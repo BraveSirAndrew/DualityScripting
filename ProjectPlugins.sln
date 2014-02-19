@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin", "CorePlugin\CorePlugin.csproj", "{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin", "EditorPlugin\EditorPlugin.csproj", "{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.csproj", "{1DC301F5-644D-4109-96C4-2158ABDED70D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DC301F5-644D-4109-96C4-2158ABDED70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DC301F5-644D-4109-96C4-2158ABDED70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DC301F5-644D-4109-96C4-2158ABDED70D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
