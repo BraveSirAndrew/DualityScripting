@@ -1,6 +1,5 @@
 ﻿using System;
 using Duality;
-using Duality.Helpers;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin
@@ -99,7 +98,7 @@ namespace ScriptingPlugin
 			if (_scriptInstance == null)
 				return;
 
-			_scriptInstance.HandleMessage(msg);
+			_scriptInstance.HandleMessage(sender, msg);
 		}
 
 		private void InstantiateScript()

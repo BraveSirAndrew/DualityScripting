@@ -45,7 +45,7 @@ namespace ScriptingPlugin
 			
 		}
 
-		public virtual void HandleMessage(GameMessage msg)
+		public virtual void HandleMessage(GameObject sender, GameMessage msg)
 		{
 			
 		}
