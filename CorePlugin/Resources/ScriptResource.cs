@@ -30,6 +30,12 @@ namespace ScriptingPlugin.Resources
 			File.WriteAllText(sourcePath, Script);
 		}
 
+		protected override void OnLoaded()
+		{
+			Compile();
+			base.OnLoaded();
+		}
+
 		private void Compile()
 		{
 			if (File.Exists("Scripts\\Scripts.dll"))
@@ -47,7 +53,7 @@ namespace ScriptingPlugin.Resources
 			if (_assembly == null)
 				return null;
 
-			var script = _assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript));
+			var script = _assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
 
 			if (script == null)
 			{

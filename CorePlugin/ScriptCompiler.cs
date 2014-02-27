@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Duality;
@@ -11,6 +12,13 @@ namespace ScriptingPlugin
 {
 	public class ScriptCompiler
 	{
+		private List<string> _references = new List<string>();
+
+		public ScriptCompiler()
+		{
+			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerOpenTK.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll" };
+		}
+
 		public Assembly Compile(string scriptName, string scriptPath, string script)
 		{
 			var compilerParams = new CompilerParameters
@@ -23,11 +31,7 @@ namespace ScriptingPlugin
 										 CompilerOptions = " /debug:pdbonly"
 									 };
 			
-			string[] references =
-				{
-					"System.dll", "System.Core.dll", "Duality.dll", "FarseerOpenTK.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll"
-				};
-			compilerParams.ReferencedAssemblies.AddRange(references);
+			compilerParams.ReferencedAssemblies.AddRange(_references.ToArray());
 
 			var provider = new CSharpCodeProvider();
 			var compile = provider.CompileAssemblyFromSource(compilerParams, script);
@@ -41,6 +45,11 @@ namespace ScriptingPlugin
 			var text = compile.Errors.Cast<CompilerError>().Aggregate("", (current, ce) => current + ("rn" + ce));
 			Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
 			return null;
+		}
+
+		public void AddReference(string referenceAssembly)
+		{
+			_references.Add(referenceAssembly);
 		}
 
 		private void SetSourcePathInPdbFile(CompilerResults compile, string scriptName, string scriptPath)

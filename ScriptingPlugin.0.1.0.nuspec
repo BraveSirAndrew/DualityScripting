@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+    <metadata>
+        <id>ScriptingPlugin</id>
+        <version>0.1.0</version>
+        <title>Duality Scripting Plugin</title>
+        <authors>@BatCatGames</authors>
+        <owners>@BatCatGames</owners>
+        <projectUrl>https://github.com/BraveSirAndrew/DualityScripting</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A plugin for Duality that uses the CodeDom support in .Net to enable easy scripting.</description>
+        <language>en-IE</language>
+        <tags>Duality</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="Mono.Cecil" version="0.9.5.4" />
+            </group>
+        </dependencies>
+        <references>
+            <group targetFramework=".NETFramework4.0" />
+        </references>
+    </metadata>
+    <files>
+        <file src="CorePlugin\bin\Release\ScriptingPlugin.core.dll" target="lib\net40\ScriptingPlugin.core.dll" />
+        <file src="EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40\ScriptingPlugin.editor.dll" />
+    </files>
+</package>

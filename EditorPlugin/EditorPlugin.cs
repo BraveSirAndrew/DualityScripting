@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using AdamsLair.PropertyGrid;
 using Duality;
 using DualityEditor;
 using DualityEditor.CorePluginInterface;

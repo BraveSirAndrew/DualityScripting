@@ -1,4 +1,6 @@
-﻿using Duality;
+﻿using System;
+using System.IO;
+using Duality;
 
 namespace ScriptingPlugin
 {
@@ -14,6 +16,11 @@ namespace ScriptingPlugin
             base.InitPlugin();
 
             ScriptCompiler = new ScriptCompiler();
+
+	        foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
+	        {
+		        ScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+	        }
         }
     }
 }
