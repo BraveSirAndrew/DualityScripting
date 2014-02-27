@@ -11,6 +11,11 @@
         <description>A plugin for Duality that uses the CodeDom support in .Net to enable easy scripting.</description>
         <language>en-IE</language>
         <tags>Duality</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="Mono.Cecil" version="0.9.5.4" />
+            </group>
+        </dependencies>
     </metadata>
     <files>
         <file src="CorePlugin\bin\Release\ScriptingPlugin.core.dll" target="lib\net40\ScriptingPlugin.core.dll" />
