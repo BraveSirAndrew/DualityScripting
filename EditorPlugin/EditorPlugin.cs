@@ -58,6 +58,12 @@ namespace ScriptingPlugin.Editor
 		    {
 				var metafilePath = Path.GetFullPath(script.Res.GetMetafilePath());
 
+			    if (string.IsNullOrEmpty(metafilePath))
+				    continue;
+
+			    if (string.IsNullOrEmpty(script.Res.SourcePath))
+				    continue;
+
 				if (File.Exists(metafilePath) && File.GetLastWriteTime(script.Res.SourcePath) > File.GetLastWriteTime(metafilePath))
 				{
 					script.Res.Script = File.ReadAllText(script.Res.SourcePath);

@@ -44,6 +44,12 @@ namespace ScriptingPlugin.Resources
 			}
 			else
 			{
+				if (string.IsNullOrEmpty(SourcePath))
+				{
+					Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.");
+					return;
+				}
+
 				_assembly = ScriptingPluginCorePlugin.ScriptCompiler.Compile(Name, SourcePath, Script);
 			}
 		}
@@ -51,7 +57,15 @@ namespace ScriptingPlugin.Resources
 		public DualityScript Instantiate()
 		{
 			if (_assembly == null)
-				return null;
+			{
+				Compile();
+				
+				if (_assembly == null)
+				{
+					Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
+					return null;
+				}
+			}
 
 			var script = _assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
 

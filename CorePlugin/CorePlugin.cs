@@ -9,7 +9,9 @@ namespace ScriptingPlugin
 	/// </summary>
     public class ScriptingPluginCorePlugin : CorePlugin
     {
-	    public static ScriptCompiler ScriptCompiler { get; set; }
+		private const string ReferenceAssembliesFile = "ScriptReferences.txt";
+
+		public static ScriptCompiler ScriptCompiler { get; set; }
 
         protected override void InitPlugin()
         {
@@ -20,6 +22,16 @@ namespace ScriptingPlugin
 	        foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 	        {
 		        ScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+	        }
+
+	        if (File.Exists(ReferenceAssembliesFile))
+	        {
+		        var assemblies = File.ReadAllText(ReferenceAssembliesFile).Split('\n');
+
+		        foreach (var assembly in assemblies)
+		        {
+			        ScriptCompiler.AddReference(assembly);
+		        }
 	        }
         }
     }
