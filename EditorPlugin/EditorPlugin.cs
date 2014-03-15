@@ -16,6 +16,8 @@ namespace ScriptingPlugin.Editor
 	{
 	    private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
 
+		private bool _debuggerAttachedLastFrame;
+
 	    public override string Id
 		{
 			get { return "ScriptingEditorPlugin"; }
@@ -41,7 +43,26 @@ namespace ScriptingPlugin.Editor
 			FileEventManager.ResourceCreated += OnResourceCreated;
 
 			ModifySolution();
+
+			DualityEditorApp.Idling += DualityEditorAppOnIdling;
 		}
+
+	    private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
+	    {
+			if (System.Diagnostics.Debugger.IsAttached && _debuggerAttachedLastFrame == false)
+			{
+				foreach (var script in ContentProvider.GetAvailableContent<ScriptResource>())
+				{
+					script.Res.Reload();
+				}
+
+				_debuggerAttachedLastFrame = true;
+			}
+			else if (System.Diagnostics.Debugger.IsAttached == false && _debuggerAttachedLastFrame)
+			{
+				_debuggerAttachedLastFrame = false;
+			}
+	    }
 
 	    private static void ModifySolution()
 	    {
