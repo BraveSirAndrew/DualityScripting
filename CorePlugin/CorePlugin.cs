@@ -11,17 +11,21 @@ namespace ScriptingPlugin
     {
 		private const string ReferenceAssembliesFile = "ScriptReferences.txt";
 
-		public static ScriptCompiler ScriptCompiler { get; set; }
+		public static CSharpScriptCompiler CSharpScriptCompiler { get; set; }
+		
+		public static FSharpScriptCompiler FSharpScriptCompiler { get; set; }
 
         protected override void InitPlugin()
         {
             base.InitPlugin();
 
-            ScriptCompiler = new ScriptCompiler();
+            CSharpScriptCompiler = new CSharpScriptCompiler();
+			FSharpScriptCompiler = new FSharpScriptCompiler();
 
 	        foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 	        {
-		        ScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+		        CSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+		        FSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
 	        }
 
 	        if (File.Exists(ReferenceAssembliesFile))
@@ -30,7 +34,8 @@ namespace ScriptingPlugin
 
 		        foreach (var assembly in assemblies)
 		        {
-			        ScriptCompiler.AddReference(assembly);
+			        CSharpScriptCompiler.AddReference(assembly);
+			        FSharpScriptCompiler.AddReference(assembly);
 		        }
 	        }
         }

@@ -36,39 +36,38 @@
   <ItemGroup>
     <Reference Include="Aga.Controls, Version=1.7.0.0, Culture=neutral, PublicKeyToken=fcc90fbf924463a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\Aga.Controls.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\Aga.Controls.dll</HintPath>
     </Reference>
     <Reference Include="CustomPropertyGrid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\CustomPropertyGrid.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\CustomPropertyGrid.dll</HintPath>
     </Reference>
-    <Reference Include="Duality, Version=1.0.5170.25769, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Duality, Version=1.0.5180.38290, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\Duality.dll</HintPath>
     </Reference>
-    <Reference Include="DualityEditor, Version=1.0.5170.25770, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DualityEditor, Version=1.0.5180.38291, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\DualityEditor.exe</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\DualityEditor.exe</HintPath>
     </Reference>
-    <Reference Include="EditorBase.editor, Version=1.0.5170.25771, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="EditorBase.editor, Version=1.0.5180.38292, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\EditorBase.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\EditorBase.editor.dll</HintPath>
     </Reference>
-    <Reference Include="FarseerOpenTK, Version=3.3.5137.42391, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FarseerOpenTK, Version=3.3.5178.27573, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\FarseerOpenTK.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\FarseerOpenTK.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,9 +75,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.5.0.25834, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.5.0.27573, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.126\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -91,7 +90,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="packages.config" />
-    <None Include="Resources\ScriptTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CorePlugin\CorePlugin.csproj">

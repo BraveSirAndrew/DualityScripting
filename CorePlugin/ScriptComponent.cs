@@ -10,7 +10,7 @@ namespace ScriptingPlugin
 		[NonSerialized]
 		private DualityScript _scriptInstance;
 
-		public ContentRef<ScriptResource> Script { get; set; }
+		public ContentRef<ScriptResourceBase> Script { get; set; }
 
 		public void OnInit(InitContext context)
 		{

@@ -38,16 +38,35 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Duality, Version=1.0.5170.25769, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Duality, Version=1.0.5180.38290, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.126\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.130\lib\net40\Duality.dll</HintPath>
     </Reference>
-    <Reference Include="FarseerOpenTK, Version=3.3.5137.42391, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FarseerOpenTK, Version=3.3.5178.27573, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.126\lib\net40\FarseerOpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.130\lib\net40\FarseerOpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\packages\Duality.0.1.126\lib\net40\Ionic.Zip.dll</HintPath>
+    <Reference Include="FSharp.Compiler.CodeDom">
+      <HintPath>D:\temp\fsharp\powerpack-master\powerpack-master\Debug\bin\FSharp.Compiler.CodeDom.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Compiler.Service">
+      <HintPath>..\packages\FSharp.Compiler.Service.0.0.43\lib\net40\FSharp.Compiler.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.PowerPack">
+      <HintPath>..\packages\FSPowerPack.Core.Community.3.0.0.0\Lib\Net40\FSharp.PowerPack.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.PowerPack.Linq">
+      <HintPath>..\packages\FSPowerPack.Linq.Community.3.0.0.0\Lib\Net40\FSharp.PowerPack.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.PowerPack.Metadata">
+      <HintPath>..\packages\FSPowerPack.Metadata.Community.3.0.0.0\Lib\Net40\FSharp.PowerPack.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.PowerPack.Parallel.Seq">
+      <HintPath>..\packages\FSPowerPack.Parallel.Seq.Community.3.0.0.0\Lib\Net40\FSharp.PowerPack.Parallel.Seq.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Duality.0.1.130\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
@@ -62,11 +81,11 @@
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.126\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.130\lib\net40\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl">
-      <HintPath>..\packages\Duality.0.1.126\lib\net40\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Duality.0.1.130\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,10 +94,14 @@
   <ItemGroup>
     <Compile Include="CorePlugin.cs" />
     <Compile Include="DualityScript.cs" />
+    <Compile Include="FSharpScriptCompiler.cs" />
+    <Compile Include="IScriptCompiler.cs" />
+    <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\ScriptResource.cs" />
+    <Compile Include="Resources\ScriptResourceBase.cs" />
     <Compile Include="ScriptComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptCompiler.cs" />
+    <Compile Include="CSharpScriptCompiler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AdamsLair.PropertyGrid;
 using Duality;
 using DualityEditor;
 using DualityEditor.CorePluginInterface;
@@ -28,10 +27,14 @@ namespace ScriptingPlugin.Editor
 		    base.LoadPlugin();
 
 			CorePluginRegistry.RegisterFileImporter(new ScriptFileImporter());
+			CorePluginRegistry.RegisterFileImporter(new FSharpScriptFileImporter());
 
 			CorePluginRegistry.RegisterTypeCategory(typeof(ScriptResource), "Scripting");
+			CorePluginRegistry.RegisterTypeCategory(typeof(FSharpScript), "Scripting");
 
-			CorePluginRegistry.RegisterEditorAction(new EditorAction<ScriptResource>(null, null, ActionOpenScriptFile, "Open script file"), CorePluginRegistry.ActionContext_OpenRes);
+			CorePluginRegistry.RegisterEditorAction(new EditorAction<ScriptResource>(null, null, ActionOpenScriptFile, "Open C# script file"), CorePluginRegistry.ActionContext_OpenRes);
+			
+			CorePluginRegistry.RegisterEditorAction(new EditorAction<FSharpScript>(null, null, ActionOpenFSharpScriptFile, "Open F# script file"), CorePluginRegistry.ActionContext_OpenRes);
 	    }
 
 		protected override void InitPlugin(MainForm main)
@@ -114,12 +117,18 @@ namespace ScriptingPlugin.Editor
 
 	    private void OnResourceCreated(object sender, ResourceEventArgs e)
 	    {
-		    if (e.ContentType != typeof (ScriptResource))
-			    return;
-
-		    var script = e.Content.As<ScriptResource>();
-		    script.Res.Script = Resources.Resources.ScriptTemplate;
-			script.Res.Save();
+		    if (e.ContentType == typeof (ScriptResource))
+		    {
+			    var script = e.Content.As<ScriptResource>();
+			    script.Res.Script = Resources.Resources.ScriptTemplate;
+			    script.Res.Save();
+		    }
+			else if (e.ContentType == typeof(FSharpScript))
+		    {
+				var script = e.Content.As<FSharpScript>();
+				script.Res.Script = Resources.Resources.FSharpScriptTemplate;
+				script.Res.Save();
+		    }
 	    }
 
 	    private static void ActionOpenScriptFile(ScriptResource script)
@@ -128,6 +137,14 @@ namespace ScriptingPlugin.Editor
 				return;
 
 			FileImportProvider.OpenSourceFile(script, ".cs", script.SaveScript);
+	    }
+
+	    private static void ActionOpenFSharpScriptFile(FSharpScript script)
+	    {
+			if (script == null) 
+				return;
+
+			FileImportProvider.OpenSourceFile(script, ".fs", script.SaveScript);
 	    }
 	}
 }
