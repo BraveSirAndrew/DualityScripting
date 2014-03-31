@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AdamsLair.PropertyGrid;
 using Duality;
 using DualityEditor;
 using DualityEditor.CorePluginInterface;
@@ -17,6 +16,9 @@ namespace ScriptingPlugin.Editor
 	    private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
 
 		private bool _debuggerAttachedLastFrame;
+
+		private const string CsFileExt = ".cs";
+		private const string Scripts = "Scripts";
 
 	    public override string Id
 		{
@@ -64,9 +66,11 @@ namespace ScriptingPlugin.Editor
 			}
 	    }
 
+		
 	    private static void ModifySolution()
 	    {
-		    if (File.Exists(Path.Combine(EditorHelper.SourceCodeDirectory, "Scripts" + Path.DirectorySeparatorChar + "Scripts.csproj")))
+		    
+		    if (File.Exists(Path.Combine(EditorHelper.SourceCodeDirectory, Scripts,  Scripts+ ".csproj")))
 			    return;
 
 		    ExtractScriptProjectToCodeDirectory();
@@ -107,7 +111,7 @@ namespace ScriptingPlugin.Editor
 	    {
 		    using (var scriptsProjectZip = ZipFile.Read(Resources.Resources.ScriptsProjectTemplate))
 		    {
-			    scriptsProjectZip.ExtractAll(Path.Combine(EditorHelper.SourceCodeDirectory, "Scripts"),
+			    scriptsProjectZip.ExtractAll(Path.Combine(EditorHelper.SourceCodeDirectory, Scripts),
 				    ExtractExistingFileAction.DoNotOverwrite);
 		    }
 	    }
@@ -121,13 +125,14 @@ namespace ScriptingPlugin.Editor
 		    script.Res.Script = Resources.Resources.ScriptTemplate;
 			script.Res.Save();
 	    }
-
+		
 	    private static void ActionOpenScriptFile(ScriptResource script)
 	    {
 			if (script == null) 
 				return;
 
-			FileImportProvider.OpenSourceFile(script, ".cs", script.SaveScript);
+		    
+		    FileImportProvider.OpenSourceFile(script, CsFileExt, script.SaveScript);
 	    }
 	}
 }
