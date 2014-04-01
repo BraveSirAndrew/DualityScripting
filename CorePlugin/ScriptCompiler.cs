@@ -16,7 +16,7 @@ namespace ScriptingPlugin
 
 		public ScriptCompiler()
 		{
-			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerOpenTK.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll" };
+			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll" };
 		}
 
 		public Assembly Compile(string scriptName, string scriptPath, string script)

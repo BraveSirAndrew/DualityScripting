@@ -3,10 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Duality;
+using Duality.Editor;
 
 namespace ScriptingPlugin.Resources
 {
 	[Serializable]
+	[EditorHintCategory("Scripting")]
 	public class ScriptResource : Resource
 	{
 		public new const string FileExt = ".cs" + Resource.FileExt;

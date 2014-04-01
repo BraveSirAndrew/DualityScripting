@@ -1,18 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AdamsLair.PropertyGrid;
 using Duality;
-using DualityEditor;
-using DualityEditor.CorePluginInterface;
-using DualityEditor.Forms;
+using Duality.Editor;
+using Duality.Editor.Forms;
 using Ionic.Zip;
-using ScriptingPlugin.Editor.Importers;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
 {
-    public class ScriptingEditorPlugin : EditorPlugin
+	public class ScriptingEditorPlugin : EditorPlugin
 	{
 	    private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
 
@@ -22,18 +19,7 @@ namespace ScriptingPlugin.Editor
 		{
 			get { return "ScriptingEditorPlugin"; }
 		}
-
-	    protected override void LoadPlugin()
-	    {
-		    base.LoadPlugin();
-
-			CorePluginRegistry.RegisterFileImporter(new ScriptFileImporter());
-
-			CorePluginRegistry.RegisterTypeCategory(typeof(ScriptResource), "Scripting");
-
-			CorePluginRegistry.RegisterEditorAction(new EditorAction<ScriptResource>(null, null, ActionOpenScriptFile, "Open script file"), CorePluginRegistry.ActionContext_OpenRes);
-	    }
-
+		
 		protected override void InitPlugin(MainForm main)
 		{
 			base.InitPlugin(main);
@@ -44,7 +30,7 @@ namespace ScriptingPlugin.Editor
 
 			ModifySolution();
 
-			DualityEditorApp.Idling += DualityEditorAppOnIdling;
+			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
 		}
 
 	    private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
@@ -120,14 +106,6 @@ namespace ScriptingPlugin.Editor
 		    var script = e.Content.As<ScriptResource>();
 		    script.Res.Script = Resources.Resources.ScriptTemplate;
 			script.Res.Save();
-	    }
-
-	    private static void ActionOpenScriptFile(ScriptResource script)
-	    {
-			if (script == null) 
-				return;
-
-			FileImportProvider.OpenSourceFile(script, ".cs", script.SaveScript);
 	    }
 	}
 }
