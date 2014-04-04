@@ -11,7 +11,7 @@ namespace ScriptingPlugin.Resources
 	[EditorHintCategory("Scripting")]
 	public class ScriptResource : Resource
 	{
-		public new const string FileExt = ".cs" + Resource.FileExt;
+		public new const string FileExt = ScriptingPluginCorePlugin.CSharpScriptExtension + Resource.FileExt;
 
 		[field: NonSerialized]
 		public event EventHandler Reloaded;
@@ -40,9 +40,10 @@ namespace ScriptingPlugin.Resources
 
 		private void Compile()
 		{
-			if (File.Exists("Scripts\\Scripts.dll"))
+			const string scriptsDll = "Scripts\\Scripts.dll";
+			if (File.Exists(scriptsDll))
 			{
-				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath("Scripts\\Scripts.dll"));
+				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
 			}
 			else
 			{

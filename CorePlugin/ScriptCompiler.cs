@@ -42,7 +42,7 @@ namespace ScriptingPlugin
 				return compile.CompiledAssembly;
 			}
 
-			var text = compile.Errors.Cast<CompilerError>().Aggregate("", (current, ce) => current + ("rn" + ce));
+			var text = compile.Errors.Cast<CompilerError>().Aggregate("", (current, ce) => current + ("/r/n" + ce));
 			Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
 			return null;
 		}

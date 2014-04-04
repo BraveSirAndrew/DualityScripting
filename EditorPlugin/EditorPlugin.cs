@@ -4,18 +4,21 @@ using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
+using Duality.Resources;
 using Ionic.Zip;
+using Microsoft.Build.Construction;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
 {
 	public class ScriptingEditorPlugin : EditorPlugin
 	{
+		
 	    private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
 
 		private bool _debuggerAttachedLastFrame;
+		private static string _scriptsProjectPath;
 
-		private const string CsFileExt = ".cs";
 		private const string Scripts = "Scripts";
 
 	    public override string Id
@@ -30,10 +33,12 @@ namespace ScriptingPlugin.Editor
 			ReloadOutOfDateScripts();
 
 			FileEventManager.ResourceCreated += OnResourceCreated;
+			FileEventManager.ResourceRenamed += OnResourceRenamed;
 
 			ModifySolution();
 
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
+			_scriptsProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
 		}
 
 	    private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
@@ -52,12 +57,11 @@ namespace ScriptingPlugin.Editor
 				_debuggerAttachedLastFrame = false;
 			}
 	    }
-
 		
 	    private static void ModifySolution()
 	    {
 		    
-		    if (File.Exists(Path.Combine(EditorHelper.SourceCodeDirectory, Scripts,  Scripts+ ".csproj")))
+		    if (File.Exists(_scriptsProjectPath))
 			    return;
 
 		    ExtractScriptProjectToCodeDirectory();
@@ -103,6 +107,17 @@ namespace ScriptingPlugin.Editor
 		    }
 	    }
 
+		private void OnResourceRenamed(object sender, ResourceRenamedEventArgs e)
+		{
+			if (e.ContentType != typeof(ScriptResource))
+				return;
+
+			var script = e.Content.As<ScriptResource>();
+			
+
+			
+		}
+
 	    private void OnResourceCreated(object sender, ResourceEventArgs e)
 	    {
 		    if (e.ContentType != typeof (ScriptResource))
@@ -111,15 +126,32 @@ namespace ScriptingPlugin.Editor
 		    var script = e.Content.As<ScriptResource>();
 		    script.Res.Script = Resources.Resources.ScriptTemplate;
 			script.Res.Save();
-	    }
-		
-	    private static void ActionOpenScriptFile(ScriptResource script)
-	    {
-			if (script == null) 
-				return;
 
-		    
-		    FileImportProvider.OpenSourceFile(script, CsFileExt, script.SaveScript);
+		    var fileName = GetFileName(script);
+		    AddScriptToSolution(GetScriptName(fileName), fileName);
 	    }
+
+		public string GetFileName(ContentRef<ScriptResource> script)
+		{
+			return script.Name + ScriptingPluginCorePlugin.CSharpScriptExtension;
+		}
+
+		public string GetScriptName(string fileName)
+		{
+			return Path.Combine(EditorHelper.SourceMediaDirectory, Scripts, fileName);
+		}
+
+		private void AddScriptToSolution(string scriptPath, string scriptName)
+		{
+			ProjectRootElement rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
+			if (rootElement == null) 
+				return;
+			var itemGroup = rootElement.AddItemGroup();
+			
+			
+			var itemElement = itemGroup.AddItem("compile",  scriptPath);
+			itemElement.AddMetadata("link", Path.Combine(Scene.Current.Name, scriptName));
+			rootElement.Save();
+		}
 	}
 }
