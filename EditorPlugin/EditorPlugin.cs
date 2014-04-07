@@ -112,9 +112,27 @@ namespace ScriptingPlugin.Editor
 			if (e.ContentType != typeof(ScriptResource))
 				return;
 
-			var script = e.Content.As<ScriptResource>();
 			
+			ProjectRootElement rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
+			if (rootElement == null)
+				return;
+			string scriptName = GetScriptName(GetFileName(e.OldContent.Name));
+//			rootElement.ItemGroups.Where(x => x.Items.Where(y=> y.Include == scriptName));
+			foreach (var itemGroup in rootElement.ItemGroups)
+			{
+				foreach (ProjectItemElement item in itemGroup.Items)
+				{
+					if (item.Include.Contains(scriptName))
+					{
+						rootElement.ItemGroups.Remove(itemGroup);
+					}
+				}
+			}
+			rootElement.Save();
 
+			AddScriptToSolution(GetScriptName(scriptName), scriptName);
+			
+			 
 			
 		}
 
@@ -127,13 +145,13 @@ namespace ScriptingPlugin.Editor
 		    script.Res.Script = Resources.Resources.ScriptTemplate;
 			script.Res.Save();
 
-		    var fileName = GetFileName(script);
+		    var fileName = GetFileName(script.Name);
 		    AddScriptToSolution(GetScriptName(fileName), fileName);
 	    }
 
-		public string GetFileName(ContentRef<ScriptResource> script)
+		public string GetFileName(string scriptName)
 		{
-			return script.Name + ScriptingPluginCorePlugin.CSharpScriptExtension;
+			return scriptName + ScriptingPluginCorePlugin.CSharpScriptExtension;
 		}
 
 		public string GetScriptName(string fileName)
