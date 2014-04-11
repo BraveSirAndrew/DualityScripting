@@ -111,32 +111,34 @@ namespace ScriptingPlugin.Editor
 		{
 			if (e.ContentType != typeof(ScriptResource))
 				return;
+			RemoveOldScriptFromProject(e.OldContent.FullName);
 
-			
+			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName));
+			AddScriptToSolution(newScriptName, GetFileName(newScriptName));
+		}
+
+		private void RemoveOldScriptFromProject(string oldContentName)
+		{
 			ProjectRootElement rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
 			if (rootElement == null)
 				return;
-			string scriptName = GetScriptName(GetFileName(e.OldContent.Name));
-//			rootElement.ItemGroups.Where(x => x.Items.Where(y=> y.Include == scriptName));
+			
+			string scriptName = GetScriptNameWithPath(RemoveDataScriptPath(oldContentName));
+
 			foreach (var itemGroup in rootElement.ItemGroups)
 			{
 				foreach (ProjectItemElement item in itemGroup.Items)
 				{
 					if (item.Include.Contains(scriptName))
 					{
-						rootElement.ItemGroups.Remove(itemGroup);
+						rootElement.RemoveChild(itemGroup);
 					}
 				}
 			}
 			rootElement.Save();
-
-			AddScriptToSolution(GetScriptName(scriptName), scriptName);
-			
-			 
-			
 		}
 
-	    private void OnResourceCreated(object sender, ResourceEventArgs e)
+		private void OnResourceCreated(object sender, ResourceEventArgs e)
 	    {
 		    if (e.ContentType != typeof (ScriptResource))
 			    return;
@@ -145,31 +147,45 @@ namespace ScriptingPlugin.Editor
 		    script.Res.Script = Resources.Resources.ScriptTemplate;
 			script.Res.Save();
 
-		    var fileName = GetFileName(script.Name);
-		    AddScriptToSolution(GetScriptName(fileName), fileName);
+		    var fileWithPath = RemoveDataScriptPath(script.FullName);
+			AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath));
 	    }
 
-		public string GetFileName(string scriptName)
+		private string GetFileName(string fileWithPath)
 		{
-			return scriptName + ScriptingPluginCorePlugin.CSharpScriptExtension;
+			return Path.GetFileName(fileWithPath);
 		}
 
-		public string GetScriptName(string fileName)
+		public string RemoveDataScriptPath(string fullScriptName)
 		{
-			return Path.Combine(EditorHelper.SourceMediaDirectory, Scripts, fileName);
+			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + ScriptingPluginCorePlugin.CSharpScriptExtension;
 		}
 
-		private void AddScriptToSolution(string scriptPath, string scriptName)
+		public string GetScriptNameWithPath(string fileNameWithResourcePath)
 		{
-			ProjectRootElement rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
-			if (rootElement == null) 
-				return;
-			var itemGroup = rootElement.AddItemGroup();
+			return Path.Combine(@"..\..\Media", Scripts, fileNameWithResourcePath);
+		}
+
+		private void AddScriptToSolution(string scriptPath, string scriptFileName)
+		{
+			try
+			{
+				var rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
+				if (rootElement == null)
+					return;
+				var itemGroup = rootElement.AddItemGroup();
+
+
+				var itemElement = itemGroup.AddItem("compile", scriptPath);
+				itemElement.AddMetadata("link", scriptFileName);
+				rootElement.Save();
+			}
+			catch (Exception exception)
+			{
+				Log.Editor.WriteError("There was a problem editing the Scripts project. The error is {0} \n StackTrace: {1}",exception.Message, exception.StackTrace);
+				
+			}
 			
-			
-			var itemElement = itemGroup.AddItem("compile",  scriptPath);
-			itemElement.AddMetadata("link", Path.Combine(Scene.Current.Name, scriptName));
-			rootElement.Save();
 		}
 	}
 }
