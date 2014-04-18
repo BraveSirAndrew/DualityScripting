@@ -173,15 +173,7 @@ namespace ScriptingPlugin.Editor
 		    }
 	    }
 
-	    private static void ActionOpenFSharpScriptFile(FSharpScript script)
-	    {
-			if (script == null) 
-				return;
-
-			FileImportProvider.OpenSourceFile(script, ".fs", script.SaveScript);
-	    }
-
-		private string GetFileName(string fileWithPath)
+	    private string GetFileName(string fileWithPath)
 		{
 			return Path.GetFileName(fileWithPath);
 		}

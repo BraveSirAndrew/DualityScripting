@@ -1,12 +1,14 @@
 ﻿using System;
 using Duality;
+using Duality.Editor;
 
 namespace ScriptingPlugin.Resources
 {
 	[Serializable]
+	[EditorHintCategory("Scripting")]
 	public class FSharpScript : ScriptResourceBase
 	{
-		public new const string FileExt = ".fs" + Resource.FileExt;
+		public new const string FileExt = FileConstants.FSharpExtension + Resource.FileExt;
 
 		protected override void OnLoaded()
 		{

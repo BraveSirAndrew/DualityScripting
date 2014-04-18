@@ -1,10 +1,11 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Duality;
+using Microsoft.FSharp.Compiler.SimpleSourceCodeServices;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 
@@ -16,37 +17,35 @@ namespace ScriptingPlugin
 
 		public FSharpScriptCompiler()
 		{
-			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerOpenTK.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll", "System.Drawing" };
+			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll", "System.Drawing" };
 		}
 
 		public Assembly Compile(string scriptName, string scriptPath, string script)
 		{
-			var compilerParams = new CompilerParameters
-			{
-				GenerateInMemory = false,
-				TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true),
-				IncludeDebugInformation = true,
-				TreatWarningsAsErrors = false,
-				GenerateExecutable = false,
-				OutputAssembly = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName()+".dll"),
-				CompilerOptions = " /debug:pdbonly"
-			};
-
-			compilerParams.ReferencedAssemblies.AddRange(_references.ToArray());
-
-			var provider = new Microsoft.FSharp.Compiler.CodeDom.FSharpCodeProvider();
+			var scs = new SimpleSourceCodeServices();
+			var outputAssemblyPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName() + ".dll");
+			var referencesAndScript = new List<string>();
+			foreach (var reference in _references)
+				referencesAndScript.Add(string.Format("--reference:{0}", reference));
 			
-			var compile = provider.CompileAssemblyFromSource(compilerParams, script);
+			var options = new[] {"fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--lib:plugins"};
 
-			if (compile.Errors.HasErrors == false)
+			referencesAndScript.Add(scriptPath);
+			string[] completeOptions = options.Concat(referencesAndScript).ToArray();
+			
+			Log.Editor.Write("options {0}", string.Join("  ", options));
+
+			var errorsAndExitCode = scs.Compile(completeOptions);
+
+			if (errorsAndExitCode.Item1.Any() || !File.Exists(outputAssemblyPath))
 			{
-				SetSourcePathInPdbFile(compile, scriptName, scriptPath);
-				return compile.CompiledAssembly;
+				var text = errorsAndExitCode.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
+				Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
+				return null;
 			}
-
-			var text = compile.Errors.Cast<CompilerError>().Aggregate("", (current, ce) => current + ("\r\n" + ce));
-			Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
-			return null;
+			
+			SetSourcePathInPdbFile(outputAssemblyPath, scriptName, scriptPath);
+			return Assembly.LoadFile(outputAssemblyPath);
 		}
 
 		public void AddReference(string referenceAssembly)
@@ -54,14 +53,34 @@ namespace ScriptingPlugin
 			_references.Add(referenceAssembly);
 		}
 
-		private void SetSourcePathInPdbFile(CompilerResults compile, string scriptName, string scriptPath)
+		private void SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
 		{
 			var readerParameters = new ReaderParameters { ReadSymbols = true, SymbolReaderProvider = new PdbReaderProvider() };
-			var assemblyDef = AssemblyDefinition.ReadAssembly(compile.PathToAssembly, readerParameters);
+			var assemblyDef = AssemblyDefinition.ReadAssembly(pathToAssembly, readerParameters);
 
 			var moduleDefinition = assemblyDef.Modules[0];
 			moduleDefinition.ReadSymbols();
-			var type = moduleDefinition.Types.FirstOrDefault(t => t.BaseType != null && t.BaseType.Name == "DualityScript");
+			TypeDefinition type = null;
+			foreach (TypeDefinition t in moduleDefinition.Types)
+			{
+				if (t.BaseType != null && t.BaseType.FullName == typeof (DualityScript).FullName)
+				{
+					type = t;
+					break;
+				}
+
+				if (t.HasNestedTypes)
+				{
+					foreach (var typ in t.NestedTypes)
+					{
+						if (typ.BaseType != null && typ.BaseType.FullName == typeof(DualityScript).FullName)
+						{
+							type = typ;
+							break;
+						}
+					}
+				}
+			}
 
 			if (type == null)
 			{
@@ -79,7 +98,7 @@ namespace ScriptingPlugin
 			}
 
 			var writerParameters = new WriterParameters { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
-			assemblyDef.Write(compile.PathToAssembly, writerParameters);
+			assemblyDef.Write(pathToAssembly, writerParameters);
 		}
 
 	}
