@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Duality;
-using DualityEditor.CorePluginInterface;
+using Duality.Editor;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor.Importers

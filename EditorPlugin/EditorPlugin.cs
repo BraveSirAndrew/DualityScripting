@@ -2,16 +2,14 @@
 using System.IO;
 using System.Linq;
 using Duality;
-using DualityEditor;
-using DualityEditor.CorePluginInterface;
-using DualityEditor.Forms;
+using Duality.Editor;
+using Duality.Editor.Forms;
 using Ionic.Zip;
-using ScriptingPlugin.Editor.Importers;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
 {
-    public class ScriptingEditorPlugin : EditorPlugin
+	public class ScriptingEditorPlugin : EditorPlugin
 	{
 	    private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
 
@@ -24,17 +22,18 @@ namespace ScriptingPlugin.Editor
 
 	    protected override void LoadPlugin()
 	    {
+//This will probably not be used but something needs to be added so that the f# script opens AM
 		    base.LoadPlugin();
 
-			CorePluginRegistry.RegisterFileImporter(new ScriptFileImporter());
-			CorePluginRegistry.RegisterFileImporter(new FSharpScriptFileImporter());
-
-			CorePluginRegistry.RegisterTypeCategory(typeof(ScriptResource), "Scripting");
-			CorePluginRegistry.RegisterTypeCategory(typeof(FSharpScript), "Scripting");
-
-			CorePluginRegistry.RegisterEditorAction(new EditorAction<ScriptResource>(null, null, ActionOpenScriptFile, "Open C# script file"), CorePluginRegistry.ActionContext_OpenRes);
-			
-			CorePluginRegistry.RegisterEditorAction(new EditorAction<FSharpScript>(null, null, ActionOpenFSharpScriptFile, "Open F# script file"), CorePluginRegistry.ActionContext_OpenRes);
+//			CorePluginRegistry.RegisterFileImporter(new ScriptFileImporter());
+//			CorePluginRegistry.RegisterFileImporter(new FSharpScriptFileImporter());
+//
+//			CorePluginRegistry.RegisterTypeCategory(typeof(ScriptResource), "Scripting");
+//			CorePluginRegistry.RegisterTypeCategory(typeof(FSharpScript), "Scripting");
+//
+//			CorePluginRegistry.RegisterEditorAction(new EditorAction<ScriptResource>(null, null, ActionOpenScriptFile, "Open C# script file"), CorePluginRegistry.ActionContext_OpenRes);
+//			
+//			CorePluginRegistry.RegisterEditorAction(new EditorAction<FSharpScript>(null, null, ActionOpenFSharpScriptFile, "Open F# script file"), CorePluginRegistry.ActionContext_OpenRes);
 	    }
 
 		protected override void InitPlugin(MainForm main)
@@ -47,7 +46,7 @@ namespace ScriptingPlugin.Editor
 
 			ModifySolution();
 
-			DualityEditorApp.Idling += DualityEditorAppOnIdling;
+			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
 		}
 
 	    private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
@@ -129,14 +128,6 @@ namespace ScriptingPlugin.Editor
 				script.Res.Script = Resources.Resources.FSharpScriptTemplate;
 				script.Res.Save();
 		    }
-	    }
-
-	    private static void ActionOpenScriptFile(ScriptResource script)
-	    {
-			if (script == null) 
-				return;
-
-			FileImportProvider.OpenSourceFile(script, FileConstants.CSharpExtension, script.SaveScript);
 	    }
 
 	    private static void ActionOpenFSharpScriptFile(FSharpScript script)

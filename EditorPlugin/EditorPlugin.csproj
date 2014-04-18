@@ -34,40 +34,60 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aga.Controls, Version=1.7.0.0, Culture=neutral, PublicKeyToken=fcc90fbf924463a3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\Aga.Controls.dll</HintPath>
+    <Reference Include="AdamsLair.WinForms">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\AdamsLair.WinForms.dll</HintPath>
     </Reference>
-    <Reference Include="CustomPropertyGrid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Aga.Controls, Version=1.7.0.1, Culture=neutral, PublicKeyToken=fcc90fbf924463a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\CustomPropertyGrid.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\Aga.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Duality, Version=1.0.5180.38290, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\Duality.dll</HintPath>
+    <Reference Include="CamView.editor">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\CamView.editor.dll</HintPath>
     </Reference>
-    <Reference Include="DualityEditor, Version=1.0.5180.38291, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\DualityEditor.exe</HintPath>
+    <Reference Include="Compatibility.core">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\Compatibility.core.dll</HintPath>
     </Reference>
-    <Reference Include="EditorBase.editor, Version=1.0.5180.38292, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Duality, Version=1.0.5203.41277, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\EditorBase.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\Duality.dll</HintPath>
     </Reference>
-    <Reference Include="FarseerOpenTK, Version=3.3.5178.27573, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DualityEditor, Version=1.0.5203.41278, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\FarseerOpenTK.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\DualityEditor.exe</HintPath>
+    </Reference>
+    <Reference Include="EditorBase.editor, Version=1.0.5203.41279, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\EditorBase.editor.dll</HintPath>
+    </Reference>
+    <Reference Include="FarseerDuality">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\FarseerDuality.dll</HintPath>
+    </Reference>
+    <Reference Include="HelpAdvisor.editor">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\HelpAdvisor.editor.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="LogView.editor">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\LogView.editor.dll</HintPath>
+    </Reference>
+    <Reference Include="ObjectInspector.editor">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\ObjectInspector.editor.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\OpenTK.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectView.editor">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\ProjectView.editor.dll</HintPath>
+    </Reference>
+    <Reference Include="SceneView.editor">
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\SceneView.editor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,13 +95,14 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.5.0.27573, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.130\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditorPlugin.cs" />
+    <Compile Include="OpenScriptResourceEditorAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Importers\ScriptFileImporter.cs" />
     <Compile Include="Resources\Resources.Designer.cs">

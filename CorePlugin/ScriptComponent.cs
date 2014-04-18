@@ -5,7 +5,7 @@ using ScriptingPlugin.Resources;
 namespace ScriptingPlugin
 {
 	[Serializable]
-	public class ScriptComponent : Component, ICmpInitializable, ICmpUpdatable, ICmpCollisionListener, ICmpComponentListener, ICmpGameObjectListener, ICmpHandlesMessages 
+	public class ScriptComponent : Component, ICmpInitializable, ICmpUpdatable, ICmpCollisionListener, ICmpHandlesMessages 
 	{
 		[NonSerialized]
 		private DualityScript _scriptInstance;
@@ -70,22 +70,6 @@ namespace ScriptingPlugin
 				return;
 
 			SafeExecute(_scriptInstance.CollisionSolve, "CollisionSolve", args);
-		}
-
-		public void OnComponentAdded(Component comp)
-		{
-			if (_scriptInstance == null)
-				return;
-
-			SafeExecute(_scriptInstance.ComponentAdded, "ComponentAdded", comp);
-		}
-
-		public void OnComponentRemoving(Component comp)
-		{
-			if (_scriptInstance == null)
-				return;
-
-			SafeExecute(_scriptInstance.ComponentRemoving, "ComponentRemoving", comp);
 		}
 
 		public void OnGameObjectParentChanged(GameObject oldParent, GameObject newParent)
