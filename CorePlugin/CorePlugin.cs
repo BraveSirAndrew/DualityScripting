@@ -9,6 +9,8 @@ namespace ScriptingPlugin
 	/// </summary>
     public class ScriptingPluginCorePlugin : CorePlugin
     {
+		public const string CSharpScriptExtension = ".cs";
+		public const string DataScripts = "Data\\Scripts\\";
 		private const string ReferenceAssembliesFile = "ScriptReferences.txt";
 
 		public static CSharpScriptCompiler CSharpScriptCompiler { get; set; }

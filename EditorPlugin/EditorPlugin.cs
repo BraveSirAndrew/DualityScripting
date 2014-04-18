@@ -4,22 +4,28 @@ using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
+using Duality.Resources;
 using Ionic.Zip;
+using Microsoft.Build.Construction;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
 {
 	public class ScriptingEditorPlugin : EditorPlugin
 	{
+		
 	    private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
 
 		private bool _debuggerAttachedLastFrame;
+		private static string _scriptsProjectPath;
+
+		private const string Scripts = "Scripts";
 
 	    public override string Id
 		{
 			get { return "ScriptingEditorPlugin"; }
 		}
-
+		
 	    protected override void LoadPlugin()
 	    {
 //This will probably not be used but something needs to be added so that the f# script opens AM
@@ -43,10 +49,12 @@ namespace ScriptingPlugin.Editor
 			ReloadOutOfDateScripts();
 
 			FileEventManager.ResourceCreated += OnResourceCreated;
+			FileEventManager.ResourceRenamed += OnResourceRenamed;
 
 			ModifySolution();
 
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
+			_scriptsProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
 		}
 
 	    private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
@@ -68,7 +76,8 @@ namespace ScriptingPlugin.Editor
 
 	    private static void ModifySolution()
 	    {
-		    if (File.Exists(Path.Combine(EditorHelper.SourceCodeDirectory, "Scripts" + Path.DirectorySeparatorChar + "Scripts.csproj")))
+		    
+		    if (File.Exists(_scriptsProjectPath))
 			    return;
 
 		    ExtractScriptProjectToCodeDirectory();
@@ -109,19 +118,53 @@ namespace ScriptingPlugin.Editor
 	    {
 		    using (var scriptsProjectZip = ZipFile.Read(Resources.Resources.ScriptsProjectTemplate))
 		    {
-			    scriptsProjectZip.ExtractAll(Path.Combine(EditorHelper.SourceCodeDirectory, "Scripts"),
+			    scriptsProjectZip.ExtractAll(Path.Combine(EditorHelper.SourceCodeDirectory, Scripts),
 				    ExtractExistingFileAction.DoNotOverwrite);
 		    }
 	    }
+
+		private void OnResourceRenamed(object sender, ResourceRenamedEventArgs e)
+		{
+			if (e.ContentType != typeof(ScriptResource))
+				return;
+			RemoveOldScriptFromProject(e.OldContent.FullName);
+
+			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName));
+			AddScriptToSolution(newScriptName, GetFileName(newScriptName));
+		}
+
+		private void RemoveOldScriptFromProject(string oldContentName)
+		{
+			ProjectRootElement rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
+			if (rootElement == null)
+				return;
+			
+			string scriptName = GetScriptNameWithPath(RemoveDataScriptPath(oldContentName));
+
+			foreach (var itemGroup in rootElement.ItemGroups)
+			{
+				foreach (ProjectItemElement item in itemGroup.Items)
+				{
+					if (item.Include.Contains(scriptName))
+					{
+						rootElement.RemoveChild(itemGroup);
+					}
+				}
+			}
+			rootElement.Save();
+		}
 
 	    private void OnResourceCreated(object sender, ResourceEventArgs e)
 	    {
 		    if (e.ContentType == typeof (ScriptResource))
 		    {
-			    var script = e.Content.As<ScriptResource>();
-			    script.Res.Script = Resources.Resources.ScriptTemplate;
-			    script.Res.Save();
-		    }
+		    var script = e.Content.As<ScriptResource>();
+		    script.Res.Script = Resources.Resources.ScriptTemplate;
+			script.Res.Save();
+
+		    var fileWithPath = RemoveDataScriptPath(script.FullName);
+			AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath));
+	    }
 			else if (e.ContentType == typeof(FSharpScript))
 		    {
 				var script = e.Content.As<FSharpScript>();
@@ -137,5 +180,42 @@ namespace ScriptingPlugin.Editor
 
 			FileImportProvider.OpenSourceFile(script, ".fs", script.SaveScript);
 	    }
+
+		private string GetFileName(string fileWithPath)
+		{
+			return Path.GetFileName(fileWithPath);
+		}
+
+		public string RemoveDataScriptPath(string fullScriptName)
+		{
+			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + ScriptingPluginCorePlugin.CSharpScriptExtension;
+		}
+
+		public string GetScriptNameWithPath(string fileNameWithResourcePath)
+		{
+			return Path.Combine(@"..\..\Media", Scripts, fileNameWithResourcePath);
+		}
+
+		private void AddScriptToSolution(string scriptPath, string scriptFileName)
+		{
+			try
+			{
+				var rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, _scriptsProjectPath));
+				if (rootElement == null)
+					return;
+				var itemGroup = rootElement.AddItemGroup();
+
+
+				var itemElement = itemGroup.AddItem("compile", scriptPath);
+				itemElement.AddMetadata("link", scriptFileName);
+				rootElement.Save();
+			}
+			catch (Exception exception)
+			{
+				Log.Editor.WriteError("There was a problem editing the Scripts project. The error is {0} \n StackTrace: {1}",exception.Message, exception.StackTrace);
+				
+			}
+			
+		}
 	}
 }

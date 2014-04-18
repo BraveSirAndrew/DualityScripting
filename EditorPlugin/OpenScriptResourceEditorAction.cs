@@ -19,7 +19,7 @@ namespace ScriptingPlugin.Editor
 		{
 			if (script == null)
 				return;
-
+			
 			FileImportProvider.OpenSourceFile(script, ".cs", script.SaveScript);
 		}
 
