@@ -6,7 +6,7 @@ namespace ScriptingPlugin.Resources
 	[Serializable]
 	public class ScriptResource : ScriptResourceBase
 	{
-		public new const string FileExt = ".cs" + Resource.FileExt;
+		public new const string FileExt = FileConstants.CSharpExtension + Resource.FileExt;
 
 		protected override void OnLoaded()
 		{

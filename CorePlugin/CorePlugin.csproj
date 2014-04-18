@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="CorePlugin.cs" />
     <Compile Include="DualityScript.cs" />
+    <Compile Include="FileConstants.cs" />
     <Compile Include="FSharpScriptCompiler.cs" />
     <Compile Include="IScriptCompiler.cs" />
     <Compile Include="Resources\FSharpScript.cs" />

@@ -136,7 +136,7 @@ namespace ScriptingPlugin.Editor
 			if (script == null) 
 				return;
 
-			FileImportProvider.OpenSourceFile(script, ".cs", script.SaveScript);
+			FileImportProvider.OpenSourceFile(script, FileConstants.CSharpExtension, script.SaveScript);
 	    }
 
 	    private static void ActionOpenFSharpScriptFile(FSharpScript script)

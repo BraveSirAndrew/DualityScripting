@@ -6,12 +6,13 @@ using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor.Importers
 {
+
 	public class ScriptFileImporter : IFileImporter
 	{
 		public bool CanImportFile(string srcFile)
 		{
 			var ext = Path.GetExtension(srcFile);
-			return ext != null && ext.ToLower() == ".cs";
+			return ext != null && ext.ToLower() == FileConstants.CSharpExtension;
 		}
 
 		public void ImportFile(string srcFile, string targetName, string targetDir)

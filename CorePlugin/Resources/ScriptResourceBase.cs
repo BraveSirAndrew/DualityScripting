@@ -39,9 +39,10 @@ namespace ScriptingPlugin.Resources
 
 		private void Compile()
 		{
-			if (File.Exists("Scripts\\Scripts.dll"))
+			const string scriptsDll = "Scripts\\Scripts.dll";
+			if (File.Exists(scriptsDll))
 			{
-				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath("Scripts\\Scripts.dll"));
+				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
 			}
 			else
 			{
@@ -50,8 +51,6 @@ namespace ScriptingPlugin.Resources
 					Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.");
 					return;
 				}
-
-				
 				_assembly = ScriptCompiler.Compile(Name, SourcePath, Script);
 			}
 		}
