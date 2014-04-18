@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Duality;
 using Microsoft.FSharp.Compiler.SimpleSourceCodeServices;
 using Mono.Cecil;
@@ -31,10 +30,8 @@ namespace ScriptingPlugin
 			var options = new[] {"fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--lib:plugins"};
 
 			referencesAndScript.Add(scriptPath);
-			string[] completeOptions = options.Concat(referencesAndScript).ToArray();
+			var completeOptions = options.Concat(referencesAndScript).ToArray();
 			
-			Log.Editor.Write("options {0}", string.Join("  ", options));
-
 			var errorsAndExitCode = scs.Compile(completeOptions);
 
 			if (errorsAndExitCode.Item1.Any() || !File.Exists(outputAssemblyPath))
@@ -71,11 +68,11 @@ namespace ScriptingPlugin
 
 				if (t.HasNestedTypes)
 				{
-					foreach (var typ in t.NestedTypes)
+					foreach (var nested in t.NestedTypes)
 					{
-						if (typ.BaseType != null && typ.BaseType.FullName == typeof(DualityScript).FullName)
+						if (nested.BaseType != null && nested.BaseType.FullName == typeof(DualityScript).FullName)
 						{
-							type = typ;
+							type = nested;
 							break;
 						}
 					}

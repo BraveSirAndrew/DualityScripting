@@ -4,7 +4,7 @@ using ScriptingPlugin;
 
 namespace ScriptingNamespace
 {
-	public class ScriptTemplate : DualityScript
+	public class ScriptResource : DualityScript
 	{
 		public override void Update()
 		{
