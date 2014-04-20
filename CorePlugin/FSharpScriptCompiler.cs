@@ -16,7 +16,7 @@ namespace ScriptingPlugin
 
 		public FSharpScriptCompiler()
 		{
-			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll", "System.Drawing" };
+			_references = new List<string> { "System.dll", "System.Core.dll", "System.Drawing.dll", "System.Xml.Linq", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll", "System.Drawing" };
 		}
 
 		public Assembly Compile(string scriptName, string scriptPath, string script)

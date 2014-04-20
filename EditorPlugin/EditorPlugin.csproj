@@ -103,7 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditorPlugin.cs" />
-    <Compile Include="Importers\FSharpScriptFileImporter.cs" />
     <Compile Include="OpenScriptResourceEditorAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Importers\ScriptFileImporter.cs" />
@@ -112,6 +111,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ScriptResourceEvents.cs" />
+    <Compile Include="ScriptsSolutionEditor.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

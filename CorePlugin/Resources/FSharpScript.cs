@@ -8,11 +8,12 @@ namespace ScriptingPlugin.Resources
 	[EditorHintCategory("Scripting")]
 	public class FSharpScript : ScriptResourceBase
 	{
-		public new const string FileExt = FileConstants.FSharpExtension + Resource.FileExt;
 
 		protected override void OnLoaded()
 		{
 			ScriptCompiler = ScriptingPluginCorePlugin.FSharpScriptCompiler;
+			
+			FileExt = FileConstants.FSharpExtension + Resource.FileExt;
 			base.OnLoaded();
 		}
 	}
