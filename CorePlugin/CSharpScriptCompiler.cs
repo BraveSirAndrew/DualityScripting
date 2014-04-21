@@ -10,12 +10,13 @@ using Mono.Cecil.Pdb;
 
 namespace ScriptingPlugin
 {
-	public class ScriptCompiler
+	public class CSharpScriptCompiler : IScriptCompiler
 	{
 		private List<string> _references = new List<string>();
 
-		public ScriptCompiler()
+		public CSharpScriptCompiler()
 		{
+			//TODO: refactor to scan dependecies 
 			_references = new List<string> { "System.dll", "System.Core.dll", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll" };
 		}
 
@@ -36,15 +37,15 @@ namespace ScriptingPlugin
 			var provider = new CSharpCodeProvider();
 			var compile = provider.CompileAssemblyFromSource(compilerParams, script);
 
-			if (compile.Errors.HasErrors == false)
+			if (compile.Errors.HasErrors == true)
 			{
-				SetSourcePathInPdbFile(compile, scriptName, scriptPath);
-				return compile.CompiledAssembly;
+				var text = compile.Errors.Cast<CompilerError>().Aggregate("", (current, ce) => current + ("\r\n" + ce));
+				Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
+				return null;
 			}
 
-			var text = compile.Errors.Cast<CompilerError>().Aggregate("", (current, ce) => current + ("rn" + ce));
-			Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
-			return null;
+			SetSourcePathInPdbFile(compile, scriptName, scriptPath);
+			return compile.CompiledAssembly;
 		}
 
 		public void AddReference(string referenceAssembly)

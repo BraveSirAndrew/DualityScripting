@@ -6,12 +6,14 @@ namespace ScriptingPlugin.Resources
 {
 	[Serializable]
 	[EditorHintCategory("Scripting")]
-	public class ScriptResource : ScriptResourceBase
+	public class FSharpScript : ScriptResourceBase
 	{
+
 		protected override void OnLoaded()
 		{
-			ScriptCompiler = ScriptingPluginCorePlugin.CSharpScriptCompiler;
-			FileExt = FileConstants.CSharpExtension + Resource.FileExt;
+			ScriptCompiler = ScriptingPluginCorePlugin.FSharpScriptCompiler;
+			
+			FileExt = FileConstants.FSharpExtension + Resource.FileExt;
 			base.OnLoaded();
 		}
 	}

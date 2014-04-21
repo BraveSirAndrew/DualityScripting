@@ -14,7 +14,7 @@ namespace ScriptingPlugin
 
 		private Dictionary<string, object> _scriptPropertyValues = new Dictionary<string, object>();
 
-		public ContentRef<ScriptResource> Script { get; set; }
+		public ContentRef<ScriptResourceBase> Script { get; set; }
 
 		public void OnInit(InitContext context)
 		{

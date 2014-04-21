@@ -72,6 +72,7 @@
     <Reference Include="LogView.editor">
       <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\LogView.editor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build" />
     <Reference Include="ObjectInspector.editor">
       <HintPath>..\packages\DualityEditor.0.1.141\lib\net40\ObjectInspector.editor.dll</HintPath>
     </Reference>
@@ -111,8 +112,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ScriptResourceEvents.cs" />
+    <Compile Include="ScriptsSolutionEditor.cs" />
     <None Include="packages.config" />
-    <None Include="Resources\ScriptTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CorePlugin\CorePlugin.csproj">

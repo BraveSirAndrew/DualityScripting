@@ -3,7 +3,7 @@ using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
 {
-	public class OpenScriptResourceEditorAction : EditorSingleAction<ScriptResource>
+	public abstract class OpenScriptResourceEditorAction<TScriptType> : EditorSingleAction<TScriptType> where TScriptType : ScriptResourceBase
 	{
 		public override string Name
 		{
@@ -14,18 +14,39 @@ namespace ScriptingPlugin.Editor
 		{
 			get { return "Open a script file in the associated editor"; }
 		}
+
 		
-		public override void Perform(ScriptResource script)
+		public override void Perform(TScriptType script)
 		{
 			if (script == null)
 				return;
 
-			FileImportProvider.OpenSourceFile(script, ".cs", script.SaveScript);
+			FileImportProvider.OpenSourceFile(script, CurrentExtension(), script.SaveScript);
 		}
+
+		protected abstract string CurrentExtension();
+		
 
 		public override bool MatchesContext(string context)
 		{
 			return context == DualityEditorApp.ActionContextOpenRes;
+		}
+	}
+
+	public class OpenCSharpScriptResourceEditorAction : OpenScriptResourceEditorAction<ScriptResource>
+	{
+		protected override string CurrentExtension()
+		{
+			return FileConstants.CSharpExtension;
+		}
+	}
+
+	public class OpenFSharpScriptResourceEditorAction : OpenScriptResourceEditorAction<FSharpScript>
+	{
+		protected override string CurrentExtension()
+		{
+			return FileConstants.FSharpExtension;
+
 		}
 	}
 }
