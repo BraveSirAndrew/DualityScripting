@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -25,18 +26,20 @@ namespace ScriptingPlugin.Editor
 		protected override void InitPlugin(MainForm main)
 		{
 			base.InitPlugin(main);
-			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(EditorHelper.SourceCodeDirectory);
+			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
 			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents();
 
 			ReloadOutOfDateScripts();
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
+			
 			ScriptsProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
-			_scriptsSolutionEditor.ModifySolution(Scripts);
+
+			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(ScriptsProjectPath);
+			_scriptsSolutionEditor.AddScriptProjectToSolution();
 
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
-			
 		}
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)

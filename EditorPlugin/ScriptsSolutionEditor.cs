@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using Ionic.Zip;
 
@@ -8,25 +9,21 @@ namespace ScriptingPlugin.Editor
 {
 	public class ScriptsSolutionEditor
 	{
+		private readonly IFileSystem _fileSystem;
 		private readonly string _sourceCodeDirectory;
-		private const string SolutionProjectReferences = "\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\nEndProject";
+		private const string SolutionProjectReferences = "\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\r\nEndProject";
 
-		public ScriptsSolutionEditor(string sourceCodeDirectory )
+		public ScriptsSolutionEditor(IFileSystem fileSystem, string sourceCodeDirectory)
 		{
+			_fileSystem = fileSystem;
 			_sourceCodeDirectory = sourceCodeDirectory;
 		}
 
-		public void ModifySolution(string projectPath)
+		public void ExtractScriptProjectToCodeDirectory(string projectPath)
 		{
-			if (File.Exists(projectPath))
+			if (_fileSystem.File.Exists(projectPath))
 				return;
 
-			ExtractScriptProjectToCodeDirectory();
-			AddScriptProjectToSolution();
-		}
-
-		private  void ExtractScriptProjectToCodeDirectory()
-		{
 			using (var scriptsProjectZip = ZipFile.Read(Resources.Resources.ScriptsProjectTemplate))
 			{
 				scriptsProjectZip.ExtractAll(Path.Combine(_sourceCodeDirectory, ScriptingEditorPlugin.Scripts),
@@ -34,17 +31,16 @@ namespace ScriptingPlugin.Editor
 			}
 		}
 
-		private  void AddScriptProjectToSolution()
+		public void AddScriptProjectToSolution()
 		{
-			var slnPath = Directory.GetFiles(_sourceCodeDirectory, "*.sln").First();
-			var slnText = File.ReadAllText(slnPath);
+			var slnPath = _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln").First();
+			var slnText = _fileSystem.File.ReadAllText(slnPath);
 
-			if (!slnText.Any(x => x.ToString(CultureInfo.InvariantCulture).Contains(SolutionProjectReferences)))
-			{
-				slnText = slnText.Insert(slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10,
-					SolutionProjectReferences);
-			}
-			File.WriteAllText(slnPath, slnText);
+			if (slnText.ToString(CultureInfo.InvariantCulture).IndexOf(SolutionProjectReferences, StringComparison.OrdinalIgnoreCase) != -1)
+				return;
+
+			slnText = slnText.Insert(slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10, SolutionProjectReferences);
+			_fileSystem.File.WriteAllText(slnPath, slnText);
 		}
 	}
 }
