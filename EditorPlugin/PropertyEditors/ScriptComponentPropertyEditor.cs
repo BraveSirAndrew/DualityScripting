@@ -31,7 +31,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 		{
 			base.BeforeAutoCreateEditors();
 
-			var scriptEditor = ParentGrid.CreateEditor(typeof (ContentRef<ScriptResource>), this);
+			var scriptEditor = ParentGrid.CreateEditor(typeof (ContentRef<ScriptResourceBase>), this);
 			if (scriptEditor != null)
 			{
 				scriptEditor.BeginUpdate();
