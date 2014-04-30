@@ -44,8 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Duality.0.1.141\lib\net40\Duality.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Compiler.Service">
-      <HintPath>..\packages\FSharp.Compiler.Service.0.0.44\lib\net40\FSharp.Compiler.Service.dll</HintPath>
+    <Reference Include="FSharp.Compiler.Service, Version=0.0.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FSharp.Compiler.Service.0.0.45\lib\net40\FSharp.Compiler.Service.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +80,7 @@
     <Compile Include="FileConstants.cs" />
     <Compile Include="FSharpScriptCompiler.cs" />
     <Compile Include="IScriptCompiler.cs" />
+    <Compile Include="PdbEditor.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\ScriptResource.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />

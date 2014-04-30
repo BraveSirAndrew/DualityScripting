@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Duality;
+using Microsoft.FSharp.Compiler;
 using Microsoft.FSharp.Compiler.SimpleSourceCodeServices;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
@@ -19,7 +20,35 @@ namespace ScriptingPlugin
 			_references = new List<string> { "System.dll", "System.Core.dll", "System.Drawing.dll", "System.Xml.Linq", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll", "System.Drawing" };
 		}
 
-		public Assembly Compile(string scriptName, string scriptPath, string script)
+		public CompilerResult TryCompile(string scriptName, string scriptPath, string script, out Assembly assembly)
+		{
+			assembly = null;
+			try
+			{
+				var compilerResult = Compile(scriptName, scriptPath, script);
+				if (compilerResult.Item1.Any() || !File.Exists(compilerResult.Item2))
+				{
+					var text = compilerResult.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
+					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
+					return CompilerResult.CompilerError;
+				}
+
+				SetSourcePathInPdbFile(compilerResult.Item2, scriptName, scriptPath);
+				//switch to use 
+				//var result = PdbEditor.SetSourcePathInPdbFile(compilerResult.Item2, scriptName, scriptPath);
+				//if (result == CompilerResult.Success)
+				if (compilerResult.Item2 != null)
+					assembly = Assembly.Load(compilerResult.Item2);
+				return CompilerResult.AssemblyExists;
+			}
+			catch (Exception exception)
+			{
+				Log.Editor.WriteError("Could not compile script {0} error {1}", scriptName, exception);
+				return CompilerResult.GeneralError;
+			}
+		}
+
+		private Tuple<ErrorInfo[], string> Compile(string scriptName, string scriptPath, string script)
 		{
 			var scs = new SimpleSourceCodeServices();
 			var outputAssemblyPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName() + ".dll");
@@ -31,18 +60,8 @@ namespace ScriptingPlugin
 
 			referencesAndScript.Add(scriptPath);
 			var completeOptions = options.Concat(referencesAndScript).ToArray();
-			
 			var errorsAndExitCode = scs.Compile(completeOptions);
-
-			if (errorsAndExitCode.Item1.Any() || !File.Exists(outputAssemblyPath))
-			{
-				var text = errorsAndExitCode.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
-				Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
-				return null;
-			}
-			
-			SetSourcePathInPdbFile(outputAssemblyPath, scriptName, scriptPath);
-			return Assembly.LoadFile(outputAssemblyPath);
+			return Tuple.Create(errorsAndExitCode.Item1, outputAssemblyPath);
 		}
 
 		public void AddReference(string referenceAssembly)
