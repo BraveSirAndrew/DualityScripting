@@ -32,11 +32,7 @@ namespace ScriptingPlugin
 					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
 					return CompilerResult.CompilerError;
 				}
-
-				SetSourcePathInPdbFile(compilerResult.Item2, scriptName, scriptPath);
-				//switch to use 
-				//var result = PdbEditor.SetSourcePathInPdbFile(compilerResult.Item2, scriptName, scriptPath);
-				//if (result == CompilerResult.Success)
+				
 				if (compilerResult.Item2 != null)
 					assembly = Assembly.Load(compilerResult.Item2);
 				return CompilerResult.AssemblyExists;
