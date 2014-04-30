@@ -12,6 +12,11 @@ namespace ScriptingPlugin.Resources
 		public new static string FileExt = FileConstants.FSharpExtension + Resource.FileExt;
 
 		public string Script { get; set; }
+		
+		public Assembly Assembly
+		{
+			get { return _assembly; }
+		}
 
 		[field: NonSerialized]
 		public event EventHandler Reloaded;
@@ -57,18 +62,18 @@ namespace ScriptingPlugin.Resources
 
 		public DualityScript Instantiate()
 		{
-			if (_assembly == null)
+			if (Assembly == null)
 			{
 				var compiled = Compile();
 
-				if (_assembly == null || compiled != CompilerResult.AssemblyExists)
+				if (Assembly == null || compiled != CompilerResult.AssemblyExists)
 				{
 					Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
 					return null;
 				}
 			}
 
-			var script = _assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
+			var script = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
 
 			if (script == null)
 			{

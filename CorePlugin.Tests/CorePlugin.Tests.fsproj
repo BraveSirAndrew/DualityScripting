@@ -11,6 +11,8 @@
     <AssemblyName>CorePlugin.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Name>CorePlugin.Tests</Name>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,11 +35,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Duality">
-      <HintPath>..\packages\Duality.0.1.141\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.148\lib\net40\Duality.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FarseerDuality">
-      <HintPath>..\packages\Duality.0.1.141\lib\net40\FarseerDuality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.148\lib\net40\FarseerDuality.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsCheck">
@@ -45,7 +47,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\packages\Duality.0.1.141\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.148\lib\net40\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
@@ -57,11 +59,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\packages\Duality.0.1.141\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.148\lib\net40\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK.GLControl">
-      <HintPath>..\packages\Duality.0.1.141\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.148\lib\net40\OpenTK.GLControl.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -83,6 +85,7 @@
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

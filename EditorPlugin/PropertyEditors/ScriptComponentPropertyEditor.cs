@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AdamsLair.WinForms;
+using AdamsLair.WinForms.PropertyEditing;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Plugins.Base.PropertyEditors;
@@ -30,7 +31,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 		{
 			base.BeforeAutoCreateEditors();
 
-			var scriptEditor = ParentGrid.CreateEditor(typeof (ContentRef<ScriptResource>), this);
+			var scriptEditor = ParentGrid.CreateEditor(typeof (ContentRef<ScriptResourceBase>), this);
 			if (scriptEditor != null)
 			{
 				scriptEditor.BeginUpdate();

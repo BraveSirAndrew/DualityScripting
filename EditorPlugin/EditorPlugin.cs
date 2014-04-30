@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -46,17 +47,20 @@ namespace ScriptingPlugin.Editor
 		{
 			if (System.Diagnostics.Debugger.IsAttached && _debuggerAttachedLastFrame == false)
 			{
-				foreach (var script in ContentProvider.GetAvailableContent<ScriptResource>())
+				foreach (var script in ContentProvider.GetAvailableContent<ScriptResourceBase>())
 				{
 					script.Res.Reload();
+				//	PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.Location, script.Name, script.Path);
 				}
 
-				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-				{
-					script.Res.Reload();
-				}
-
+//				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
+//				{
+//					script.Res.Reload();
+//					PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.CodeBase, script.Name, script.Path);
+//				}
+				
 				_debuggerAttachedLastFrame = true;
+
 			}
 			else if (System.Diagnostics.Debugger.IsAttached == false && _debuggerAttachedLastFrame)
 			{
@@ -67,13 +71,9 @@ namespace ScriptingPlugin.Editor
 		private void ReloadOutOfDateScripts()
 		{
 			foreach (var script in ContentProvider.GetAvailableContent<ScriptResource>())
-			{
 				ReloadScript(script);
-			}
 			foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-			{
 				ReloadScript(script);
-			}
 		}
 
 		private static void ReloadScript<T>(ContentRef<T> script) where T : ScriptResourceBase
