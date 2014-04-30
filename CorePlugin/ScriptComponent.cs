@@ -123,6 +123,8 @@ namespace ScriptingPlugin
 		private void OnScriptReloaded(object sender, EventArgs eventArgs)
 		{
 			InstantiateScript();
+			if (_scriptInstance == null)
+				return;
 			SetScriptPropertyValues();
 		}
 

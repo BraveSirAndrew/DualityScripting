@@ -50,15 +50,9 @@ namespace ScriptingPlugin.Editor
 				foreach (var script in ContentProvider.GetAvailableContent<ScriptResourceBase>())
 				{
 					script.Res.Reload();
-				//	PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.Location, script.Name, script.Path);
+					if (script.Res.Assembly != null)
+						PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.Location, script.Name, script.Path);
 				}
-
-//				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-//				{
-//					script.Res.Reload();
-//					PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.CodeBase, script.Name, script.Path);
-//				}
-				
 				_debuggerAttachedLastFrame = true;
 
 			}

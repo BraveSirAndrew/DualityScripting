@@ -63,7 +63,13 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 
 				var scriptInstance = scriptComponent.Script.Res.Instantiate();
 
+				if (scriptInstance == null)
+					continue;
+
 				var properties = scriptInstance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+				
+				if(properties.Any() == false)
+					continue;
 
 				foreach (var propertyInfo in properties)
 				{
