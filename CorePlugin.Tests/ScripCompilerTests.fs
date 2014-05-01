@@ -30,7 +30,7 @@ module ScriptCompilerTests =
     [<Test>]
     let ``Compiling doesnt throw on null or empty params``() = 
         let scriptingCompiler = createCSharpCompiler
-        Assert.DoesNotThrow( fun () -> scriptingCompiler.TryCompile("", null, "some") |> ignore)
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.TryCompile("", null, "soe") |> ignore)
         
     [<Test>]
     let ``Compiling returns null on null or empty params``() = 
@@ -45,9 +45,24 @@ module ScriptCompilerTests =
         Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)
         Assert.NotNull(snd compiled) 
 
-module FsharpScriptCompiler =
-        
+module FsharpScriptCompiler =        
+            
+    let createFSharpCompiler =
+        let compiler = new FSharpScriptCompiler()
+        let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
+        List.map(fun r -> compiler.AddReference(r)) ref |> ignore
+        compiler
+
+    
     [<Test>]
-    let ``Compiler add reference "f"s``() = 
+    let ``Compiler add reference f#``() = 
         let scriptongCompiler = new FSharpScriptCompiler()
-        Check.VerboseThrowOnFailure scriptongCompiler.AddReference   
+        Check.VerboseThrowOnFailure scriptongCompiler.AddReference
+
+    [<Test>]
+    let ``Compiling returns true if there is no errors ``() = 
+        let scriptingCompiler = createFSharpCompiler
+        let compiled = scriptingCompiler.TryCompile("asdas", "get a real path", "asd")
+      //  Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)
+      //  Assert.NotNull(snd compiled) 
+        Assert.Ignore("Ignore this integration test for now")

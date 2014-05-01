@@ -23,13 +23,13 @@ namespace ScriptingPlugin
 				var compilerResult = Compile(scriptName, scriptPath, script);
 				if (compilerResult.Item1.Any() || !File.Exists(compilerResult.Item2))
 				{
-					var text = compilerResult.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
+					var text = compilerResult.Item1.Aggregate("", (current, ce) => current + (Environment.NewLine + ce));
 					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
 					return CompilerResult.CompilerError;
 				}
 				
 				if (compilerResult.Item2 != null)
-					assembly = Assembly.Load(compilerResult.Item2);
+					assembly = Assembly.LoadFile(compilerResult.Item2);
 				return CompilerResult.AssemblyExists;
 			}
 			catch (Exception exception)
@@ -46,8 +46,8 @@ namespace ScriptingPlugin
 			var referencesAndScript = new List<string>();
 			foreach (var reference in _references)
 				referencesAndScript.Add(string.Format("--reference:{0}", reference));
-			
-			var options = new[] {"fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--lib:plugins", "--platform:anycpu"};
+
+			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--lib:plugins", "--noframework" };
 
 			referencesAndScript.Add(scriptPath);
 			var completeOptions = options.Concat(referencesAndScript).ToArray();
