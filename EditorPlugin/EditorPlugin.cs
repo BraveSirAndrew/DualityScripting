@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
+using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -25,35 +27,34 @@ namespace ScriptingPlugin.Editor
 		protected override void InitPlugin(MainForm main)
 		{
 			base.InitPlugin(main);
-			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(EditorHelper.SourceCodeDirectory);
+			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
 			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents();
 
 			ReloadOutOfDateScripts();
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
+			
 			ScriptsProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
-			_scriptsSolutionEditor.ModifySolution(Scripts);
+
+			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(ScriptsProjectPath);
+			_scriptsSolutionEditor.AddScriptProjectToSolution();
 
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
-			
 		}
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{
 			if (System.Diagnostics.Debugger.IsAttached && _debuggerAttachedLastFrame == false)
 			{
-				foreach (var script in ContentProvider.GetAvailableContent<ScriptResource>())
+				foreach (var script in ContentProvider.GetAvailableContent<ScriptResourceBase>())
 				{
 					script.Res.Reload();
+					if (script.Res.Assembly != null)
+						PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.Location, script.Name, script.Path);
 				}
-
-				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-				{
-					script.Res.Reload();
-				}
-
 				_debuggerAttachedLastFrame = true;
+
 			}
 			else if (System.Diagnostics.Debugger.IsAttached == false && _debuggerAttachedLastFrame)
 			{
@@ -64,13 +65,9 @@ namespace ScriptingPlugin.Editor
 		private void ReloadOutOfDateScripts()
 		{
 			foreach (var script in ContentProvider.GetAvailableContent<ScriptResource>())
-			{
 				ReloadScript(script);
-			}
 			foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-			{
 				ReloadScript(script);
-			}
 		}
 
 		private static void ReloadScript<T>(ContentRef<T> script) where T : ScriptResourceBase

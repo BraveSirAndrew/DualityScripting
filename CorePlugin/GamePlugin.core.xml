@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScriptingPlugin.core</name>
+    </assembly>
+    <members>
+        <member name="T:ScriptingPlugin.ScriptingPluginCorePlugin">
+            <summary>
+            Defines a Duality core plugin.
+            </summary>
+        </member>
+        <member name="T:ScriptingPlugin.DualityScript">
+            <summary>
+            This is the base class for all scripts. The scripting system will try to instantiate a type that inherits from
+            DualityScript when given a script to compile.
+            </summary>
+        </member>
+        <member name="F:ScriptingPlugin.CompilerResult.AssemblyExists">
+            <summary>
+            Either the assembly was succesfuly created or it exists
+            </summary>
+        </member>
+    </members>
+</doc>

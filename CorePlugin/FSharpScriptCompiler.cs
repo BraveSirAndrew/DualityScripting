@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Duality;
+using Microsoft.FSharp.Compiler;
 using Microsoft.FSharp.Compiler.SimpleSourceCodeServices;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
@@ -14,12 +15,31 @@ namespace ScriptingPlugin
 	{
 		private List<string> _references = new List<string>();
 
-		public FSharpScriptCompiler()
+		public CompilerResult TryCompile(string scriptName, string scriptPath, string script, out Assembly assembly)
 		{
-			_references = new List<string> { "System.dll", "System.Core.dll", "System.Drawing.dll", "System.Xml.Linq", "Duality.dll", "FarseerDuality.dll", "plugins/ScriptingPlugin.core.dll", "OpenTK.dll", "System.Drawing" };
+			assembly = null;
+			try
+			{
+				var compilerResult = Compile(scriptName, scriptPath, script);
+				if (compilerResult.Item1.Any() )//|| !File.Exists(compilerResult.Item2))
+				{
+					var text = compilerResult.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
+					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
+					return CompilerResult.CompilerError;
+				}
+				
+				if (compilerResult.Item2 != null)
+					assembly = Assembly.Load(compilerResult.Item2);
+				return CompilerResult.AssemblyExists;
+			}
+			catch (Exception exception)
+			{
+				Log.Editor.WriteError("Could not compile script {0} error {1}", scriptName, exception);
+				return CompilerResult.GeneralError;
+			}
 		}
 
-		public Assembly Compile(string scriptName, string scriptPath, string script)
+		private Tuple<ErrorInfo[], string> Compile(string scriptName, string scriptPath, string script)
 		{
 			var scs = new SimpleSourceCodeServices();
 			var outputAssemblyPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName() + ".dll");
@@ -27,22 +47,12 @@ namespace ScriptingPlugin
 			foreach (var reference in _references)
 				referencesAndScript.Add(string.Format("--reference:{0}", reference));
 			
-			var options = new[] {"fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--lib:plugins"};
+			var options = new[] {"fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--lib:plugins", "--platform:anycpu"};
 
 			referencesAndScript.Add(scriptPath);
 			var completeOptions = options.Concat(referencesAndScript).ToArray();
-			
 			var errorsAndExitCode = scs.Compile(completeOptions);
-
-			if (errorsAndExitCode.Item1.Any() || !File.Exists(outputAssemblyPath))
-			{
-				var text = errorsAndExitCode.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
-				Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
-				return null;
-			}
-			
-			SetSourcePathInPdbFile(outputAssemblyPath, scriptName, scriptPath);
-			return Assembly.LoadFile(outputAssemblyPath);
+			return Tuple.Create(errorsAndExitCode.Item1, outputAssemblyPath);
 		}
 
 		public void AddReference(string referenceAssembly)

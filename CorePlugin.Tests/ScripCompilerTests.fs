@@ -6,22 +6,41 @@ open ScriptingPlugin
 
 module ScriptCompilerTests =
 
-    type blaaa() =
-        inherit DualityScript()
-        
-            override this.Update () =
-                printfn "updated"
-
+    let myScript = "CSharpScript"
+    let scriptPath = "whyIsThisImportant"
+    let cShScript = @"namespace Tests
+                        {
+                            public class MyClass { 
+                                public void MyMethod(){var c= 1;}
+                            }
+                        }"
+    
     [<Test>]
     let ``Compiler add reference "I"s``() = 
         let scriptongCompiler = new CSharpScriptCompiler()
-        Check.Verbose scriptongCompiler.AddReference        
+        Check.VerboseThrowOnFailure scriptongCompiler.AddReference               
 
+    [<Test>]
+    let ``Compiling doesnt throw on null or empty params``() = 
+        let scriptingCompiler = new CSharpScriptCompiler()
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.TryCompile("", null, "some") |> ignore)
+        
+    [<Test>]
+    let ``Compiling returns null on null or empty params``() = 
+        let scriptingCompiler = new CSharpScriptCompiler()              
+        let compiled = scriptingCompiler.TryCompile(null, null, null)
+        Assert.AreEqual(CompilerResult.GeneralError,fst compiled)
+
+    [<Test>]
+    let ``Compiling returns true if there is no errors ``() = 
+        let scriptingCompiler = new CSharpScriptCompiler()
+        let compiled = scriptingCompiler.TryCompile(myScript, scriptPath, cShScript)
+        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)         
+        Assert.NotNull(snd compiled) 
+
+module FsharpScriptCompiler =
+        
     [<Test>]
     let ``Compiler add reference "f"s``() = 
         let scriptongCompiler = new FSharpScriptCompiler()
-        Check.Verbose scriptongCompiler.AddReference        
-
-    [<Test>]
-    let ``Test DualityScript Update method``() =         
-        Assert.DoesNotThrow(fun () -> blaaa().Update())        
+        Check.VerboseThrowOnFailure scriptongCompiler.AddReference   

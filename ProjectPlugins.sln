@@ -8,6 +8,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F75B19F0
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CorePlugin.Tests", "CorePlugin.Tests\CorePlugin.Tests.fsproj", "{53863E4D-A1C6-454D-BD30-DF64D084B112}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin.Tests", "EditorPlugin.Tests\EditorPlugin.Tests.csproj", "{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BD6E9743-00ED-4C0E-96D1-2038A97D83D8}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,11 +35,16 @@ Global
 		{53863E4D-A1C6-454D-BD30-DF64D084B112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53863E4D-A1C6-454D-BD30-DF64D084B112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53863E4D-A1C6-454D-BD30-DF64D084B112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{53863E4D-A1C6-454D-BD30-DF64D084B112} = {F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}
+		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6} = {F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}
 	EndGlobalSection
 EndGlobal

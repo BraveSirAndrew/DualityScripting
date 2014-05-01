@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Duality;
+using Duality.Helpers;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin
@@ -10,6 +12,8 @@ namespace ScriptingPlugin
 		[NonSerialized]
 		private DualityScript _scriptInstance;
 
+		private Dictionary<string, object> _scriptPropertyValues = new Dictionary<string, object>();
+
 		public ContentRef<ScriptResourceBase> Script { get; set; }
 
 		public void OnInit(InitContext context)
@@ -19,7 +23,7 @@ namespace ScriptingPlugin
 
 			if (Script.Res == null)
 			{
-				Log.Game.WriteWarning("The script attached to '{0}' is null.", GameObj.Name);
+				Log.Game.WriteError("The script attached to '{0}' is null.", GameObj);
 				return;
 			}
 
@@ -29,6 +33,7 @@ namespace ScriptingPlugin
 			if (_scriptInstance == null)
 				return;
 
+			SetScriptPropertyValues();
 			SafeExecute(_scriptInstance.Init, "Init");
 		}
 
@@ -88,6 +93,24 @@ namespace ScriptingPlugin
 			SafeExecute(_scriptInstance.HandleMessage, "HandleMessage", sender, msg);
 		}
 
+		public void SetScriptPropertyValue(string propertyName, object value)
+		{
+			if (_scriptPropertyValues.ContainsKey(propertyName))
+				_scriptPropertyValues[propertyName] = value;
+			else
+				_scriptPropertyValues.Add(propertyName, value);
+		}
+
+		public object GetScriptPropertyValue(string propertyName)
+		{
+			return _scriptPropertyValues.ContainsKey(propertyName) ? _scriptPropertyValues[propertyName] : new object();
+		}
+
+		public void ClearScriptPropertyValues()
+		{
+			_scriptPropertyValues.Clear();
+		}
+
 		private void InstantiateScript()
 		{
 			_scriptInstance = Script.Res.Instantiate();
@@ -100,6 +123,9 @@ namespace ScriptingPlugin
 		private void OnScriptReloaded(object sender, EventArgs eventArgs)
 		{
 			InstantiateScript();
+			if (_scriptInstance == null)
+				return;
+			SetScriptPropertyValues();
 		}
 
 		private void SafeExecute(Action action, string methodName)
@@ -135,6 +161,33 @@ namespace ScriptingPlugin
 			catch (Exception e)
 			{
 				Log.Game.WriteError("An error occurred while executing script {0} on '{1}':{2}", methodName, Script.Name, e.Message);
+			}
+		}
+
+		private void SetScriptPropertyValues()
+		{
+			Guard.NotNull(_scriptInstance);
+			Guard.NotNull(_scriptPropertyValues);
+
+			var removalList = new List<string>();
+			foreach (var propertyValue in _scriptPropertyValues)
+			{
+				var property = _scriptInstance.GetType().GetProperty(propertyValue.Key);
+
+				if (property == null)
+				{
+					Log.Editor.WriteWarning("{0}: Property name {1} not found in script {2}. Removing property value.", GetType().Name,
+						propertyValue.Key, Script.Name);
+					removalList.Add(propertyValue.Key);
+					continue;
+				}
+
+				property.SetValue(_scriptInstance, propertyValue.Value);
+			}
+
+			foreach (var key in removalList)
+			{
+				_scriptPropertyValues.Remove(key);
 			}
 		}
 	}
