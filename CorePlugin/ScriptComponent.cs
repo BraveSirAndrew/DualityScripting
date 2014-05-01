@@ -19,7 +19,7 @@ namespace ScriptingPlugin
 
 			if (Script.Res == null)
 			{
-				Log.Game.WriteError("The script attached to '{0}' is null.", GameObj.Name);
+				Log.Game.WriteWarning("The script attached to '{0}' is null.", GameObj.Name);
 				return;
 			}
 

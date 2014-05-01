@@ -50,7 +50,7 @@ namespace ScriptingPlugin.Resources
 			{
 				if (string.IsNullOrEmpty(SourcePath))
 				{
-					Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.");
+					Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
 					return;
 				}
 				_assembly = ScriptCompiler.Compile(Name, SourcePath, Script);

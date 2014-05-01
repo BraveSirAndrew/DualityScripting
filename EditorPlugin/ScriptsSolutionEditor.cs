@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Duality;
 using Ionic.Zip;
 
 namespace ScriptingPlugin.Editor
@@ -20,9 +21,16 @@ namespace ScriptingPlugin.Editor
 		{
 			if (File.Exists(projectPath))
 				return;
-
-			ExtractScriptProjectToCodeDirectory();
-			AddScriptProjectToSolution();
+			try
+			{
+				ExtractScriptProjectToCodeDirectory();
+				AddScriptProjectToSolution();
+			}
+			catch (Exception exception)
+			{
+				Log.Editor.WriteWarning("Tried adding a project to code directory and adding to solution but failed with the following exception {0} /n {1}", exception.Message, exception.StackTrace);
+			}
+			
 		}
 
 		private  void ExtractScriptProjectToCodeDirectory()
