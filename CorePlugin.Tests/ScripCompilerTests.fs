@@ -15,6 +15,13 @@ module ScriptCompilerTests =
                             }
                         }"
     
+    let createCSharpCompiler =
+        let compiler = new CSharpScriptCompiler()
+        let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
+        List.map(fun r -> compiler.AddReference(r)) ref |> ignore
+        compiler
+         
+
     [<Test>]
     let ``Compiler add reference "I"s``() = 
         let scriptongCompiler = new CSharpScriptCompiler()
@@ -22,20 +29,20 @@ module ScriptCompilerTests =
 
     [<Test>]
     let ``Compiling doesnt throw on null or empty params``() = 
-        let scriptingCompiler = new CSharpScriptCompiler()
+        let scriptingCompiler = createCSharpCompiler
         Assert.DoesNotThrow( fun () -> scriptingCompiler.TryCompile("", null, "some") |> ignore)
         
     [<Test>]
     let ``Compiling returns null on null or empty params``() = 
-        let scriptingCompiler = new CSharpScriptCompiler()              
+        let scriptingCompiler = createCSharpCompiler             
         let compiled = scriptingCompiler.TryCompile(null, null, null)
         Assert.AreEqual(CompilerResult.GeneralError,fst compiled)
 
     [<Test>]
     let ``Compiling returns true if there is no errors ``() = 
-        let scriptingCompiler = new CSharpScriptCompiler()
+        let scriptingCompiler = createCSharpCompiler
         let compiled = scriptingCompiler.TryCompile(myScript, scriptPath, cShScript)
-        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)         
+        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)
         Assert.NotNull(snd compiled) 
 
 module FsharpScriptCompiler =

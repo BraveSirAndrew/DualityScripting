@@ -21,7 +21,7 @@ namespace ScriptingPlugin
 			try
 			{
 				var compilerResult = Compile(scriptName, scriptPath, script);
-				if (compilerResult.Item1.Any() )//|| !File.Exists(compilerResult.Item2))
+				if (compilerResult.Item1.Any() || !File.Exists(compilerResult.Item2))
 				{
 					var text = compilerResult.Item1.Aggregate("", (current, ce) => current + ("\r\n" + ce));
 					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
