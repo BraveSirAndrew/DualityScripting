@@ -4,6 +4,13 @@ open NUnit.Framework
 open FsCheck
 open ScriptingPlugin
 
+module TestHelpers =
+    
+    let getLogInfo ()=  
+                Duality.Log.LogData.Data
+                            |> Seq.map (fun x-> x.Message)
+                            |> String.concat "+"
+
 module ScriptCompilerTests =
 
     let myScript = "CSharpScript"
@@ -14,16 +21,16 @@ module ScriptCompilerTests =
                                 public void MyMethod(){var c= 1;}
                             }
                         }"
-    
+
+        
     let createCSharpCompiler =
         let compiler = new CSharpScriptCompiler()
         let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
         List.map(fun r -> compiler.AddReference(r)) ref |> ignore
-        compiler
-         
+        compiler        
 
     [<Test>]
-    let ``Compiler add reference "I"s``() = 
+    let ``Compiler add reference``() = 
         let scriptongCompiler = new CSharpScriptCompiler()
         Check.VerboseThrowOnFailure scriptongCompiler.AddReference               
 
@@ -52,7 +59,6 @@ module FsharpScriptCompiler =
         let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
         List.map(fun r -> compiler.AddReference(r)) ref |> ignore
         compiler
-
     
     [<Test>]
     let ``Compiler add reference f#``() = 
@@ -62,7 +68,17 @@ module FsharpScriptCompiler =
     [<Test>]
     let ``Compiling returns true if there is no errors ``() = 
         let scriptingCompiler = createFSharpCompiler
+        //no need for the api to use script name and the rest, just the script would work, tho the path is better
         let compiled = scriptingCompiler.TryCompile("asdas", "get a real path", "asd")
-      //  Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)
-      //  Assert.NotNull(snd compiled) 
+        //why this gets the value at the start
+        let error = lazy TestHelpers.getLogInfo
+
+        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled )
+        Assert.NotNull(snd compiled) 
         Assert.Ignore("Ignore this integration test for now")
+
+// Other notes
+// need to support rename of the script
+// replace template file
+// copile all scripts into a dll 
+// add to fsproj and work also on edit

@@ -18,17 +18,14 @@ namespace ScriptingPlugin
 			assembly = null;
 			try
 			{
-				var compilerResult = Compile(scriptName, scriptPath, script);
+				var compilerResult = Compile(script);
 
 				if (compilerResult.Errors.HasErrors)
 				{
 					var text = compilerResult.Errors.Cast<CompilerError>().Aggregate("", (current, compilerError) => current + (Environment.NewLine + compilerError));
 					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
 					return CompilerResult.CompilerError;
-				}
-//				var result =PdbEditor.SetSourcePathInPdbFile(compilerResult, scriptName, scriptPath);
-//				if (result == CompilerResult.AssemblyExists) 
-				
+				}				
 				assembly = compilerResult.CompiledAssembly;
 				return CompilerResult.AssemblyExists;
 			}
@@ -39,10 +36,8 @@ namespace ScriptingPlugin
 			}
 		}
 
-		private CompilerResults Compile(string scriptName, string scriptPath, string script)
+		private CompilerResults Compile(string script)
 		{
-				Guard.StringNotNullEmpty(scriptName);
-				Guard.StringNotNullEmpty(scriptPath);
 				Guard.StringNotNullEmpty(script);
 
 				var compilerParams = new CompilerParameters

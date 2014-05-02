@@ -113,6 +113,11 @@ namespace ScriptingPlugin
 
 		private void InstantiateScript()
 		{
+			if (Script.Res == null)
+			{
+				Log.Editor.WriteWarning("Attempting to instanciate Script but resource is null {0}", Script);
+				return;
+			}
 			_scriptInstance = Script.Res.Instantiate();
 			if (_scriptInstance == null)
 				return;
