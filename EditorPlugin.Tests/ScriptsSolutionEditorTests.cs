@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using NUnit.Framework;
 using ScriptingPlugin.Editor;
@@ -68,15 +69,13 @@ namespace EditorPlugin.Tests
 			{
 				var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
 				{
-					{_sourceCodeDirectory, new MockFileData("file.txt")}
-					//{_solutionPath, new MockFileData(_projectReferenceString.ToLower())}
+					{Path.Combine(_sourceCodeDirectory, "file.txt"), new MockFileData("file.txt")}
 				});
 
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
-			//	solutionEditor.AddScriptProjectToSolution();
-				Assert.Ignore("Until after lunch");
-//				Assert.AreEqual(expexted, actual);
+				Assert.DoesNotThrow(solutionEditor.AddScriptProjectToSolution);
+				
 			}
 		}
 	}
