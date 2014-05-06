@@ -24,23 +24,34 @@ namespace ScriptingPlugin.Editor
 			if (_fileSystem.File.Exists(projectPath))
 				return;
 
+			if (!SolutionExists().Item2) 
+				return;
 			using (var scriptsProjectZip = ZipFile.Read(Resources.Resources.ScriptsProjectTemplate))
 			{
 				scriptsProjectZip.ExtractAll(Path.Combine(_sourceCodeDirectory, ScriptingEditorPlugin.Scripts),
-				ExtractExistingFileAction.DoNotOverwrite);
+					ExtractExistingFileAction.DoNotOverwrite);
 			}
+		}
+
+		private Tuple<string[], bool> SolutionExists()
+		{
+			var slnPath = _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln");
+			return Tuple.Create(slnPath, slnPath.Any());
 		}
 
 		public void AddScriptProjectToSolution()
 		{
-			var slnPath = _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln").First();
-			var slnText = _fileSystem.File.ReadAllText(slnPath);
+			var solutionExists = SolutionExists();
+			if(solutionExists.Item2 == false)
+				return;
+			var solutionPath = solutionExists.Item1.First();
+			var slnText = _fileSystem.File.ReadAllText(solutionPath);
 
 			if (slnText.ToString(CultureInfo.InvariantCulture).IndexOf(SolutionProjectReferences, StringComparison.OrdinalIgnoreCase) != -1)
 				return;
 
 			slnText = slnText.Insert(slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10, SolutionProjectReferences);
-			_fileSystem.File.WriteAllText(slnPath, slnText);
+			_fileSystem.File.WriteAllText(solutionPath, slnText);
 		}
 	}
 }

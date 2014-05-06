@@ -62,6 +62,22 @@ namespace EditorPlugin.Tests
 
 				Assert.IsTrue(_projectReferenceString.Equals(new MockFile(fileSystem).ReadAllText(_solutionPath), StringComparison.OrdinalIgnoreCase));
 			}
+
+			[Test]
+			public void When_Solution_doesnt_exist_then_it_doesnt_throw()
+			{
+				var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+				{
+					{_sourceCodeDirectory, new MockFileData("file.txt")}
+					//{_solutionPath, new MockFileData(_projectReferenceString.ToLower())}
+				});
+
+
+				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
+			//	solutionEditor.AddScriptProjectToSolution();
+				Assert.Ignore("Until after lunch");
+//				Assert.AreEqual(expexted, actual);
+			}
 		}
 	}
 }

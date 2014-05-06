@@ -73,12 +73,13 @@ module FsharpScriptCompiler =
         //why this gets the value at the start
         let error = lazy TestHelpers.getLogInfo
 
-        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled )
-        Assert.NotNull(snd compiled) 
+//        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled )
+//        Assert.NotNull(snd compiled) 
         Assert.Ignore("Ignore this integration test for now")
+
+
 
 // Other notes
 // need to support rename of the script
 // replace template file
-// copile all scripts into a dll 
-// add to fsproj and work also on edit
+// copile all scripts into a dll  add to fsproj and work also on edit
