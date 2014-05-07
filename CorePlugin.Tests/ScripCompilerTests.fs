@@ -80,6 +80,7 @@ module FsharpScriptCompiler =
 
 
 // Other notes
-// need to support rename of the script
-// replace template file
-// copile all scripts into a dll  add to fsproj and work also on edit
+// DONE - need to support rename of the script
+// DONE - replace template file
+// copile all scripts into a dll  
+// add to fsproj and work also on edit
