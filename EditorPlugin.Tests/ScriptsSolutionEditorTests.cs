@@ -72,7 +72,6 @@ namespace EditorPlugin.Tests
 					{Path.Combine(_sourceCodeDirectory, "file.txt"), new MockFileData("file.txt")}
 				});
 
-
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
 				Assert.DoesNotThrow(solutionEditor.AddScriptProjectToSolution);
 				

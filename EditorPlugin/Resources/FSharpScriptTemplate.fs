@@ -3,7 +3,7 @@
 open ScriptingPlugin
 open Duality
 
-    type blaaa() =
+    type FSharpScript() =
         inherit DualityScript()
         
             override this.Update () =

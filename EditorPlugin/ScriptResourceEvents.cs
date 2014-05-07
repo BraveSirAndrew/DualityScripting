@@ -13,42 +13,54 @@ namespace ScriptingPlugin.Editor
 		{
 			if (e.ContentType == typeof(ScriptResource))
 			{
-				var script = e.Content.As<ScriptResource>();
-				script.Res.Script = Resources.Resources.ScriptTemplate;
-				script.Res.Save();
+				var scriptFullName = SaveResource<ScriptResource>(e.Content, Resources.Resources.ScriptTemplate);
 
-				var fileWithPath = RemoveDataScriptPath(script.FullName);
+				var fileWithPath = RemoveDataScriptPath(scriptFullName, ScriptingPluginCorePlugin.CSharpScriptExtension);
 				AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath));
 			}
 			else if (e.ContentType == typeof(FSharpScript))
-			{
-				var script = e.Content.As<FSharpScript>();
-				script.Res.Script = Resources.Resources.FSharpScriptTemplate;
-				script.Res.Save();
-			}
+				SaveResource<FSharpScript>(e.Content, Resources.Resources.FSharpScriptTemplate);
+		}
+
+		private string SaveResource<T>(ContentRef<Resource> scriptResourceContentRef, string script) where T : ScriptResourceBase
+		{
+			var scriptResource = scriptResourceContentRef.As<T>();
+
+			scriptResource.Res.Script = script;
+			scriptResource.Res.Save();
+			return scriptResource.FullName;
 		}
 
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs e)
 		{
-			if (e.ContentType != typeof(ScriptResource))
+			string extension = null;
+			if (!e.ContentType.IsAssignableFrom(typeof(ScriptResourceBase)))
 				return;
-			RemoveOldScriptFromProject(e.OldContent.FullName);
-
-			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName));
+			if (e.ContentType == typeof(ScriptResource))
+			{
+				extension = ScriptingPluginCorePlugin.CSharpScriptExtension;
+			}
+			else if (e.ContentType == typeof(FSharpScript))
+			{
+				extension = ScriptingPluginCorePlugin.FSharpScriptExtension;
+			}
+			var oldName = e.OldContent.FullName;
+			RemoveOldScriptFromProject(oldName, extension);
+			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName, extension));
 			AddScriptToSolution(newScriptName, GetFileName(newScriptName));
 		}
 
-		private void RemoveOldScriptFromProject(string oldContentName)
+		private void RemoveOldScriptFromProject(string oldContentName, string extension)
 		{
-			var rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, ScriptingEditorPlugin.ScriptsProjectPath));
+			var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, ScriptingEditorPlugin.ScriptsProjectPath));
 			if (rootElement == null)
 				return;
 
-			string scriptName = GetScriptNameWithPath(RemoveDataScriptPath(oldContentName));
+			string scriptName = GetScriptNameWithPath(RemoveDataScriptPath(oldContentName, extension));
 
 			foreach (var itemGroup in rootElement.ItemGroups)
 			{
-				foreach (ProjectItemElement item in itemGroup.Items)
+				foreach (var item in itemGroup.Items)
 				{
 					if (item.Include.Contains(scriptName))
 					{
@@ -70,16 +82,16 @@ namespace ScriptingPlugin.Editor
 			return Path.Combine(@"..\..\Media", ScriptingEditorPlugin.Scripts, fileNameWithResourcePath);
 		}
 
-		private string RemoveDataScriptPath(string fullScriptName)
+		private string RemoveDataScriptPath(string fullScriptName, string extension)
 		{
-			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + ScriptingPluginCorePlugin.CSharpScriptExtension;
+			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + extension;
 		}
 
 		private void AddScriptToSolution(string scriptPath, string scriptFileName)
 		{
 			try
 			{
-				var rootElement = ProjectRootElement.Open(Path.Combine(Duality.PathHelper.ExecutingAssemblyDir, ScriptingEditorPlugin.ScriptsProjectPath));
+				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, ScriptingEditorPlugin.ScriptsProjectPath));
 				if (rootElement == null)
 					return;
 				var itemGroup = rootElement.AddItemGroup();
