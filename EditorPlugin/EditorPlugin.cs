@@ -64,7 +64,7 @@ namespace ScriptingPlugin.Editor
 
 		private void ReloadOutOfDateScripts()
 		{
-			foreach (var script in ContentProvider.GetAvailableContent<ScriptResource>())
+			foreach (var script in ContentProvider.GetAvailableContent<CSharpScript>())
 				ReloadScript(script);
 			foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
 				ReloadScript(script);

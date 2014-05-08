@@ -50,7 +50,7 @@ namespace ScriptingPlugin.Editor.Importers
 		}
 	}
 
-	public class CSharpFileImporter : ScriptFileImporter<ScriptResource>
+	public class CSharpFileImporter : ScriptFileImporter<CSharpScript>
 	{
 		protected override string DefaultFileExtention()
 		{

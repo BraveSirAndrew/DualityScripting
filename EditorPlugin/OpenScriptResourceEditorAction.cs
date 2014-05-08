@@ -33,7 +33,7 @@ namespace ScriptingPlugin.Editor
 		}
 	}
 
-	public class OpenCSharpScriptResourceEditorAction : OpenScriptResourceEditorAction<ScriptResource>
+	public class OpenCSharpScriptResourceEditorAction : OpenScriptResourceEditorAction<CSharpScript>
 	{
 		protected override string CurrentExtension()
 		{

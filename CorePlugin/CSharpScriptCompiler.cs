@@ -25,7 +25,7 @@ namespace ScriptingPlugin
 					var text = compilerResult.Errors.Cast<CompilerError>().Aggregate("", (current, compilerError) => current + (Environment.NewLine + compilerError));
 					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
 					return CompilerResult.CompilerError;
-				}				
+				}
 				assembly = compilerResult.CompiledAssembly;
 				return CompilerResult.AssemblyExists;
 			}
@@ -38,22 +38,22 @@ namespace ScriptingPlugin
 
 		private CompilerResults Compile(string script)
 		{
-				Guard.StringNotNullEmpty(script);
+			Guard.StringNotNullEmpty(script);
 
-				var compilerParams = new CompilerParameters
-				{
-					GenerateInMemory = false,
-					TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true),
-					IncludeDebugInformation = true,
-					TreatWarningsAsErrors = false,
-					GenerateExecutable = false,
-					CompilerOptions = " /debug:pdbonly"
-				};
+			var compilerParams = new CompilerParameters
+			{
+				GenerateInMemory = false,
+				TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true),
+				IncludeDebugInformation = true,
+				TreatWarningsAsErrors = false,
+				GenerateExecutable = false,
+				CompilerOptions = " /debug:pdbonly"
+			};
 
-				compilerParams.ReferencedAssemblies.AddRange(_references.ToArray());
+			compilerParams.ReferencedAssemblies.AddRange(_references.ToArray());
 
-				var provider = new CSharpCodeProvider();
-				return provider.CompileAssemblyFromSource(compilerParams, script);
+			var provider = new CSharpCodeProvider();
+			return provider.CompileAssemblyFromSource(compilerParams, script);
 		}
 
 		public void AddReference(string referenceAssembly)

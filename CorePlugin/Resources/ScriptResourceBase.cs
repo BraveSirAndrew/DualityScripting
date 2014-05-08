@@ -9,8 +9,6 @@ namespace ScriptingPlugin.Resources
 	[Serializable]
 	public abstract class ScriptResourceBase : Resource
 	{
-		public new static string FileExt = FileConstants.FSharpExtension + Resource.FileExt;
-
 		public string Script { get; set; }
 		
 		public Assembly Assembly

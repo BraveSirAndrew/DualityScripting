@@ -11,9 +11,9 @@ namespace ScriptingPlugin.Editor
 	{
 		public void OnResourceCreated(object sender, ResourceEventArgs e)
 		{
-			if (e.ContentType == typeof(ScriptResource))
+			if (e.ContentType == typeof(CSharpScript))
 			{
-				var scriptFullName = SaveResource<ScriptResource>(e.Content, Resources.Resources.ScriptTemplate);
+				var scriptFullName = SaveResource<CSharpScript>(e.Content, Resources.Resources.ScriptTemplate);
 
 				var fileWithPath = RemoveDataScriptPath(scriptFullName, ScriptingPluginCorePlugin.CSharpScriptExtension);
 				AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath));
@@ -36,7 +36,7 @@ namespace ScriptingPlugin.Editor
 			string extension = null;
 			if (!e.ContentType.IsAssignableFrom(typeof(ScriptResourceBase)))
 				return;
-			if (e.ContentType == typeof(ScriptResource))
+			if (e.ContentType == typeof(CSharpScript))
 			{
 				extension = ScriptingPluginCorePlugin.CSharpScriptExtension;
 			}
