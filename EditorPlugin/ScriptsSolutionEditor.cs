@@ -19,38 +19,40 @@ namespace ScriptingPlugin.Editor
 			_sourceCodeDirectory = sourceCodeDirectory;
 		}
 
-		public void ExtractScriptProjectToCodeDirectory(string projectPath)
+		public void ExtractScriptProjectToCodeDirectory(string projectPath, byte[] projectTemplate)
 		{
 			if (_fileSystem.File.Exists(projectPath))
 				return;
 
-			if (!SolutionExists().Item2) 
+			if (!SolutionExists().Any()) 
 				return;
-			using (var scriptsProjectZip = ZipFile.Read(Resources.Resources.ScriptsProjectTemplate))
+
+			using (var scriptsProjectZip = ZipFile.Read(projectTemplate))
 			{
 				scriptsProjectZip.ExtractAll(Path.Combine(_sourceCodeDirectory, ScriptingEditorPlugin.Scripts),
 					ExtractExistingFileAction.DoNotOverwrite);
 			}
 		}
 
-		private Tuple<string[], bool> SolutionExists()
+		private string[] SolutionExists()
 		{
-			var slnPath = _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln");
-			return Tuple.Create(slnPath, slnPath.Any());
+			return _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln");
 		}
 
 		public void AddScriptProjectToSolution()
 		{
 			var solutionExists = SolutionExists();
-			if(solutionExists.Item2 == false)
+			if(solutionExists.Any() == false)
 				return;
-			var solutionPath = solutionExists.Item1.First();
+
+			var solutionPath = solutionExists.First();
 			var slnText = _fileSystem.File.ReadAllText(solutionPath);
 
 			if (slnText.ToString(CultureInfo.InvariantCulture).IndexOf(SolutionProjectReferences, StringComparison.OrdinalIgnoreCase) != -1)
 				return;
 
-			slnText = slnText.Insert(slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10, SolutionProjectReferences);
+			slnText = slnText.Insert(
+				slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10, SolutionProjectReferences);
 			_fileSystem.File.WriteAllText(solutionPath, slnText);
 		}
 	}

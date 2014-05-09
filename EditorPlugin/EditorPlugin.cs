@@ -14,7 +14,8 @@ namespace ScriptingPlugin.Editor
 		private bool _debuggerAttachedLastFrame;
 		
 		private ScriptsSolutionEditor _scriptsSolutionEditor;
-		internal static string ScriptsProjectPath;
+		internal static string CSharpProjectPath;
+		internal static string FSharpProjectPath;
 		private ScriptResourceEvents _scriptResourceEvents;
 
 		public const string Scripts = "Scripts";
@@ -35,9 +36,12 @@ namespace ScriptingPlugin.Editor
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
 			
-			ScriptsProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
+			CSharpProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
+			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(CSharpProjectPath, Resources.Resources.ScriptsProjectTemplate);
+			_scriptsSolutionEditor.AddScriptProjectToSolution();
 
-			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(ScriptsProjectPath);
+			FSharpProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".fsproj");
+			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(FSharpProjectPath, Resources.Resources.FSharpProjectTemplate);
 			_scriptsSolutionEditor.AddScriptProjectToSolution();
 
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;

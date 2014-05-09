@@ -15,8 +15,9 @@ namespace ScriptingPlugin.Editor
 			{
 				var scriptFullName = SaveResource<CSharpScript>(e.Content, Resources.Resources.ScriptTemplate);
 
-				var fileWithPath = RemoveDataScriptPath(scriptFullName, ScriptingPluginCorePlugin.CSharpScriptExtension);
-				AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath));
+				string scriptExtension = ScriptingPluginCorePlugin.CSharpScriptExtension;
+				var fileWithPath = RemoveDataScriptPath(scriptFullName, scriptExtension);
+				AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), ScriptingEditorPlugin.CSharpProjectPath);
 			}
 			else if (e.ContentType == typeof(FSharpScript))
 				SaveResource<FSharpScript>(e.Content, Resources.Resources.FSharpScriptTemplate);
@@ -34,25 +35,28 @@ namespace ScriptingPlugin.Editor
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs e)
 		{
 			string extension = null;
+			string projectPath = null;
 			if (!e.ContentType.IsAssignableFrom(typeof(ScriptResourceBase)))
 				return;
 			if (e.ContentType == typeof(CSharpScript))
 			{
 				extension = ScriptingPluginCorePlugin.CSharpScriptExtension;
+				projectPath = ScriptingEditorPlugin.CSharpProjectPath;
 			}
 			else if (e.ContentType == typeof(FSharpScript))
 			{
 				extension = ScriptingPluginCorePlugin.FSharpScriptExtension;
+				projectPath = ScriptingEditorPlugin.FSharpProjectPath;
 			}
 			var oldName = e.OldContent.FullName;
-			RemoveOldScriptFromProject(oldName, extension);
+			RemoveOldScriptFromProject(oldName, extension, projectPath);
 			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName, extension));
-			AddScriptToSolution(newScriptName, GetFileName(newScriptName));
+			AddScriptToSolution(newScriptName, GetFileName(newScriptName), projectPath);
 		}
 
-		private void RemoveOldScriptFromProject(string oldContentName, string extension)
+		private void RemoveOldScriptFromProject(string oldContentName, string extension, string projectPath)
 		{
-			var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, ScriptingEditorPlugin.ScriptsProjectPath));
+			var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
 			if (rootElement == null)
 				return;
 
@@ -87,11 +91,11 @@ namespace ScriptingPlugin.Editor
 			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + extension;
 		}
 
-		private void AddScriptToSolution(string scriptPath, string scriptFileName)
+		private void AddScriptToSolution(string scriptPath, string scriptFileName, string projectPath)
 		{
 			try
 			{
-				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, ScriptingEditorPlugin.ScriptsProjectPath));
+				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
 				if (rootElement == null)
 					return;
 				var itemGroup = rootElement.AddItemGroup();
