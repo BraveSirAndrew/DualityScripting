@@ -4,9 +4,6 @@ using Duality;
 
 namespace ScriptingPlugin
 {
-	/// <summary>
-	/// Defines a Duality core plugin.
-	/// </summary>
 	public class ScriptingPluginCorePlugin : CorePlugin
 	{
 		public const string CSharpScriptExtension = ".cs";
@@ -14,20 +11,23 @@ namespace ScriptingPlugin
 		public const string DataScripts = "Data\\Scripts\\";
 		private const string ReferenceAssembliesFile = "ScriptReferences.txt";
 
-		public static CSharpScriptCompiler CSharpScriptCompiler { get; set; }
-		public static FSharpScriptCompiler FSharpScriptCompiler { get; set; }
+		public static IScriptCompilerService CSharpScriptCompiler { get; set; }
+		public static IScriptCompilerService FSharpScriptCompiler { get; set; }
 
 		protected override void InitPlugin()
 		{
 			base.InitPlugin();
 
-			CSharpScriptCompiler = new CSharpScriptCompiler();
-			FSharpScriptCompiler = new FSharpScriptCompiler();
+			var cSharpScriptCompiler = new CSharpScriptCompiler();
+			var fSharpScriptCompiler = new FSharpScriptCompiler();
+
+			CSharpScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler, new NullPdbEditor());
+			FSharpScriptCompiler = new ScriptCompilerService(fSharpScriptCompiler, new NullPdbEditor());
 
 			foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 			{
-				CSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
-				FSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+				cSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+				fSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
 			}
 
 			if (File.Exists(ReferenceAssembliesFile))
@@ -36,8 +36,8 @@ namespace ScriptingPlugin
 
 				foreach (var assembly in assemblies)
 				{
-					CSharpScriptCompiler.AddReference(assembly);
-					FSharpScriptCompiler.AddReference(assembly);
+					cSharpScriptCompiler.AddReference(assembly);
+					fSharpScriptCompiler.AddReference(assembly);
 				}
 			}
 		}

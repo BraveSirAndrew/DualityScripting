@@ -23,7 +23,7 @@ namespace ScriptingPlugin.Resources
 		private Assembly _assembly;
 		
 		[NonSerialized]
-		protected IScriptCompiler ScriptCompiler;
+		protected IScriptCompilerService ScriptCompiler;
 
 		public void SaveScript(string scriptPath)
 		{

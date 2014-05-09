@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -45,19 +45,32 @@ namespace ScriptingPlugin.Editor
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{
-			if (System.Diagnostics.Debugger.IsAttached && _debuggerAttachedLastFrame == false)
+			if (Debugger.IsAttached && _debuggerAttachedLastFrame == false)
 			{
+				Log.Editor.Write("Reloading scripts with debug information...");
+				Log.Editor.PushIndent();
+
+				var sw = Stopwatch.StartNew();
+
+				ScriptingPluginCorePlugin.CSharpScriptCompiler.SetPdbEditor(new PdbEditor());
+				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
+
 				foreach (var script in ContentProvider.GetAvailableContent<ScriptResourceBase>())
 				{
 					script.Res.Reload();
-					if (script.Res.Assembly != null)
-						PdbEditor.SetSourcePathInPdbFile(script.Res.Assembly.Location, script.Name, script.Path);
 				}
-				_debuggerAttachedLastFrame = true;
 
+				_debuggerAttachedLastFrame = true;
+				
+				sw.Stop();
+				Log.Editor.PopIndent();
+				Log.Editor.Write("Reloading scripts took {0} ms", sw.ElapsedMilliseconds);
 			}
-			else if (System.Diagnostics.Debugger.IsAttached == false && _debuggerAttachedLastFrame)
+			else if (Debugger.IsAttached == false && _debuggerAttachedLastFrame)
 			{
+				ScriptingPluginCorePlugin.CSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
+				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
+
 				_debuggerAttachedLastFrame = false;
 			}
 		}
