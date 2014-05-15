@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Duality;
+using Duality.Editor;
 
 namespace ScriptingPlugin.Resources
 {
@@ -11,6 +12,7 @@ namespace ScriptingPlugin.Resources
 	{
 		public string Script { get; set; }
 		
+		[EditorHintFlags(MemberFlags.Invisible)]
 		public Assembly Assembly
 		{
 			get { return _assembly; }
@@ -23,7 +25,7 @@ namespace ScriptingPlugin.Resources
 		private Assembly _assembly;
 		
 		[NonSerialized]
-		protected IScriptCompiler ScriptCompiler;
+		protected IScriptCompilerService ScriptCompiler;
 
 		public void SaveScript(string scriptPath)
 		{

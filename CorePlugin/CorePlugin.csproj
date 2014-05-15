@@ -83,11 +83,15 @@
     <Compile Include="DualityScript.cs" />
     <Compile Include="FileConstants.cs" />
     <Compile Include="FSharpScriptCompiler.cs" />
+    <Compile Include="IPdbEditor.cs" />
     <Compile Include="IScriptCompiler.cs" />
+    <Compile Include="IScriptCompilerService.cs" />
+    <Compile Include="NullPdbEditor.cs" />
     <Compile Include="PdbEditor.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\CSharpScript.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />
+    <Compile Include="ScriptCompilerService.cs" />
     <Compile Include="ScriptComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CSharpScriptCompiler.cs" />

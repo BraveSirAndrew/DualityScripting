@@ -21,8 +21,7 @@ module ScriptCompilerTests =
                                 public void MyMethod(){var c= 1;}
                             }
                         }"
-
-        
+                        
     let createCSharpCompiler =
         let compiler = new CSharpScriptCompiler()
         let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
@@ -37,20 +36,14 @@ module ScriptCompilerTests =
     [<Test>]
     let ``Compiling doesnt throw on null or empty params``() = 
         let scriptingCompiler = createCSharpCompiler
-        Assert.DoesNotThrow( fun () -> scriptingCompiler.TryCompile("", null, "soe") |> ignore)
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile(cShScript) |> ignore)
         
-    [<Test>]
-    let ``Compiling returns null on null or empty params``() = 
-        let scriptingCompiler = createCSharpCompiler             
-        let compiled = scriptingCompiler.TryCompile(null, null, null)
-        Assert.AreEqual(CompilerResult.GeneralError,fst compiled)
-
     [<Test>]
     let ``Compiling returns true if there is no errors ``() = 
         let scriptingCompiler = createCSharpCompiler
-        let compiled = scriptingCompiler.TryCompile(myScript, scriptPath, cShScript)
-        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled)
-        Assert.NotNull(snd compiled) 
+        let compilerResults = scriptingCompiler.Compile(cShScript)
+        Assert.IsFalse(compilerResults.Errors.HasErrors)
+        Assert.NotNull(compilerResults.CompiledAssembly)
 
 module FsharpScriptCompiler =        
             
@@ -59,7 +52,14 @@ module FsharpScriptCompiler =
         let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
         List.map(fun r -> compiler.AddReference(r)) ref |> ignore
         compiler
-    
+    let fsharpScript = @"module Dualityscript
+
+open ScriptingPlugin
+open Duality
+
+    type FSharpScript() =
+        inherit DualityScript()"
+
     [<Test>]
     let ``Compiler add reference f#``() = 
         let scriptongCompiler = new FSharpScriptCompiler()
@@ -69,7 +69,7 @@ module FsharpScriptCompiler =
     let ``Compiling returns true if there is no errors ``() = 
         let scriptingCompiler = createFSharpCompiler
         //no need for the api to use script name and the rest, just the script would work, tho the path is better
-        let compiled = scriptingCompiler.TryCompile("asdas", "get a real path", "asd")
+        let compiled = scriptingCompiler.Compile(fsharpScript)
         //why this gets the value at the start
         let error = lazy TestHelpers.getLogInfo
 

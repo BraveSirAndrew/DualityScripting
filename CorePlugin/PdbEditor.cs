@@ -1,5 +1,4 @@
 using System;
-using System.CodeDom.Compiler;
 using System.Linq;
 using Duality;
 using Mono.Cecil;
@@ -7,9 +6,9 @@ using Mono.Cecil.Pdb;
 
 namespace ScriptingPlugin
 {
-	public class PdbEditor
+	public class PdbEditor : IPdbEditor
 	{
-		public static CompilerResult SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
+		public CompilerResult SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
 		{
 			try
 			{
@@ -36,13 +35,13 @@ namespace ScriptingPlugin
 				}
 				var writerParameters = new WriterParameters { WriteSymbols = true, SymbolWriterProvider = new PdbWriterProvider() };
 				assemblyDef.Write(pathToAssembly, writerParameters);
-				
 			}
 			catch (Exception exception)
 			{
 				Log.Editor.WriteError("There was a problem editing the pdb file after compiling the script {0}, {1} Error: {2} {1} StackTrace: {3}", scriptName,Environment.NewLine, exception.Message, exception.StackTrace);
 				return CompilerResult.PdbEditorError;
 			}
+
 			return CompilerResult.AssemblyExists;
 		}
 	}
