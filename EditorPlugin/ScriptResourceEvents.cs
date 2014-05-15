@@ -9,18 +9,23 @@ namespace ScriptingPlugin.Editor
 {
 	public class ScriptResourceEvents
 	{
+		private const string Scripts = "Scipts";
 		public void OnResourceCreated(object sender, ResourceEventArgs e)
 		{
+			string scriptFullName = null;
+			string scriptExtension = null;
 			if (e.ContentType == typeof(CSharpScript))
 			{
-				var scriptFullName = SaveResource<CSharpScript>(e.Content, Resources.Resources.ScriptTemplate);
-
-				string scriptExtension = ScriptingPluginCorePlugin.CSharpScriptExtension;
-				var fileWithPath = RemoveDataScriptPath(scriptFullName, scriptExtension);
-				AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), ScriptingEditorPlugin.CSharpProjectPath);
+				scriptFullName = SaveResource<CSharpScript>(e.Content, Resources.Resources.ScriptTemplate);
+				scriptExtension = ScriptingPluginCorePlugin.CSharpScriptExtension;
 			}
-			else if (e.ContentType == typeof(FSharpScript))
-				SaveResource<FSharpScript>(e.Content, Resources.Resources.FSharpScriptTemplate);
+			else if (e.ContentType == typeof (FSharpScript))
+			{
+				scriptFullName= SaveResource<FSharpScript>(e.Content, Resources.Resources.FSharpScriptTemplate);
+				scriptExtension = ScriptingPluginCorePlugin.FSharpScriptExtension;
+			}
+			var fileWithPath = RemoveDataScriptPath(scriptFullName, scriptExtension);
+			AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), ScriptingEditorPlugin.CSharpProjectPath);
 		}
 
 		private string SaveResource<T>(ContentRef<Resource> scriptResourceContentRef, string script) where T : ScriptResourceBase
@@ -36,7 +41,7 @@ namespace ScriptingPlugin.Editor
 		{
 			string extension = null;
 			string projectPath = null;
-			if (!e.ContentType.IsAssignableFrom(typeof(ScriptResourceBase)))
+			if (!(typeof(ScriptResourceBase)).IsAssignableFrom(e.ContentType))
 				return;
 			if (e.ContentType == typeof(CSharpScript))
 			{
@@ -83,7 +88,7 @@ namespace ScriptingPlugin.Editor
 
 		private string GetScriptNameWithPath(string fileNameWithResourcePath)
 		{
-			return Path.Combine(@"..\..\Media", ScriptingEditorPlugin.Scripts, fileNameWithResourcePath);
+			return Path.Combine(@"..\..\Media", Scripts, fileNameWithResourcePath);
 		}
 
 		private string RemoveDataScriptPath(string fullScriptName, string extension)

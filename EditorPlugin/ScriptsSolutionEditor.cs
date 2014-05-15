@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Duality.Editor;
 using Ionic.Zip;
 
 namespace ScriptingPlugin.Editor
@@ -19,6 +20,15 @@ namespace ScriptingPlugin.Editor
 			_sourceCodeDirectory = sourceCodeDirectory;
 		}
 
+		public string AddToSolution(string projectLanguagePath, string projectExtention, byte[] projectTemplate)
+		{
+			const string scripts = "Scripts";
+			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath, scripts + projectExtention);
+			ExtractScriptProjectToCodeDirectory(projectPath, projectTemplate);
+			AddScriptProjectToSolution();
+			return projectPath;
+		}
+		
 		public void ExtractScriptProjectToCodeDirectory(string projectPath, byte[] projectTemplate)
 		{
 			if (_fileSystem.File.Exists(projectPath))
@@ -29,8 +39,7 @@ namespace ScriptingPlugin.Editor
 
 			using (var scriptsProjectZip = ZipFile.Read(projectTemplate))
 			{
-				scriptsProjectZip.ExtractAll(Path.Combine(_sourceCodeDirectory, ScriptingEditorPlugin.Scripts),
-					ExtractExistingFileAction.DoNotOverwrite);
+				scriptsProjectZip.ExtractAll(Path.GetDirectoryName(projectPath), ExtractExistingFileAction.DoNotOverwrite);
 			}
 		}
 

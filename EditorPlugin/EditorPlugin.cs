@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -17,9 +16,10 @@ namespace ScriptingPlugin.Editor
 		internal static string CSharpProjectPath;
 		internal static string FSharpProjectPath;
 		private ScriptResourceEvents _scriptResourceEvents;
-
-		public const string Scripts = "Scripts";
-
+		
+		public const string PathPartCsharp = "CSharp";
+		public const string PathPartFsharp = "FSharp";
+		
 		public override string Id
 		{
 			get { return "ScriptingEditorPlugin"; }
@@ -30,22 +30,24 @@ namespace ScriptingPlugin.Editor
 			base.InitPlugin(main);
 			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
 			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents();
-
+			
 			ReloadOutOfDateScripts();
+			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, ".csproj", Resources.Resources.ScriptsProjectTemplate);
+			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, ".fsproj", Resources.Resources.FSharpProjectTemplate);
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
-			
-			CSharpProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".csproj");
-			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(CSharpProjectPath, Resources.Resources.ScriptsProjectTemplate);
-			_scriptsSolutionEditor.AddScriptProjectToSolution();
-
-			FSharpProjectPath = Path.Combine(EditorHelper.SourceCodeDirectory, Scripts, Scripts + ".fsproj");
-			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(FSharpProjectPath, Resources.Resources.FSharpProjectTemplate);
-			_scriptsSolutionEditor.AddScriptProjectToSolution();
-
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
 		}
+
+//		private string AddToSolution(string projectLanguagePath, string projectExtention, byte[] projectTemplate)
+//		{
+//			const string scripts = "Scripts";
+//			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath, scripts + projectExtention);
+//			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(projectPath, projectTemplate);
+//			_scriptsSolutionEditor.AddScriptProjectToSolution();
+//			return projectPath;
+//		}
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{

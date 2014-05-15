@@ -14,6 +14,7 @@
         <dependencies>
             <group targetFramework=".NETFramework4.0">
                 <dependency id="Mono.Cecil" version="0.9.5.4" />
+                <dependency id="FSharp.Compiler.Service" version="0.0.45" />
             </group>
         </dependencies>
     </metadata>
