@@ -44,20 +44,20 @@ namespace ScriptingPlugin.Resources
 			base.OnLoaded();
 		}
 
-		private CompilerResult Compile()
+		private ScriptsResult Compile()
 		{
 			const string scriptsDll = "Scripts\\Scripts.dll";
 			if (File.Exists(scriptsDll))
 			{
 				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
-				return CompilerResult.AssemblyExists;
+				return ScriptsResult.AssemblyExists;
 			}
 
 			if (!string.IsNullOrEmpty(SourcePath)) 
 				return ScriptCompiler.TryCompile(Name, SourcePath, Script, out _assembly);
 
 			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
-			return CompilerResult.GeneralError;
+			return ScriptsResult.GeneralError;
 		}
 
 		public DualityScript Instantiate()
@@ -66,7 +66,7 @@ namespace ScriptingPlugin.Resources
 			{
 				var compiled = Compile();
 
-				if (Assembly == null || compiled != CompilerResult.AssemblyExists)
+				if (Assembly == null || compiled != ScriptsResult.AssemblyExists)
 				{
 					Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
 					return null;

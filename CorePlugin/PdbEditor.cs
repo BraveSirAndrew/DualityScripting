@@ -8,7 +8,7 @@ namespace ScriptingPlugin
 {
 	public class PdbEditor : IPdbEditor
 	{
-		public CompilerResult SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
+		public ScriptsResult SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
 		{
 			try
 			{
@@ -22,7 +22,7 @@ namespace ScriptingPlugin
 				if (type == null)
 				{
 					Log.Editor.WriteError("Script file '{0}' has to contain a class that derives from DualityScript.", scriptName);
-					return CompilerResult.PdbEditorError;
+					return ScriptsResult.PdbEditorError;
 				}
 
 				foreach (var method in type.Methods)
@@ -39,10 +39,10 @@ namespace ScriptingPlugin
 			catch (Exception exception)
 			{
 				Log.Editor.WriteError("There was a problem editing the pdb file after compiling the script {0}, {1} Error: {2} {1} StackTrace: {3}", scriptName,Environment.NewLine, exception.Message, exception.StackTrace);
-				return CompilerResult.PdbEditorError;
+				return ScriptsResult.PdbEditorError;
 			}
 
-			return CompilerResult.AssemblyExists;
+			return ScriptsResult.AssemblyExists;
 		}
 	}
 }

@@ -10,10 +10,5 @@
             DualityScript when given a script to compile.
             </summary>
         </member>
-        <member name="F:ScriptingPlugin.CompilerResult.AssemblyExists">
-            <summary>
-            Either the assembly was succesfuly created or it exists
-            </summary>
-        </member>
     </members>
 </doc>

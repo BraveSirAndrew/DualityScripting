@@ -17,7 +17,7 @@ namespace ScriptingPlugin
 			_pdbEditor = pdbEditor;
 		}
 
-		public CompilerResult TryCompile(string scriptName, string scriptPath, string script, out Assembly assembly)
+		public ScriptsResult TryCompile(string scriptName, string scriptPath, string script, out Assembly assembly)
 		{
 			assembly = null;
 			try
@@ -34,15 +34,15 @@ namespace ScriptingPlugin
 				{
 					var text = compilerResult.Errors.Cast<CompilerError>().Aggregate("", (current, compilerError) => current + (Environment.NewLine + compilerError));
 					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
-					return CompilerResult.CompilerError;
+					return ScriptsResult.CompilerError;
 				}
 				assembly = compilerResult.CompiledAssembly;
-				return CompilerResult.AssemblyExists;
+				return ScriptsResult.AssemblyExists;
 			}
 			catch (Exception exception)
 			{
 				Log.Editor.WriteError("Could not compile script {0} error {1}", scriptName, exception);
-				return CompilerResult.GeneralError;
+				return ScriptsResult.GeneralError;
 			}
 		}
 

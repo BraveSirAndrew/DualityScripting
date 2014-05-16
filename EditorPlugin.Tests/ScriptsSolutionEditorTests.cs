@@ -1,7 +1,9 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
+using System.Reflection;
 using NUnit.Framework;
 using ScriptingPlugin.Editor;
 
@@ -74,7 +76,6 @@ namespace EditorPlugin.Tests
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
 				Assert.DoesNotThrow(solutionEditor.AddScriptProjectToSolution);
-				
 			}
 		}
 	}

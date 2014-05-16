@@ -6,8 +6,8 @@ open ScriptingPlugin
 
 module TestHelpers =
     
-    let getLogInfo ()=  
-                Duality.Log.LogData.Data
+    let getLogInfo =  
+                fun _ -> Duality.Log.LogData.Data
                             |> Seq.map (fun x-> x.Message)
                             |> String.concat "+"
 
@@ -49,13 +49,15 @@ module FsharpScriptCompiler =
             
     let createFSharpCompiler =
         let compiler = new FSharpScriptCompiler()
-        let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
-        List.map(fun r -> compiler.AddReference(r)) ref |> ignore
+        let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll";"System.Drawing.dll";"System.Xml.Linq.dll" ]
+        List.iter(fun r -> compiler.AddReference(r)) ref
         compiler
+
     let fsharpScript = @"module Dualityscript
 
 open ScriptingPlugin
 open Duality
+open System
 
     type FSharpScript() =
         inherit DualityScript()"
@@ -66,17 +68,17 @@ open Duality
         Check.VerboseThrowOnFailure scriptongCompiler.AddReference
 
     [<Test>]
-    let ``Compiling returns true if there is no errors ``() = 
-        let scriptingCompiler = createFSharpCompiler
-        //no need for the api to use script name and the rest, just the script would work, tho the path is better
-        let compiled = scriptingCompiler.Compile(fsharpScript)
-        //why this gets the value at the start
-        let error = lazy TestHelpers.getLogInfo
+    let ``Compiling has no errors and creates assembly ``() = 
+        let scriptingCompiler = createFSharpCompiler        
+        let compiled = scriptingCompiler.Compile(fsharpScript)    
 
-//        Assert.AreEqual(CompilerResult.AssemblyExists, fst compiled )
-//        Assert.NotNull(snd compiled) 
-        Assert.Ignore("Ignore this integration test for now")
+        Assert.IsFalse(compiled.Errors.HasErrors)
+        Assert.NotNull(compiled.CompiledAssembly)
 
+    [<Test>]
+    let ``Compiling throws when script is empty string ``() =         
+        Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("") |>ignore )|> ignore
+        
 
 
 // Other notes
