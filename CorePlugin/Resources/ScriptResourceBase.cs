@@ -52,11 +52,18 @@ namespace ScriptingPlugin.Resources
 				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
 				return ScriptsResult.AssemblyExists;
 			}
+			try
+			{
+				if (!string.IsNullOrEmpty(SourcePath))
+					return ScriptCompiler.TryCompile(Name, SourcePath, Script, out _assembly);
 
-			if (!string.IsNullOrEmpty(SourcePath)) 
-				return ScriptCompiler.TryCompile(Name, SourcePath, Script, out _assembly);
-
-			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
+			}
+			catch (Exception e)
+			{
+				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);	
+			}
+			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);	
+			
 			return ScriptsResult.GeneralError;
 		}
 

@@ -30,7 +30,7 @@ namespace ScriptingPlugin.Editor
 		{
 			base.InitPlugin(main);
 			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
-			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents();
+			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(new FileSystem());
 			
 			ReloadOutOfDateScripts();
 			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, ".csproj", Resources.Resources.ScriptsProjectTemplate);

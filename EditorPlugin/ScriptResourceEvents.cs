@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using Duality;
 using Duality.Editor;
 using Microsoft.Build.Construction;
@@ -9,6 +10,13 @@ namespace ScriptingPlugin.Editor
 {
 	public class ScriptResourceEvents
 	{
+		private readonly IFileSystem _fileSystem;
+
+		public ScriptResourceEvents(IFileSystem fileSystem )
+		{
+			_fileSystem = fileSystem;
+		}
+
 		private const string Scripts = "Scipts";
 		public void OnResourceCreated(object sender, ResourceEventArgs e)
 		{
@@ -53,15 +61,21 @@ namespace ScriptingPlugin.Editor
 				extension = ScriptingPluginCorePlugin.FSharpScriptExtension;
 				projectPath = ScriptingEditorPlugin.FSharpProjectPath;
 			}
+			
+			
+			var projectPathComplete = Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath);
+			if (!_fileSystem.File.Exists(projectPathComplete))
+				return;
 			var oldName = e.OldContent.FullName;
-			RemoveOldScriptFromProject(oldName, extension, projectPath);
+			RemoveOldScriptFromProject(oldName, extension, projectPathComplete);
 			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName, extension));
 			AddScriptToSolution(newScriptName, GetFileName(newScriptName), projectPath);
 		}
 
 		private void RemoveOldScriptFromProject(string oldContentName, string extension, string projectPath)
 		{
-			var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
+			
+			var rootElement = ProjectRootElement.Open(projectPath);
 			if (rootElement == null)
 				return;
 
