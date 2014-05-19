@@ -33,7 +33,8 @@ namespace ScriptingPlugin.Editor
 				scriptExtension = ScriptingPluginCorePlugin.FSharpScriptExtension;
 			}
 			var fileWithPath = RemoveDataScriptPath(scriptFullName, scriptExtension);
-			AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), ScriptingEditorPlugin.CSharpProjectPath);
+			if(!string.IsNullOrWhiteSpace(fileWithPath))
+				AddScriptToSolution(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), ScriptingEditorPlugin.CSharpProjectPath);
 		}
 
 		private string SaveResource<T>(ContentRef<Resource> scriptResourceContentRef, string script) where T : ScriptResourceBase
@@ -68,7 +69,10 @@ namespace ScriptingPlugin.Editor
 				return;
 			var oldName = e.OldContent.FullName;
 			RemoveOldScriptFromProject(oldName, extension, projectPathComplete);
-			var newScriptName = GetScriptNameWithPath(RemoveDataScriptPath(e.Content.FullName, extension));
+			string fileNameWithResourcePath = RemoveDataScriptPath(e.Content.FullName, extension);
+			if(string.IsNullOrWhiteSpace(fileNameWithResourcePath))
+				return;
+			var newScriptName = GetScriptNameWithPath(fileNameWithResourcePath);
 			AddScriptToSolution(newScriptName, GetFileName(newScriptName), projectPath);
 		}
 
@@ -79,7 +83,10 @@ namespace ScriptingPlugin.Editor
 			if (rootElement == null)
 				return;
 
-			string scriptName = GetScriptNameWithPath(RemoveDataScriptPath(oldContentName, extension));
+			string fileNameWithResourcePath = RemoveDataScriptPath(oldContentName, extension);
+			if(string.IsNullOrWhiteSpace(fileNameWithResourcePath))
+				return;
+			string scriptName = GetScriptNameWithPath(fileNameWithResourcePath);
 
 			foreach (var itemGroup in rootElement.ItemGroups)
 			{
@@ -107,6 +114,9 @@ namespace ScriptingPlugin.Editor
 
 		private string RemoveDataScriptPath(string fullScriptName, string extension)
 		{
+			if (string.IsNullOrWhiteSpace(fullScriptName) || string.IsNullOrWhiteSpace(extension))
+				return null;
+			
 			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + extension;
 		}
 
