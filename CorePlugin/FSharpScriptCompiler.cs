@@ -14,17 +14,25 @@ namespace ScriptingPlugin
 	public class FSharpScriptCompiler : IScriptCompiler
 	{
 		private List<string> _references = new List<string>();
-		private SimpleSourceCodeServices _sourceCodeServices;
+		private readonly SimpleSourceCodeServices _sourceCodeServices;
 
 		public FSharpScriptCompiler()
 		{
-			_sourceCodeServices = new SimpleSourceCodeServices();
+
+			try
+			{
+				_sourceCodeServices = new SimpleSourceCodeServices();
+			}
+			catch (Exception exception)
+			{
+				Log.Editor.WriteWarning("Could not start compiler services for FSharp {0} \n {1}", exception.Message, exception.StackTrace);
+			}
 		}
 
 		public CompilerResults Compile(string script)
 		{
 			Guard.StringNotNullEmpty(script);
-
+			Guard.NotNull(_sourceCodeServices);
 			var outputAssemblyPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName() + ".dll");
 			var referencesAndScript = new List<string>();
 
