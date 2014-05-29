@@ -73,18 +73,10 @@ open System
         let compiled = scriptingCompiler.Compile(fsharpScript)    
 
         //let errors = List.ofSeq compiled.Errors
-        Assert.Ignore("ignore")
-        //Assert.IsFalse(compiled.Errors.HasErrors, compiled.Errors |>  )
-        //Assert.NotNull(compiled.CompiledAssembly)
+        //Assert.Ignore("ignore")
+        Assert.IsFalse(compiled.Errors.HasErrors)
+        Assert.NotNull(compiled.CompiledAssembly)
 
     [<Test>]
     let ``Compiling throws when script is empty string ``() =         
         Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("") |>ignore )|> ignore
-        
-
-
-// Other notes
-// DONE - need to support rename of the script
-// DONE - replace template file
-// copile all scripts into a dll  
-// add to fsproj and work also on edit
