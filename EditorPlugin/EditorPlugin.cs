@@ -30,25 +30,22 @@ namespace ScriptingPlugin.Editor
 		{
 			base.InitPlugin(main);
 			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
-			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(new FileSystem());
-			
-			ReloadOutOfDateScripts();
+
+			ScriptReloader.ReloadOutOfDateScripts(new FileSystem());
 			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, ".csproj", Resources.Resources.ScriptsProjectTemplate);
 			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, ".fsproj", Resources.Resources.FSharpProjectTemplate);
+			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(new FileSystem(), new ProjectConstants()
+			{
+				CSharpProjectPath = CSharpProjectPath,
+				CSharpScriptExtension = ScriptingPluginCorePlugin.CSharpScriptExtension,
+				FSharpProjectPath = FSharpProjectPath,
+				FSharpScriptExtension = ScriptingPluginCorePlugin.FSharpScriptExtension
+			});
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
 		}
-
-//		private string AddToSolution(string projectLanguagePath, string projectExtention, byte[] projectTemplate)
-//		{
-//			const string scripts = "Scripts";
-//			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath, scripts + projectExtention);
-//			_scriptsSolutionEditor.ExtractScriptProjectToCodeDirectory(projectPath, projectTemplate);
-//			_scriptsSolutionEditor.AddScriptProjectToSolution();
-//			return projectPath;
-//		}
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{
@@ -81,9 +78,16 @@ namespace ScriptingPlugin.Editor
 				_debuggerAttachedLastFrame = false;
 			}
 		}
+	}
 
-		private void ReloadOutOfDateScripts()
+	public class ScriptReloader
+	{
+		private static IFileSystem _fileSystem;
+
+		public static void ReloadOutOfDateScripts(IFileSystem fileSystem)
 		{
+			_fileSystem = fileSystem;
+
 			foreach (var script in ContentProvider.GetAvailableContent<CSharpScript>())
 				ReloadScript(script);
 			foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
@@ -99,7 +103,8 @@ namespace ScriptingPlugin.Editor
 
 			if (string.IsNullOrEmpty(script.Res.SourcePath))
 				return;
-
+			if(!_fileSystem.File.Exists(script.Res.SourcePath))
+				return;
 			if (File.Exists(metafilePath) && File.GetLastWriteTime(script.Res.SourcePath) > File.GetLastWriteTime(metafilePath))
 			{
 				script.Res.Script = File.ReadAllText(script.Res.SourcePath);

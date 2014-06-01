@@ -44,10 +44,7 @@ namespace ScriptingPlugin
 
 			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
 
-			var tempScriptPath = "";
-			CompilerResults compilerResults;
-
-			tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
+			var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
 			File.WriteAllText(tempScriptPath, script);
 
 			referencesAndScript.Add(tempScriptPath);
@@ -60,7 +57,7 @@ namespace ScriptingPlugin
 			}
 			catch (Exception e)
 			{
-				Log.Editor.WriteWarning("{0}: Couldn't load assembly file", GetType().Name);
+				Log.Editor.WriteWarning("{0}: Couldn't load assembly file. {1} ", GetType().Name, e.Message);
 			}
 			finally
 			{
