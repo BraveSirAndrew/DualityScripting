@@ -1,14 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin", "CorePlugin\CorePlugin.csproj", "{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin", "EditorPlugin\EditorPlugin.csproj", "{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}"
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CorePlugin.Tests", "CorePlugin.Tests\CorePlugin.Tests.fsproj", "{53863E4D-A1C6-454D-BD30-DF64D084B112}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin.Tests", "EditorPlugin.Tests\EditorPlugin.Tests.csproj", "{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BD6E9743-00ED-4C0E-96D1-2038A97D83D8}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,6 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BD6E97
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin", "CorePlugin\CorePlugin.csproj", "{AFE883F3-72B4-4C7C-A1D1-44EDC09C8F6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin", "EditorPlugin\EditorPlugin.csproj", "{78DBC94D-EE9D-4AC0-95ED-91A0AE2F6652}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CorePlugin.Tests", "CorePlugin.Tests\CorePlugin.Tests.fsproj", "{53863E4D-A1C6-454D-BD30-DF64D084B112}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin.Tests", "EditorPlugin.Tests\EditorPlugin.Tests.csproj", "{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

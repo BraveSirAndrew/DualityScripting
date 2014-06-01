@@ -3,13 +3,10 @@
 open NUnit.Framework
 open FsCheck
 open ScriptingPlugin
-
-module TestHelpers =
+open System
+open System.Linq
     
-    let getLogInfo =  
-                fun _ -> Duality.Log.LogData.Data
-                            |> Seq.map (fun x-> x.Message)
-                            |> String.concat "+"
+
 
 module ScriptCompilerTests =
 
@@ -42,8 +39,9 @@ module ScriptCompilerTests =
     let ``Compiling returns true if there is no errors ``() = 
         let scriptingCompiler = createCSharpCompiler
         let compilerResults = scriptingCompiler.Compile(cShScript)
-        Assert.IsFalse(compilerResults.Errors.HasErrors)
+        Assert.IsFalse(compilerResults.Errors.Any())
         Assert.NotNull(compilerResults.CompiledAssembly)
+
 
 module FsharpScriptCompiler =        
             
@@ -62,29 +60,23 @@ open System
     type FSharpScript() =
         inherit DualityScript()"
 
+    let join (errors: Collections.Generic.IEnumerable<string>) =     
+        String.Join(" ", errors)
+
     [<Test>]
     let ``Compiler add reference f#``() = 
         let scriptongCompiler = new FSharpScriptCompiler()
         Check.VerboseThrowOnFailure scriptongCompiler.AddReference
 
     [<Test>]
-    let ``Compiling has no errors and creates assembly ``() = 
+    let ``Compiling has no errors and creates assembly ``() =        
         let scriptingCompiler = createFSharpCompiler        
         let compiled = scriptingCompiler.Compile(fsharpScript)    
 
-        //let errors = List.ofSeq compiled.Errors
-        Assert.Ignore("ignore")
-        //Assert.IsFalse(compiled.Errors.HasErrors, compiled.Errors |>  )
-        //Assert.NotNull(compiled.CompiledAssembly)
+        Assert.IsFalse(compiled.Errors.Any(), join compiled.Errors )
+        Assert.NotNull(compiled.CompiledAssembly)
+        Assert.IsFalse(String.IsNullOrWhiteSpace compiled.PathToAssembly)
 
     [<Test>]
     let ``Compiling throws when script is empty string ``() =         
         Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("") |>ignore )|> ignore
-        
-
-
-// Other notes
-// DONE - need to support rename of the script
-// DONE - replace template file
-// copile all scripts into a dll  
-// add to fsproj and work also on edit
