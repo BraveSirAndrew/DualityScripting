@@ -12,7 +12,7 @@ namespace EditorPlugin.Tests
 	{
 		public class TheAddScriptProjectToSolutionMethod
 		{
-			private const string _projectReferenceString = "\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\r\nEndProject";
+			private const string _projectReferenceString = "\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\CSharp\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\r\nEndProject";
 			private const string _solutionPath = @"c:\dir\solutionFile.sln";
 			private const string _sourceCodeDirectory = "c:\\dir";
 

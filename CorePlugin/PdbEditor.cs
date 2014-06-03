@@ -17,7 +17,7 @@ namespace ScriptingPlugin
 
 				var moduleDefinition = assemblyDef.Modules[0];
 				moduleDefinition.ReadSymbols();
-				var type = moduleDefinition.Types.FirstOrDefault(t => t.BaseType != null && t.BaseType.Name == "DualityScript");
+				var type = moduleDefinition.Types.FirstOrDefault(t => t.BaseType != null && t.BaseType.Name == typeof(DualityScript).Name);
 
 				if (type == null)
 				{

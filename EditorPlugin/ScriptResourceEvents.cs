@@ -28,7 +28,6 @@ namespace ScriptingPlugin.Editor
 			if(!string.IsNullOrWhiteSpace(fileWithPath))
 				_projectEditor.AddScriptToProject(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), resourceData.ProjectPath);
 		}
-
 		
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs renamedEventArgs)
 		{
