@@ -21,10 +21,10 @@ namespace ScriptingPlugin.Editor
 			_sourceCodeDirectory = sourceCodeDirectory;
 		}
 
-		public string AddToSolution(string projectLanguagePath, string projectExtention, byte[] projectTemplate)
+		public string AddToSolution(string projectLanguagePath, string projectName, byte[] projectTemplate)
 		{
 			const string scripts = "Scripts";
-			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath, scripts + projectExtention);
+			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath,  projectName);
 			ExtractScriptProjectToCodeDirectory(projectPath, projectTemplate);
 			AddScripstProjectsToSolution();
 			return projectPath;

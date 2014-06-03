@@ -32,8 +32,8 @@ namespace ScriptingPlugin.Editor
 			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
 
 			ScriptReloader.ReloadOutOfDateScripts(new FileSystem());
-			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, ".csproj", Resources.Resources.ScriptsProjectTemplate);
-			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, ".fsproj", Resources.Resources.FSharpProjectTemplate);
+			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, "Scripts.csproj", Resources.Resources.ScriptsProjectTemplate);
+			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
 			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(new FileSystem(), new ProjectConstants()
 			{
 				CSharpProjectPath = CSharpProjectPath,
