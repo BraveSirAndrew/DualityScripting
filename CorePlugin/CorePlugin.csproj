@@ -40,21 +40,18 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Duality, Version=1.0.5241.29518, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.150\lib\net40\Duality.dll</HintPath>
+    <Reference Include="Duality">
+      <HintPath>..\packages\Duality.0.1.154\lib\net40\Duality.dll</HintPath>
     </Reference>
-    <Reference Include="FarseerDuality, Version=3.3.5203.39568, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.150\lib\net40\FarseerDuality.dll</HintPath>
+    <Reference Include="FarseerDuality">
+      <HintPath>..\packages\Duality.0.1.154\lib\net40\FarseerDuality.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Compiler.Service, Version=0.0.45.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="FSharp.Compiler.Service, Version=0.0.48.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FSharp.Compiler.Service.0.0.45\lib\net40\FSharp.Compiler.Service.dll</HintPath>
+      <HintPath>..\packages\FSharp.Compiler.Service.0.0.48\lib\net40\FSharp.Compiler.Service.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.150\lib\net40\Ionic.Zip.dll</HintPath>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\Duality.0.1.154\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
@@ -69,11 +66,10 @@
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Duality.0.1.150\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.154\lib\net40\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.150\lib\net40\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\packages\Duality.0.1.154\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -91,6 +87,7 @@
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\CSharpScript.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />
+    <Compile Include="ScriptCompilerResults.cs" />
     <Compile Include="ScriptCompilerService.cs" />
     <Compile Include="ScriptComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

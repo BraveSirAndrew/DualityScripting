@@ -1,9 +1,7 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
-using System.Reflection;
 using NUnit.Framework;
 using ScriptingPlugin.Editor;
 
@@ -25,7 +23,7 @@ namespace EditorPlugin.Tests
 				{
 					{_solutionPath, new MockFileData("EndProject")}
 				});
-				
+
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
 				solutionEditor.AddScriptProjectToSolution();

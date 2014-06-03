@@ -4,6 +4,6 @@ namespace ScriptingPlugin
 {
 	public interface IScriptCompiler
 	{
-		CompilerResults Compile(string script);
+		ScriptCompilerResults Compile(string script);
 	}
 }

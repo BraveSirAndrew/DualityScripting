@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Linq;
 using System.Reflection;
 using Duality;
@@ -24,16 +23,16 @@ namespace ScriptingPlugin
 			{
 				var compilerResult = _scriptCompiler.Compile(script);
 
-				if (compilerResult.Errors.HasErrors == false)
+				if (compilerResult.Errors.Any() == false)
 				{
 					if (_pdbEditor != null)
 						_pdbEditor.SetSourcePathInPdbFile(compilerResult.PathToAssembly, scriptName, scriptPath);
 				}
 
-				if (compilerResult.Errors.HasErrors)
+				if (compilerResult.Errors.Any())
 				{
-					var text = compilerResult.Errors.Cast<CompilerError>().Aggregate("", (current, compilerError) => current + (Environment.NewLine + compilerError));
-					Log.Editor.WriteError("Error compiling script '{0}': {1}", scriptName, text);
+					var text = string.Join(Environment.NewLine, compilerResult.Errors);
+					Log.Editor.WriteError("Error with script '{0}': {1}", scriptName, text);
 					return ScriptsResult.CompilerError;
 				}
 				assembly = compilerResult.CompiledAssembly;

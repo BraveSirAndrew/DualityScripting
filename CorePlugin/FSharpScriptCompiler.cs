@@ -29,7 +29,7 @@ namespace ScriptingPlugin
 			}
 		}
 
-		public CompilerResults Compile(string script)
+		public ScriptCompilerResults Compile(string script)
 		{
 			Guard.StringNotNullEmpty(script);
 			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();
@@ -44,10 +44,7 @@ namespace ScriptingPlugin
 
 			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
 
-			var tempScriptPath = "";
-			CompilerResults compilerResults;
-
-			tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
+			var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
 			File.WriteAllText(tempScriptPath, script);
 
 			referencesAndScript.Add(tempScriptPath);
@@ -60,40 +57,23 @@ namespace ScriptingPlugin
 			}
 			catch (Exception e)
 			{
-				Log.Editor.WriteWarning("{0}: Couldn't load assembly file", GetType().Name);
+				Log.Editor.WriteWarning("{0}: Couldn't load assembly file. {1} ", GetType().Name, e.Message);
 			}
 			finally
 			{
 				if (File.Exists(tempScriptPath))
 					File.Delete(tempScriptPath);
 			}
-			compilerResults = new CompilerResults(new TempFileCollection())
-			{
-				CompiledAssembly = assembly,
-				PathToAssembly = outputAssemblyPath
-			};
-			ErrorInfoToCompilerErrors(errorsAndExitCode, compilerResults);
-
-
-
-			return compilerResults;
-
-		}
-
-		private static void ErrorInfoToCompilerErrors(Tuple<ErrorInfo[], int> errorsAndExitCode, CompilerResults compilerResults)
-		{
-			foreach (var errorInfo in errorsAndExitCode.Item1)
-			{
-				compilerResults.Errors.Add(new CompilerError(errorInfo.FileName, errorInfo.StartLineAlternate,
-					errorInfo.StartColumn, errorInfo.Subcategory, errorInfo.Message));
-			}
+			var errors = errorsAndExitCode.Item1.Select(x => string.Format("{0} {1} {2} ", x.Severity, x.StartLineAlternate, x.Message));
+			return new ScriptCompilerResults(errors, assembly, outputAssemblyPath);
 		}
 
 		public void AddReference(string referenceAssembly)
 		{
 			if(string.IsNullOrWhiteSpace(referenceAssembly))
 				return;
-			_references.Add(referenceAssembly);
+			
+			_references.Add(referenceAssembly.Trim());
 		}
 	}
 }
