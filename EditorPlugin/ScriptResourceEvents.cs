@@ -30,18 +30,18 @@ namespace ScriptingPlugin.Editor
 		}
 
 		
-		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs e)
+		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs renamedEventArgs)
 		{
 			string extension = null;
 			string projectPath = null;
-			if (!(typeof(ScriptResourceBase)).IsAssignableFrom(e.ContentType))
+			if (!(typeof(ScriptResourceBase)).IsAssignableFrom(renamedEventArgs.ContentType))
 				return;
-			if (e.ContentType == typeof(CSharpScript))
+			if (renamedEventArgs.ContentType == typeof(CSharpScript))
 			{
 				extension = _projectConstants.CSharpScriptExtension;
 				projectPath = _projectConstants.CSharpProjectPath;
 			}
-			else if (e.ContentType == typeof(FSharpScript))
+			else if (renamedEventArgs.ContentType == typeof(FSharpScript))
 			{
 				extension = _projectConstants.FSharpScriptExtension;
 				projectPath = _projectConstants.FSharpProjectPath;
@@ -53,9 +53,9 @@ namespace ScriptingPlugin.Editor
 			if (!_fileSystem.File.Exists(projectPathComplete))
 				return;
 
-			var oldName = e.OldContent.FullName;
+			var oldName = renamedEventArgs.OldContent.FullName;
 			_projectEditor.RemoveOldScriptFromProject(oldName, extension, projectPathComplete);
-			string fileNameWithResourcePath = RemoveDataScriptPath(e.Content.FullName, extension);
+			string fileNameWithResourcePath = RemoveDataScriptPath(renamedEventArgs.Content.FullName, extension);
 			if(string.IsNullOrWhiteSpace(fileNameWithResourcePath))
 				return;
 			var newScriptName = GetScriptNameWithPath(fileNameWithResourcePath);
