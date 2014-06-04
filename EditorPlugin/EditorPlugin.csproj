@@ -136,6 +136,10 @@
     <None Include="Resources\FSharpProjectTemplate.zip" />
     <None Include="Resources\ScriptsProjectTemplate.zip" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\csharp.png" />
+    <Content Include="Resources\fsharp.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)..\..\..\..\..\Plugins"
