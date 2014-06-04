@@ -29,7 +29,7 @@ namespace ScriptingPlugin
 			}
 		}
 
-		public ScriptCompilerResults Compile(string script)
+		public IScriptCompilerResults Compile(string script)
 		{
 			Guard.StringNotNullEmpty(script);
 			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();
@@ -65,7 +65,7 @@ namespace ScriptingPlugin
 					File.Delete(tempScriptPath);
 			}
 			var errors = errorsAndExitCode.Item1.Select(x => string.Format("{0} {1} {2} ", x.Severity, x.StartLineAlternate, x.Message));
-			return new ScriptCompilerResults(errors, assembly, outputAssemblyPath);
+			return new FSharpScriptCompilerResults(errors, assembly, outputAssemblyPath);
 		}
 
 		public void AddReference(string referenceAssembly)
