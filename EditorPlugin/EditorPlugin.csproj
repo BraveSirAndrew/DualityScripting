@@ -115,6 +115,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ScriptProjectEditor.cs" />
+    <Compile Include="ScriptReloader.cs" />
     <Compile Include="ScriptResourceEvents.cs" />
     <Compile Include="ScriptsSolutionEditor.cs" />
     <None Include="packages.config" />

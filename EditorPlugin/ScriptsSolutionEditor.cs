@@ -35,7 +35,7 @@ namespace ScriptingPlugin.Editor
 			if (_fileSystem.File.Exists(projectPath))
 				return;
 
-			if (!SolutionExists().Any()) 
+			if (!SolutionExists()== false) 
 				return;
 
 			using (var scriptsProjectZip = ZipFile.Read(projectTemplate))
@@ -44,18 +44,23 @@ namespace ScriptingPlugin.Editor
 			}
 		}
 
-		private string[] SolutionExists()
+		private bool SolutionExists()
 		{
-			return _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln");
+			return _fileSystem.File.Exists(GetSolutionPath());
+		}
+
+		private string GetSolutionPath()
+		{
+			return _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln").FirstOrDefault();
 		}
 
 		public void AddScripstProjectsToSolution()
 		{
-			var solutionExists = SolutionExists();
-			if(solutionExists.Any() == false)
+			
+			if (SolutionExists() == false)
 				return;
 
-			var solutionPath = solutionExists.First();
+			var solutionPath = GetSolutionPath();
 			var slnText = _fileSystem.File.ReadAllText(solutionPath);
 
 			AddProjectToSolution(slnText, solutionPath, SolutionCSharpProjectReferences);
