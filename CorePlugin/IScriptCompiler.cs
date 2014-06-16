@@ -1,9 +1,7 @@
-﻿using System.CodeDom.Compiler;
-
-namespace ScriptingPlugin
+﻿namespace ScriptingPlugin
 {
 	public interface IScriptCompiler
 	{
-		IScriptCompilerResults Compile(string script);
+		IScriptCompilerResults Compile(string script, string sourceFilePath = null);
 	}
 }

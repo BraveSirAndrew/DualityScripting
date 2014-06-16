@@ -1,25 +1,31 @@
-﻿using System.CodeDom.Compiler;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace ScriptingPlugin
 {
 	public class CSharpScriptCompilerResults : IScriptCompilerResults
 	{
-		private readonly CompilerResults _results;
-		
-		public CSharpScriptCompilerResults(CompilerResults results)
+		private readonly EmitResult _results;
+		private readonly string _assemblyPath;
+
+		public CSharpScriptCompilerResults(EmitResult results, string assemblyPath)
 		{
 			_results = results;
+			_assemblyPath = assemblyPath;
 		}
 
 		public IEnumerable<string> Errors
 		{
 			get
 			{
-				return from CompilerError error in _results.Errors 
-					   select string.Format("{0} {1} {2} ", error.ErrorNumber, error.Line, error.ErrorText);
+				if (_results.Success)
+					return Enumerable.Empty<string>();
+
+				return from Diagnostic error in _results.Diagnostics 
+					   select string.Format("{0} {1} {2} ", error.Id, error.Location.GetLineSpan().StartLinePosition, error.GetMessage());
 			}
 		}
 
@@ -27,13 +33,13 @@ namespace ScriptingPlugin
 		{
 			get
 			{
-				return _results.Errors.HasErrors == false ? _results.CompiledAssembly : null;
+				return _results.Success ? Assembly.LoadFrom(_assemblyPath) : null;
 			}
 		}
 
 		public string PathToAssembly
 		{
-			get { return _results.PathToAssembly; }
+			get { return _assemblyPath; }
 		}
 	}
 }

@@ -55,10 +55,9 @@ namespace ScriptingPlugin.Editor
 
 				var sw = Stopwatch.StartNew();
 
-				ScriptingPluginCorePlugin.CSharpScriptCompiler.SetPdbEditor(new PdbEditor());
 				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
 
-				foreach (var script in ContentProvider.GetAvailableContent<ScriptResourceBase>())
+				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
 				{
 					script.Res.Reload();
 				}
@@ -71,7 +70,6 @@ namespace ScriptingPlugin.Editor
 			}
 			else if (Debugger.IsAttached == false && _debuggerAttachedLastFrame)
 			{
-				ScriptingPluginCorePlugin.CSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
 				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
 
 				_debuggerAttachedLastFrame = false;

@@ -29,8 +29,10 @@ namespace ScriptingPlugin.Editor
 
 			if (string.IsNullOrEmpty(script.Res.SourcePath))
 				return;
+
 			if(!_fileSystem.File.Exists(script.Res.SourcePath))
 				return;
+
 			if (File.Exists(metafilePath) && File.GetLastWriteTime(script.Res.SourcePath) > File.GetLastWriteTime(metafilePath))
 			{
 				script.Res.Script = File.ReadAllText(script.Res.SourcePath);

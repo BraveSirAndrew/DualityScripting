@@ -56,6 +56,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Duality.0.1.156\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.7.4052301-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4052301-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -77,9 +83,16 @@
       <HintPath>..\packages\Duality.0.1.156\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\packages\Microsoft.Bcl.Metadata.1.0.11-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompilerResult.cs" />
     <Compile Include="CorePlugin.cs" />
     <Compile Include="DualityScript.cs" />
     <Compile Include="FileConstants.cs" />
@@ -95,6 +108,7 @@
     <Compile Include="Resources\CSharpScript.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />
     <Compile Include="CSharpScriptCompilerResults.cs" />
+    <Compile Include="ScriptCompilerResult.cs" />
     <Compile Include="ScriptCompilerService.cs" />
     <Compile Include="ScriptComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,7 +121,8 @@
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)..\..\..\..\..\Plugins"
 copy "$(TargetPath)" "$(TargetDir)..\..\..\..\..\Plugins"
-copy "$(TargetDir)GamePlugin.core.xml" "$(TargetDir)..\..\..\..\..\Plugins"</PostBuildEvent>
+copy "$(TargetDir)GamePlugin.core.xml" "$(TargetDir)..\..\..\..\..\Plugins"
+copy "$(TargetPath)" "D:\Honourbound\Game\Plugins"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

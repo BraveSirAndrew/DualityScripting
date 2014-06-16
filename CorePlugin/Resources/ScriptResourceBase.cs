@@ -10,22 +10,33 @@ namespace ScriptingPlugin.Resources
 	[Serializable]
 	public abstract class ScriptResourceBase : Resource
 	{
-		public string Script { get; set; }
-		
-		[EditorHintFlags(MemberFlags.Invisible)]
-		public Assembly Assembly
-		{
-			get { return _assembly; }
-		}
-
 		[field: NonSerialized]
 		public event EventHandler Reloaded;
 
-		[NonSerialized]
 		private Assembly _assembly;
-		
+		[NonSerialized]
+		private ScriptCompilerResult _scriptCompilerResult;
 		[NonSerialized]
 		protected IScriptCompilerService ScriptCompiler;
+
+		[EditorHintFlags(MemberFlags.Invisible)]
+		public Assembly Assembly
+		{
+			get
+			{
+				if (_assembly == null)
+				{
+					Compile();
+
+					if(_scriptCompilerResult != null)
+						_assembly = _scriptCompilerResult.Assembly;
+				}
+
+				return _assembly;
+			}
+		}
+
+		public string Script { get; set; }
 
 		public void SaveScript(string scriptPath)
 		{
@@ -38,46 +49,36 @@ namespace ScriptingPlugin.Resources
 			File.WriteAllText(sourcePath, Script);
 		}
 
-		protected override void OnLoaded()
-		{
-			Compile();
-			base.OnLoaded();
-		}
-
-		private ScriptsResult Compile()
+		private void Compile()
 		{
 			const string scriptsDll = "Scripts\\Scripts.dll";
 			if (File.Exists(scriptsDll))
 			{
 				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
-				return ScriptsResult.AssemblyExists;
+				return;
 			}
 			try
 			{
 				if (!string.IsNullOrEmpty(SourcePath))
-					return ScriptCompiler.TryCompile(Name, SourcePath, Script, out _assembly);
-
+				{
+					_scriptCompilerResult = ScriptCompiler.TryCompile(Name, SourcePath, Script);
+					return;
+				}
 			}
 			catch (Exception e)
 			{
 				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);	
 			}
-			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);	
 			
-			return ScriptsResult.GeneralError;
+			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
 		}
 
 		public DualityScript Instantiate()
 		{
-			if (Assembly == null)
+			if (Assembly == null || _scriptCompilerResult == null || _scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
 			{
-				var compiled = Compile();
-
-				if (Assembly == null || compiled != ScriptsResult.AssemblyExists)
-				{
-					Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
-					return null;
-				}
+				Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
+				return null;
 			}
 
 			var script = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
@@ -121,6 +122,5 @@ namespace ScriptingPlugin.Resources
 			if (handler != null)
 				handler(this, EventArgs.Empty);
 		}
-
 	}
 }

@@ -1,18 +1,8 @@
-﻿using System.Reflection;
-
-namespace ScriptingPlugin
+﻿namespace ScriptingPlugin
 {
-	public enum ScriptsResult
-	{
-		AssemblyExists,
-		CompilerError,
-		PdbEditorError,
-		GeneralError
-	}
-
 	public interface IScriptCompilerService
 	{
-		ScriptsResult TryCompile(string scriptName, string scriptPath, string script,out Assembly assembly);
+		ScriptCompilerResult TryCompile(string scriptName, string scriptPath, string script);
 		void SetPdbEditor(IPdbEditor pdbEditor);
 	}
 }

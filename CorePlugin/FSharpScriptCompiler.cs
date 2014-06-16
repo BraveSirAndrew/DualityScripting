@@ -1,12 +1,10 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Duality;
 using Duality.Helpers;
-using Microsoft.FSharp.Compiler;
 using Microsoft.FSharp.Compiler.SimpleSourceCodeServices;
 
 namespace ScriptingPlugin
@@ -18,7 +16,6 @@ namespace ScriptingPlugin
 
 		public FSharpScriptCompiler()
 		{
-
 			try
 			{
 				_sourceCodeServices = new SimpleSourceCodeServices();
@@ -29,7 +26,7 @@ namespace ScriptingPlugin
 			}
 		}
 
-		public IScriptCompilerResults Compile(string script)
+		public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
 		{
 			Guard.StringNotNullEmpty(script);
 			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();

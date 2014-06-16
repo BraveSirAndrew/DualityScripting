@@ -1,46 +1,62 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Duality.Helpers;
-using Microsoft.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace ScriptingPlugin
 {
 	public class CSharpScriptCompiler : IScriptCompiler
 	{
-		private readonly CSharpCodeProvider _provider;
-		private readonly List<string> _references = new List<string>();
+		private CSharpCompilation _compilation;
 
 		public CSharpScriptCompiler()
 		{
-			_provider = new CSharpCodeProvider();
+			_compilation = CSharpCompilation.Create("ScriptingAssembly",
+				references: new[] { new MetadataFileReference(typeof(object).Assembly.Location) },
+				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 		}
 
-		public IScriptCompilerResults Compile(string script)
+		public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
 		{
 			Guard.StringNotNullEmpty(script);
 
-			var compilerParams = new CompilerParameters
+			var tempFileName = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
+			var assemblyName = tempFileName + ".dll";
+			var assemblyPath = Path.Combine(Path.GetTempPath(), assemblyName);
+
+			var pdbName = tempFileName + ".pdb";
+			var pdbPath = Path.Combine(Path.GetTempPath(), pdbName);
+
+			using (var assemblyStream = new FileStream(assemblyPath, FileMode.Create))
+			using (var pdbStream = new FileStream(pdbPath, FileMode.Create))
 			{
-				GenerateInMemory = false,
-				TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true),
-				IncludeDebugInformation = true,
-				TreatWarningsAsErrors = false,
-				GenerateExecutable = false,
-				CompilerOptions = " /debug:pdbonly"
-			};
-			compilerParams.ReferencedAssemblies.AddRange(_references.ToArray());
-			var results = _provider.CompileAssemblyFromSource(compilerParams, script);
-			return new CSharpScriptCompilerResults(results);
+				var sourcePath = string.IsNullOrEmpty(sourceFilePath) ? "" : Path.GetFullPath(sourceFilePath);
+
+				var syntaxTree = CSharpSyntaxTree.ParseText(script);
+				syntaxTree = CSharpSyntaxTree.Create((CSharpSyntaxNode)syntaxTree.GetRoot(), sourcePath);
+
+				var results = _compilation
+					.AddSyntaxTrees(syntaxTree)
+					.WithAssemblyName(assemblyName)
+					.Emit(assemblyStream, pdbStream: pdbStream, pdbFileName: pdbName);
+				return new CSharpScriptCompilerResults(results, assemblyPath);
+			}
 		}
 
 		public void AddReference(string referenceAssembly)
 		{
 			if (string.IsNullOrEmpty(referenceAssembly) || !referenceAssembly.Contains("dll"))
 				return;
-			
-			_references.Add(referenceAssembly);
+
+			string filePath;
+			if (File.Exists(referenceAssembly))
+				filePath = Path.GetFullPath(referenceAssembly);
+			else
+				filePath = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == Path.GetFileNameWithoutExtension(referenceAssembly)).Location;
+
+			_compilation = _compilation.AddReferences(new MetadataFileReference(filePath));
 		}
 	}
 }
