@@ -115,6 +115,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ScriptProjectEditor.cs" />
+    <Compile Include="ScriptReloader.cs" />
     <Compile Include="ScriptResourceEvents.cs" />
     <Compile Include="ScriptsSolutionEditor.cs" />
     <None Include="packages.config" />
@@ -129,11 +130,16 @@
     <EmbeddedResource Include="Resources\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FSharpProjectTemplate.zip" />
     <None Include="Resources\ScriptsProjectTemplate.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\csharp.png" />
+    <Content Include="Resources\fsharp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

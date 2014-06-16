@@ -16,6 +16,12 @@ namespace ScriptingPlugin
 
 		public ContentRef<ScriptResourceBase> Script { get; set; }
 
+		public Dictionary<string, object> ScriptPropertyValues
+		{
+			get { return _scriptPropertyValues; }
+			set { _scriptPropertyValues = value; }
+		}
+
 		public void OnInit(InitContext context)
 		{
 			if (context != InitContext.Activate)

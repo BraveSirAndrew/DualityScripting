@@ -117,7 +117,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 			foreach (var scriptComponent in scriptComponents)
 			{
 				scriptComponent.SetScriptPropertyValue(name, values.FirstOrDefault());
-				DualityEditorApp.NotifyObjPropChanged(scriptComponent, new ObjectSelection(scriptComponent));
+				DualityEditorApp.NotifyObjPropChanged(scriptComponent, new ObjectSelection(scriptComponent), typeof(ScriptComponent).GetProperty("ScriptPropertyValues"));
 			}
 		}
 	}

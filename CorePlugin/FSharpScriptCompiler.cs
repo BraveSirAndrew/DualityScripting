@@ -14,7 +14,7 @@ namespace ScriptingPlugin
 	public class FSharpScriptCompiler : IScriptCompiler
 	{
 		private List<string> _references = new List<string>();
-		private readonly SimpleSourceCodeServices _sourceCodeServices;
+		private SimpleSourceCodeServices _sourceCodeServices;
 
 		public FSharpScriptCompiler()
 		{
@@ -29,10 +29,10 @@ namespace ScriptingPlugin
 			}
 		}
 
-		public ScriptCompilerResults Compile(string script)
+		public IScriptCompilerResults Compile(string script)
 		{
 			Guard.StringNotNullEmpty(script);
-			Guard.NotNull(_sourceCodeServices);
+			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();
 			var outputAssemblyPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName() + ".dll");
 			var referencesAndScript = new List<string>();
 
@@ -65,7 +65,7 @@ namespace ScriptingPlugin
 					File.Delete(tempScriptPath);
 			}
 			var errors = errorsAndExitCode.Item1.Select(x => string.Format("{0} {1} {2} ", x.Severity, x.StartLineAlternate, x.Message));
-			return new ScriptCompilerResults(errors, assembly, outputAssemblyPath);
+			return new FSharpScriptCompilerResults(errors, assembly, outputAssemblyPath);
 		}
 
 		public void AddReference(string referenceAssembly)

@@ -17,7 +17,7 @@ namespace ScriptingPlugin
 			_provider = new CSharpCodeProvider();
 		}
 
-		public ScriptCompilerResults Compile(string script)
+		public IScriptCompilerResults Compile(string script)
 		{
 			Guard.StringNotNullEmpty(script);
 
@@ -32,8 +32,7 @@ namespace ScriptingPlugin
 			};
 			compilerParams.ReferencedAssemblies.AddRange(_references.ToArray());
 			var results = _provider.CompileAssemblyFromSource(compilerParams, script);
-			var sb = (from CompilerError error in results.Errors select string.Format("{0} {1} {2} ", error.ErrorNumber, error.Line, error.ErrorText)).ToList();
-			return new ScriptCompilerResults(sb, results.CompiledAssembly, results.PathToAssembly);
+			return new CSharpScriptCompilerResults(results);
 		}
 
 		public void AddReference(string referenceAssembly)

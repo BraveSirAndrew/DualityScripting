@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Duality;
 using Microsoft.Build.Construction;
 
@@ -22,10 +23,17 @@ namespace ScriptingPlugin.Editor
 				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
 				if (rootElement == null)
 					return;
-				var itemGroup = rootElement.AddItemGroup();
+				ProjectItemGroupElement itemGroup = null;
+				foreach (var projectItemGroupElement in rootElement.ItemGroups)
+				{
+					if (projectItemGroupElement.Items.Any(x => x.ItemType == "Compile"))
+						 itemGroup = projectItemGroupElement;
+				}
+				if(itemGroup == null)
+					itemGroup = rootElement.AddItemGroup();
 
-				var itemElement = itemGroup.AddItem("compile", scriptPath);
-				itemElement.AddMetadata("link", scriptFileName);
+				var itemElement = itemGroup.AddItem("Compile", scriptPath);
+				itemElement.AddMetadata("Link", scriptFileName);
 				rootElement.Save();
 			}
 			catch (Exception exception)
@@ -60,7 +68,7 @@ namespace ScriptingPlugin.Editor
 
 		private string GetScriptNameWithPath(string fileNameWithResourcePath)
 		{
-			return Path.Combine(@"..\..\Media", Scripts, fileNameWithResourcePath);
+			return Path.Combine(@"..\..\..\Media", Scripts, fileNameWithResourcePath);
 		}
 
 		private string RemoveDataScriptPath(string fullScriptName, string extension)

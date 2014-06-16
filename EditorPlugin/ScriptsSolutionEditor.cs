@@ -12,7 +12,8 @@ namespace ScriptingPlugin.Editor
 	{
 		private readonly IFileSystem _fileSystem;
 		private readonly string _sourceCodeDirectory;
-		private const string SolutionProjectReferences = "\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\r\nEndProject";
+		private const string SolutionCSharpProjectReferences = "\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\CSharp\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\r\nEndProject";
+		private const string SolutionFSharpProjectReferences = "\r\nProject(\"{F2A71F9B-5D33-465A-A702-920D77279786}\") = \"FSharpScripts\", \"Scripts\\FSharp\\FSharpScripts.fsproj\", \"{42BBD2A5-7D56-4935-A8E4-9FA236F472CF}\"\r\nEndProject";
 
 		public ScriptsSolutionEditor(IFileSystem fileSystem, string sourceCodeDirectory)
 		{
@@ -20,12 +21,12 @@ namespace ScriptingPlugin.Editor
 			_sourceCodeDirectory = sourceCodeDirectory;
 		}
 
-		public string AddToSolution(string projectLanguagePath, string projectExtention, byte[] projectTemplate)
+		public string AddToSolution(string projectLanguagePath, string projectName, byte[] projectTemplate)
 		{
 			const string scripts = "Scripts";
-			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath, scripts + projectExtention);
+			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath,  projectName);
 			ExtractScriptProjectToCodeDirectory(projectPath, projectTemplate);
-			AddScriptProjectToSolution();
+			AddScripstProjectsToSolution();
 			return projectPath;
 		}
 		
@@ -34,7 +35,7 @@ namespace ScriptingPlugin.Editor
 			if (_fileSystem.File.Exists(projectPath))
 				return;
 
-			if (!SolutionExists().Any()) 
+			if (!SolutionExists()== false) 
 				return;
 
 			using (var scriptsProjectZip = ZipFile.Read(projectTemplate))
@@ -43,25 +44,36 @@ namespace ScriptingPlugin.Editor
 			}
 		}
 
-		private string[] SolutionExists()
+		private bool SolutionExists()
 		{
-			return _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln");
+			return _fileSystem.File.Exists(GetSolutionPath());
 		}
 
-		public void AddScriptProjectToSolution()
+		private string GetSolutionPath()
 		{
-			var solutionExists = SolutionExists();
-			if(solutionExists.Any() == false)
+			return _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln").FirstOrDefault();
+		}
+
+		public void AddScripstProjectsToSolution()
+		{
+			
+			if (SolutionExists() == false)
 				return;
 
-			var solutionPath = solutionExists.First();
+			var solutionPath = GetSolutionPath();
 			var slnText = _fileSystem.File.ReadAllText(solutionPath);
 
-			if (slnText.ToString(CultureInfo.InvariantCulture).IndexOf(SolutionProjectReferences, StringComparison.OrdinalIgnoreCase) != -1)
+			AddProjectToSolution(slnText, solutionPath, SolutionCSharpProjectReferences);
+		}
+
+		private void AddProjectToSolution(string slnText, string solutionPath, string projectReference)
+		{
+			if (slnText.ToString(CultureInfo.InvariantCulture)
+					.IndexOf(projectReference, StringComparison.OrdinalIgnoreCase) != -1)
 				return;
 
 			slnText = slnText.Insert(
-				slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10, SolutionProjectReferences);
+				slnText.LastIndexOf("EndProject", StringComparison.OrdinalIgnoreCase) + 10, projectReference);
 			_fileSystem.File.WriteAllText(solutionPath, slnText);
 		}
 	}

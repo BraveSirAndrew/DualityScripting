@@ -24,11 +24,10 @@ namespace ScriptingPlugin.Editor
 		public void OnResourceCreated(object sender, ResourceEventArgs resourceEventArgs)
 		{
 			var resourceData = _resourceSaver.Save(resourceEventArgs);
-			var fileWithPath = RemoveDataScriptPath(resourceData.ScriptFullName, resourceData.ScriptExtension);
-			if(!string.IsNullOrWhiteSpace(fileWithPath))
-				_projectEditor.AddScriptToProject(GetScriptNameWithPath(fileWithPath), GetFileName(fileWithPath), resourceData.ProjectPath);
+			var cleanFileName = RemoveDataScriptPath(resourceData.ScriptFullName, resourceData.ScriptExtension);
+			if(!string.IsNullOrWhiteSpace(cleanFileName))
+				_projectEditor.AddScriptToProject(GetScriptNameWithPath(cleanFileName), GetFileName(cleanFileName), resourceData.ProjectPath);
 		}
-
 		
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs renamedEventArgs)
 		{
@@ -68,10 +67,10 @@ namespace ScriptingPlugin.Editor
 			return Path.GetFileName(fileWithPath);
 		}
 
-		private string GetScriptNameWithPath(string fileNameWithResourcePath)
+		private string GetScriptNameWithPath(string filename)
 		{
-			const string Scripts = "Scripts";
-			return Path.Combine(@"..\..\Media", Scripts, fileNameWithResourcePath);
+			const string scripts = "Scripts";
+			return Path.Combine(@"..\..\..\Media", scripts, filename);
 		}
 
 		private string RemoveDataScriptPath(string fullScriptName, string extension)

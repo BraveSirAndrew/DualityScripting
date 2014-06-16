@@ -6,6 +6,7 @@ namespace ScriptingPlugin.Resources
 {
 	[Serializable]
 	[EditorHintCategory("Scripting")]
+	[EditorHintImage("Resources", "csharp")]
 	public class CSharpScript : ScriptResourceBase
 	{
 		public new static string FileExt = FileConstants.CSharpExtension + Resource.FileExt;
