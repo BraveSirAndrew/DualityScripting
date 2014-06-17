@@ -13,6 +13,7 @@ namespace ScriptingPlugin.Resources
 		[field: NonSerialized]
 		public event EventHandler Reloaded;
 
+		[NonSerialized]
 		private Assembly _assembly;
 		[NonSerialized]
 		private ScriptCompilerResult _scriptCompilerResult;
