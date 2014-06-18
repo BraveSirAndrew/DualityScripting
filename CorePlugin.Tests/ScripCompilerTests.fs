@@ -88,6 +88,5 @@ open System
       //  Assert.IsFalse(String.IsNullOrWhiteSpace compiled.PathToAssembly)
 
     [<Test>]
-    let ``Compiling throws when script is empty string ``() =         
-        Assert.Ignore "Need helps to figure out why this doesn't throw in F#"
-       // Assert.Throws<System.ArgumentException>(fun () -> Async.AwaitTask(createFSharpCompiler.Compile("")) |>ignore )|> ignore
+    let ``Compiling throws when script is empty string ``() =                 
+        Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("") |> ignore )|> ignore
