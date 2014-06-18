@@ -5,9 +5,9 @@ using ScriptingPlugin.Resources;
 
 namespace CorePlugin.Test.CSharp
 {
-	[TestFixture]
 	public class ScriptResourceBaseTests
 	{
+		[TestFixture]
 		public class TheReloadMethod
 		{
 			private TestScriptType _script;

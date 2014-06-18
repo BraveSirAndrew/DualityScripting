@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Reflection;
 using Duality;
@@ -18,8 +15,8 @@ namespace EditorPlugin.Tests
 	{
 		private ScriptResourceEvents _scriptResourceEvents;
 		private MockFileSystem _fileSystem;
-		private Mock<IResourceSaver> _resourceSaverMock;
 		private Mock<IScriptProjectEditor> _projectEditorMock;
+		private Mock<IScriptTemplate> _scriptTemplate;
 		private const string SolutionPath = @"c:\dir\solutionFile.sln";
 		private const string FsProjectPath = @"c:\dir\scripts\FSharp\FSharpScripts.fsproj";
 		private const string CsProjectPath = @"c:\dir\scripts\CSharp\CSharpScripts.csproj";
@@ -33,8 +30,8 @@ namespace EditorPlugin.Tests
 			{
 				{SolutionPath, new MockFileData("")}
 			});
-			_resourceSaverMock = new Mock<IResourceSaver>();
 			_projectEditorMock = new Mock<IScriptProjectEditor>();
+			_scriptTemplate = new Mock<IScriptTemplate>();
 
 			_scriptResourceEvents = new ScriptResourceEvents(_fileSystem,
 				new ProjectConstants()
@@ -44,17 +41,17 @@ namespace EditorPlugin.Tests
 						CSharpScriptExtension = ".cs",
 						CSharpProjectPath = CsProjectPath,
 					},
-				_resourceSaverMock.Object,
 				_projectEditorMock.Object);
+			_scriptResourceEvents.AddDefaultScriptTemplate<CSharpScript>(_scriptTemplate.Object);
 		}
 
 		[Test]
 		public void When_renaming_scripts_Then_old_script_removed_and_new_script_added()
 		{
-			_projectEditorMock.Setup(
-				x => x.RemoveOldScriptFromProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-			_projectEditorMock.Setup(
-				x => x.AddScriptToProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			_scriptTemplate.SetupGet(m => m.ProjectPath).Returns(CsProjectPath);
+			_projectEditorMock.Setup(x => x.RemoveOldScriptFromProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			_projectEditorMock.Setup(x => x.AddScriptToProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+
 			UpdateFileSystem(CsProjectPath, GetResourceContent(), _fileSystem);
 			var resourceRenamedEventArgs = CreateEventArgs(NewPath, OldPath);
 
@@ -64,23 +61,20 @@ namespace EditorPlugin.Tests
 		}
 
 		[Test]
-		public void When_cs_script_Then_resource_saved()
+		public void When_csharp_script_created_Then_apply_template()
 		{
-			var path = @"c:\dir\project\Data\Scripts\resource.res";
-			_resourceSaverMock.Setup(x => x.Save(It.IsAny<ResourceEventArgs>()))
-				.Returns(new ResourceSaver.ResourceData(path, ".fs", FsProjectPath));
-
+			var path = @"Data\Scripts\resource.res";
+			
 			_scriptResourceEvents.OnResourceCreated(null, new ResourceEventArgs(CreateContentRef(GetFSScriptText(), path)));
 
-			_resourceSaverMock.Verify(x => x.Save(It.IsAny<ResourceEventArgs>()), Times.Once);
-			
+			_scriptTemplate.Verify(x => x.Apply(It.Is<ContentRef<ScriptResourceBase>>(s => s.Path == path)), Times.Once);
 		}
+
 		[Test]
-		public void When_cs_script_Then_add_script_to_project()
+		public void When_csharp_script_created_Then_add_script_to_project()
 		{
-			var path = @"c:\dir\project\Data\Scripts\resource.res";
-			_resourceSaverMock.Setup(x => x.Save(It.IsAny<ResourceEventArgs>()))
-				.Returns(new ResourceSaver.ResourceData(path, ".fs", FsProjectPath));
+			var path = @"Data\Scripts\resource.fsharp.res";
+			
 			_projectEditorMock.Setup(x => x.AddScriptToProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
 
 			_scriptResourceEvents.OnResourceCreated(null, new ResourceEventArgs(CreateContentRef(GetFSScriptText(), path)));

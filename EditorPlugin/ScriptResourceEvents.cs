@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using Duality;
 using Duality.Editor;
@@ -8,78 +10,76 @@ namespace ScriptingPlugin.Editor
 {
 	public class ScriptResourceEvents
 	{
-		private readonly IFileSystem _fileSystem;
-		private readonly ProjectConstants _projectConstants;
-		private readonly IScriptProjectEditor _projectEditor;
-		private readonly IResourceSaver _resourceSaver;
+		public const string MediaFolder = @"..\..\..\Media";
 
-		public ScriptResourceEvents(IFileSystem fileSystem, ProjectConstants projectConstants, IResourceSaver resourceSaver = null , IScriptProjectEditor projectEditor = null)
+		private readonly IFileSystem _fileSystem;
+		private readonly IScriptProjectEditor _projectEditor;
+		private Dictionary<Type, IScriptTemplate> _scriptTemplates = new Dictionary<Type, IScriptTemplate>();
+
+		public ScriptResourceEvents(IFileSystem fileSystem, ProjectConstants projectConstants, IScriptProjectEditor projectEditor = null)
 		{
 			_fileSystem = fileSystem;
-			_projectConstants = projectConstants;
 			_projectEditor = projectEditor ?? new ScriptProjectEditor();
-			_resourceSaver = resourceSaver ?? new ResourceSaver(_projectConstants);
+		}
+
+		public void AddDefaultScriptTemplate<TContentType>(IScriptTemplate template) where TContentType:ScriptResourceBase
+		{
+			_scriptTemplates.Add(typeof(TContentType), template);
 		}
 		
 		public void OnResourceCreated(object sender, ResourceEventArgs resourceEventArgs)
 		{
-			var resourceData = _resourceSaver.Save(resourceEventArgs);
-			var cleanFileName = RemoveDataScriptPath(resourceData.ScriptFullName, resourceData.ScriptExtension);
-			if(!string.IsNullOrWhiteSpace(cleanFileName))
-				_projectEditor.AddScriptToProject(GetScriptNameWithPath(cleanFileName), GetFileName(cleanFileName), resourceData.ProjectPath);
+			var template = GetScriptTemplate(resourceEventArgs);
+			if (template == null)
+				return;
+
+			template.Apply(resourceEventArgs.Content.As<ScriptResourceBase>());
+
+			var sourceFilePath = FileImportProvider.GenerateSourceFilePath(resourceEventArgs.Content, template.FileExtension);
+			sourceFilePath = sourceFilePath.Replace("Source\\Media", MediaFolder);
+			var scriptFileName = GetFileName(sourceFilePath);
+			
+			_projectEditor.AddScriptToProject(sourceFilePath, scriptFileName, template.ProjectPath);
 		}
-		
+
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs renamedEventArgs)
 		{
-			string extension = null;
-			string projectPath = null;
-			if (!(typeof(ScriptResourceBase)).IsAssignableFrom(renamedEventArgs.ContentType))
+			if (!renamedEventArgs.Content.Is(typeof(ScriptResourceBase)))
 				return;
-			if (renamedEventArgs.ContentType == typeof(CSharpScript))
-			{
-				extension = _projectConstants.CSharpScriptExtension;
-				projectPath = _projectConstants.CSharpProjectPath;
-			}
-			else if (renamedEventArgs.ContentType == typeof(FSharpScript))
-			{
-				extension = _projectConstants.FSharpScriptExtension;
-				projectPath = _projectConstants.FSharpProjectPath;
-			}
-			
-			if(projectPath == null)
+
+			var template = GetScriptTemplate(renamedEventArgs);
+			if (template == null)
 				return;
-			var projectPathComplete = Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath);
+
+			if(template.ProjectPath == null)
+				return;
+
+			var projectPathComplete = Path.Combine(PathHelper.ExecutingAssemblyDir, template.ProjectPath);
 			if (!_fileSystem.File.Exists(projectPathComplete))
 				return;
 
 			var oldName = renamedEventArgs.OldContent.FullName;
-			_projectEditor.RemoveOldScriptFromProject(oldName, extension, projectPathComplete);
-			string fileNameWithResourcePath = RemoveDataScriptPath(renamedEventArgs.Content.FullName, extension);
-			if(string.IsNullOrWhiteSpace(fileNameWithResourcePath))
-				return;
-			var newScriptName = GetScriptNameWithPath(fileNameWithResourcePath);
-			_projectEditor.AddScriptToProject(newScriptName, GetFileName(newScriptName), projectPath);
+			_projectEditor.RemoveOldScriptFromProject(oldName, template.FileExtension, projectPathComplete);
+			
+			var sourceFilePath = renamedEventArgs.Content.Res.SourcePath;
+			sourceFilePath = sourceFilePath.Replace("Source\\Media", MediaFolder);
+			_projectEditor.AddScriptToProject(sourceFilePath, renamedEventArgs.Content.Res.Name + template.FileExtension, template.ProjectPath);
 		}
-
-
+		
 		private string GetFileName(string fileWithPath)
 		{
 			return Path.GetFileName(fileWithPath);
 		}
 
-		private string GetScriptNameWithPath(string filename)
+		private IScriptTemplate GetScriptTemplate(ResourceEventArgs resourceEventArgs)
 		{
-			const string scripts = "Scripts";
-			return Path.Combine(@"..\..\..\Media", scripts, filename);
+			IScriptTemplate template;
+			if (_scriptTemplates.TryGetValue(resourceEventArgs.ContentType, out template) == false)
+			{
+				Log.Editor.WriteError("Unrecognized script type '{0}'", resourceEventArgs.ContentType);
+				return template;
+			}
+			return template;
 		}
-
-		private string RemoveDataScriptPath(string fullScriptName, string extension)
-		{
-			if (string.IsNullOrWhiteSpace(fullScriptName) || string.IsNullOrWhiteSpace(extension))
-				return null;
-
-			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + extension;
-		}
-
 	}
 }

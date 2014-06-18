@@ -14,6 +14,23 @@ namespace ScriptingPlugin.Editor
 		{
 			try
 			{
+				var directoryPart = scriptPath
+					.Replace(ScriptResourceEvents.MediaFolder, "")
+					.Replace(Path.GetFileName(scriptPath), "")
+					.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+				var directories = directoryPart.Split(new []{Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries);
+
+				var currentDirectory = Path.GetDirectoryName(projectPath);
+				foreach (var directory in directories)
+				{
+					var combine = Path.Combine(currentDirectory, directory);
+					if (Directory.Exists(combine) == false)
+						Directory.CreateDirectory(combine);
+
+					currentDirectory = Path.Combine(currentDirectory, directory);
+				}
+
 				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
 				if (rootElement == null)
 					return;
@@ -27,7 +44,7 @@ namespace ScriptingPlugin.Editor
 					itemGroup = rootElement.AddItemGroup();
 
 				var itemElement = itemGroup.AddItem("Compile", scriptPath);
-				itemElement.AddMetadata("Link", scriptFileName);
+				itemElement.AddMetadata("Link", Path.Combine(directoryPart, scriptFileName));
 				rootElement.Save();
 			}
 			catch (Exception exception)
