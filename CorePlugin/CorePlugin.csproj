@@ -87,6 +87,9 @@
       <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>..\packages\System.IO.Abstractions.1.4.0.86\lib\net35\System.IO.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reflection.Metadata">
       <HintPath>..\packages\Microsoft.Bcl.Metadata.1.0.11-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
@@ -106,6 +109,8 @@
     <Compile Include="PdbEditor.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\CSharpScript.cs" />
+    <Compile Include="IScriptMetadataService.cs" />
+    <Compile Include="ScriptMetadataService.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />
     <Compile Include="CSharpScriptCompilerResults.cs" />
     <Compile Include="ScriptCompilerResult.cs" />

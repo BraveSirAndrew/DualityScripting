@@ -19,22 +19,18 @@ namespace ScriptingPlugin.Resources
 		private ScriptCompilerResult _scriptCompilerResult;
 		[NonSerialized]
 		protected IScriptCompilerService ScriptCompiler;
+		[NonSerialized]
+		protected IScriptMetadataService ScriptMetadataService;
+
+		public ScriptResourceBase()
+		{
+			ScriptMetadataService = ScriptingPluginCorePlugin.ScriptMetadataService;
+		}
 
 		[EditorHintFlags(MemberFlags.Invisible)]
 		public Assembly Assembly
 		{
-			get
-			{
-				if (_assembly == null)
-				{
-					Compile();
-
-					if(_scriptCompilerResult != null)
-						_assembly = _scriptCompilerResult.Assembly;
-				}
-
-				return _assembly;
-			}
+			get { return _assembly; }
 		}
 
 		public string Script { get; set; }
@@ -63,23 +59,29 @@ namespace ScriptingPlugin.Resources
 				if (!string.IsNullOrEmpty(SourcePath))
 				{
 					_scriptCompilerResult = ScriptCompiler.TryCompile(Name, SourcePath, Script);
+
+					if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult == CompilerResult.AssemblyExists)
+						_assembly = _scriptCompilerResult.Assembly;
+
 					return;
 				}
 			}
 			catch (Exception e)
 			{
-				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);	
+				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);
 			}
-			
+
 			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
 		}
 
 		public DualityScript Instantiate()
 		{
-			if (Assembly == null || _scriptCompilerResult == null || _scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
+			if (Assembly == null)
 			{
-				Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
-				return null;
+				Compile();
+
+				if (_scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
+					return null;
 			}
 
 			var script = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
@@ -97,24 +99,15 @@ namespace ScriptingPlugin.Resources
 		{
 			Compile();
 
-			var metafilePath = System.IO.Path.GetFullPath(GetMetafilePath());
-
-			if (File.Exists(metafilePath))
+			if (ScriptMetadataService == null)
 			{
-				var fileInfo = new FileInfo(metafilePath);
-				fileInfo.Attributes &= ~FileAttributes.Hidden;
+				Log.Editor.WriteError("The script metadata service hasn't been set up. Can't reload script '{0}'.", Name);
+				return;
 			}
 
-			File.WriteAllText(metafilePath, "");
-			File.SetLastWriteTime(metafilePath, DateTime.Now);
-			File.SetAttributes(metafilePath, FileAttributes.Hidden);
+			ScriptMetadataService.UpdateMetadata(Path);
 
 			OnReloaded();
-		}
-
-		public string GetMetafilePath()
-		{
-			return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path), System.IO.Path.GetFileNameWithoutExtension(Path) + ".meta");
 		}
 
 		protected virtual void OnReloaded()

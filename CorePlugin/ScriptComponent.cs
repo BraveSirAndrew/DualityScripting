@@ -29,7 +29,9 @@ namespace ScriptingPlugin
 
 			if (Script.Res == null)
 			{
-				Log.Game.WriteError("The script attached to '{0}' is null.", GameObj);
+				if(DualityApp.ExecContext == DualityApp.ExecutionContext.Game)
+					Log.Game.WriteError("The script attached to '{0}' is null.", GameObj);
+
 				return;
 			}
 

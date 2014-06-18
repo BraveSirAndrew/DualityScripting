@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using Duality;
+using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin
 {
@@ -13,6 +15,7 @@ namespace ScriptingPlugin
 
 		public static IScriptCompilerService CSharpScriptCompiler { get; set; }
 		public static IScriptCompilerService FSharpScriptCompiler { get; set; }
+		public static IScriptMetadataService ScriptMetadataService { get; set; }
 
 		protected override void InitPlugin()
 		{
@@ -23,6 +26,8 @@ namespace ScriptingPlugin
 
 			CSharpScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler, new NullPdbEditor());
 			FSharpScriptCompiler = new ScriptCompilerService(fSharpScriptCompiler, new NullPdbEditor());
+
+			ScriptMetadataService = new ScriptMetadataService(new FileSystem());
 
 			foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 			{
