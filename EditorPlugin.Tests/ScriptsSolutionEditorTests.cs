@@ -7,9 +7,9 @@ using ScriptingPlugin.Editor;
 
 namespace EditorPlugin.Tests
 {
-	[TestFixture]
 	public class ScriptsSolutionEditorTests
 	{
+		[TestFixture]
 		public class TheAddScriptProjectToSolutionMethod
 		{
 			private const string _projectReferenceString = "\r\nProject(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"Scripts\", \"Scripts\\CSharp\\Scripts.csproj\", \"{1DC301F5-644D-4109-96C4-2158ABDED70D}\"\r\nEndProject";

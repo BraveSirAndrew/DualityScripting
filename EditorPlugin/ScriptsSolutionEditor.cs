@@ -35,7 +35,7 @@ namespace ScriptingPlugin.Editor
 			if (_fileSystem.File.Exists(projectPath))
 				return;
 
-			if (!SolutionExists()== false) 
+			if (SolutionExists() == false)
 				return;
 
 			using (var scriptsProjectZip = ZipFile.Read(projectTemplate))

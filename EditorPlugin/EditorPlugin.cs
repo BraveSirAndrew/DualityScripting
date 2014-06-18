@@ -36,6 +36,7 @@ namespace ScriptingPlugin.Editor
 			ScriptReloader.ReloadOutOfDateScripts(fileSystem, _scriptMetadataService);
 			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, "Scripts.csproj", Resources.Resources.ScriptsProjectTemplate);
 			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
+			
 			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(fileSystem, new ProjectConstants()
 			{
 				CSharpProjectPath = CSharpProjectPath,
@@ -43,6 +44,8 @@ namespace ScriptingPlugin.Editor
 				FSharpProjectPath = FSharpProjectPath,
 				FSharpScriptExtension = ScriptingPluginCorePlugin.FSharpScriptExtension
 			});
+			_scriptResourceEvents.AddDefaultScriptTemplate<CSharpScript>(new CSharpScriptTemplate{ProjectPath = CSharpProjectPath});
+			_scriptResourceEvents.AddDefaultScriptTemplate<FSharpScript>(new FSharpScriptTemplate{ProjectPath = FSharpProjectPath});
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;

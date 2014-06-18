@@ -71,6 +71,28 @@ namespace ScriptingPlugin.Editor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to using Duality;
+        ///using OpenTK;
+        ///using ScriptingPlugin;
+        ///
+        ///namespace ScriptingNamespace
+        ///{
+        ///	public class ScriptResource : DualityScript
+        ///	{
+        ///		public override void Update()
+        ///		{
+        ///			base.Update();
+        ///		}
+        ///	}
+        ///}.
+        /// </summary>
+        internal static string CSharpScriptTemplate {
+            get {
+                return ResourceManager.GetString("CSharpScriptTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap fsharp {
@@ -115,28 +137,6 @@ namespace ScriptingPlugin.Editor.Resources {
             get {
                 object obj = ResourceManager.GetObject("ScriptsProjectTemplate", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to using Duality;
-        ///using OpenTK;
-        ///using ScriptingPlugin;
-        ///
-        ///namespace ScriptingNamespace
-        ///{
-        ///	public class ScriptResource : DualityScript
-        ///	{
-        ///		public override void Update()
-        ///		{
-        ///			base.Update();
-        ///		}
-        ///	}
-        ///}.
-        /// </summary>
-        internal static string ScriptTemplate {
-            get {
-                return ResourceManager.GetString("ScriptTemplate", resourceCulture);
             }
         }
     }

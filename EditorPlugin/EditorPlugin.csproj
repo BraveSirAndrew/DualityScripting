@@ -103,14 +103,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSharpScriptTemplate.cs" />
     <Compile Include="EditorPlugin.cs" />
+    <Compile Include="FSharpScriptTemplate.cs" />
     <Compile Include="IScriptProjectEditor.cs" />
+    <Compile Include="IScriptTemplate.cs" />
     <Compile Include="OpenScriptResourceEditorAction.cs" />
     <Compile Include="ProjectConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Importers\ScriptFileImporter.cs" />
     <Compile Include="PropertyEditors\ScriptComponentPropertyEditor.cs" />
-    <Compile Include="ResourceSaver.cs" />
     <Compile Include="Resources\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

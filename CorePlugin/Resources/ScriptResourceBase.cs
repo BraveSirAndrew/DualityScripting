@@ -8,6 +8,7 @@ using Duality.Editor;
 namespace ScriptingPlugin.Resources
 {
 	[Serializable]
+	[ExplicitResourceReference(new Type[0])]
 	public abstract class ScriptResourceBase : Resource
 	{
 		[field: NonSerialized]
