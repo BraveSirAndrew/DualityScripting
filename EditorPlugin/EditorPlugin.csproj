@@ -91,8 +91,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Abstractions">
-      <HintPath>..\packages\System.IO.Abstractions.1.4.0.85\lib\net35\System.IO.Abstractions.dll</HintPath>
+    <Reference Include="System.IO.Abstractions, Version=1.4.0.86, Culture=neutral, PublicKeyToken=d480b5b72fb413da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.IO.Abstractions.1.4.0.86\lib\net35\System.IO.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -103,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditorPlugin.cs" />
+    <Compile Include="IScriptProjectEditor.cs" />
     <Compile Include="OpenScriptResourceEditorAction.cs" />
     <Compile Include="ProjectConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -144,7 +146,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)..\..\..\..\..\Plugins"
-copy "$(TargetPath)" "$(TargetDir)..\..\..\..\..\Plugins"</PostBuildEvent>
+copy "$(TargetPath)" "$(TargetDir)..\..\..\..\..\Plugins"
+</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

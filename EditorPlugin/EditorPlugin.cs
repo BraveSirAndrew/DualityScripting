@@ -16,6 +16,7 @@ namespace ScriptingPlugin.Editor
 		internal static string CSharpProjectPath;
 		internal static string FSharpProjectPath;
 		private ScriptResourceEvents _scriptResourceEvents;
+		private IScriptMetadataService _scriptMetadataService;
 		
 		public const string PathPartCsharp = "CSharp";
 		public const string PathPartFsharp = "FSharp";
@@ -28,12 +29,14 @@ namespace ScriptingPlugin.Editor
 		protected override void InitPlugin(MainForm main)
 		{
 			base.InitPlugin(main);
-			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(new FileSystem(), EditorHelper.SourceCodeDirectory);
+			var fileSystem = new FileSystem();
+			_scriptsSolutionEditor = _scriptsSolutionEditor ?? new ScriptsSolutionEditor(fileSystem, EditorHelper.SourceCodeDirectory);
+			_scriptMetadataService = new ScriptMetadataService(fileSystem);
 
-			ScriptReloader.ReloadOutOfDateScripts(new FileSystem());
+			ScriptReloader.ReloadOutOfDateScripts(fileSystem, _scriptMetadataService);
 			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, "Scripts.csproj", Resources.Resources.ScriptsProjectTemplate);
 			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
-			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(new FileSystem(), new ProjectConstants()
+			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(fileSystem, new ProjectConstants()
 			{
 				CSharpProjectPath = CSharpProjectPath,
 				CSharpScriptExtension = ScriptingPluginCorePlugin.CSharpScriptExtension,
@@ -55,10 +58,9 @@ namespace ScriptingPlugin.Editor
 
 				var sw = Stopwatch.StartNew();
 
-				ScriptingPluginCorePlugin.CSharpScriptCompiler.SetPdbEditor(new PdbEditor());
 				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
 
-				foreach (var script in ContentProvider.GetAvailableContent<ScriptResourceBase>())
+				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
 				{
 					script.Res.Reload();
 				}
@@ -71,7 +73,6 @@ namespace ScriptingPlugin.Editor
 			}
 			else if (Debugger.IsAttached == false && _debuggerAttachedLastFrame)
 			{
-				ScriptingPluginCorePlugin.CSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
 				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
 
 				_debuggerAttachedLastFrame = false;

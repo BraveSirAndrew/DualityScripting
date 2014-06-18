@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Duality;
 
 namespace ScriptingPlugin
@@ -16,12 +15,13 @@ namespace ScriptingPlugin
 			_pdbEditor = pdbEditor;
 		}
 
-		public ScriptsResult TryCompile(string scriptName, string scriptPath, string script, out Assembly assembly)
+		public ScriptCompilerResult TryCompile(string scriptName, string scriptPath, string script)
 		{
-			assembly = null;
 			try
 			{
-				var compilerResult = _scriptCompiler.Compile(script);
+				Log.Editor.Write("Compiling script '{0}'.", scriptName);
+
+				var compilerResult = _scriptCompiler.Compile(script, scriptPath);
 
 				if (compilerResult.Errors.Any() == false)
 				{
@@ -32,22 +32,27 @@ namespace ScriptingPlugin
 				if (compilerResult.Errors.Any())
 				{
 					var text = string.Join(Environment.NewLine, compilerResult.Errors);
-					Log.Editor.WriteError("Error with script '{0}': {1}", scriptName, text);
-					return ScriptsResult.CompilerError;
+					Log.Editor.WriteError("Error with script '{0}': {1}", scriptName, Escape(text));
+					return new ScriptCompilerResult(CompilerResult.CompilerError);
 				}
-				assembly = compilerResult.CompiledAssembly;
-				return ScriptsResult.AssemblyExists;
+
+				return new ScriptCompilerResult(CompilerResult.AssemblyExists, compilerResult.CompiledAssembly);
 			}
 			catch (Exception exception)
 			{
 				Log.Editor.WriteError("Could not compile script {0} error {1}", scriptName, exception);
-				return ScriptsResult.GeneralError;
+				return new ScriptCompilerResult(CompilerResult.GeneralError);
 			}
 		}
 
 		public void SetPdbEditor(IPdbEditor pdbEditor)
 		{
 			_pdbEditor = pdbEditor;
+		}
+
+		private static string Escape(string text)
+		{
+			return text.Replace("{", "{{").Replace("}", "}}");
 		}
 	}
 }

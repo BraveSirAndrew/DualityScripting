@@ -2,9 +2,9 @@ namespace ScriptingPlugin
 {
 	public class NullPdbEditor : IPdbEditor
 	{
-		public ScriptsResult SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
+		public CompilerResult SetSourcePathInPdbFile(string pathToAssembly, string scriptName, string scriptPath)
 		{
-			return new ScriptsResult();
+			return new CompilerResult();
 		}
 	}
 }

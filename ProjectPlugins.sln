@@ -19,6 +19,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CorePlugin.Tests", "CorePlu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin.Tests", "EditorPlugin.Tests\EditorPlugin.Tests.csproj", "{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin.Test.CSharp", "CorePlugin.Test.CSharp\CorePlugin.Test.CSharp.csproj", "{BCA20AAB-0855-41B2-931C-762266C19749}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCA20AAB-0855-41B2-931C-762266C19749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCA20AAB-0855-41B2-931C-762266C19749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCA20AAB-0855-41B2-931C-762266C19749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCA20AAB-0855-41B2-931C-762266C19749}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +54,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{53863E4D-A1C6-454D-BD30-DF64D084B112} = {F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}
 		{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6} = {F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}
+		{BCA20AAB-0855-41B2-931C-762266C19749} = {F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}
 	EndGlobalSection
 EndGlobal

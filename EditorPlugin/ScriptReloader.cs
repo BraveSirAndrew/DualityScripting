@@ -10,27 +10,29 @@ namespace ScriptingPlugin.Editor
 	{
 		private static IFileSystem _fileSystem;
 
-		public static void ReloadOutOfDateScripts(IFileSystem fileSystem)
+		public static void ReloadOutOfDateScripts(IFileSystem fileSystem, IScriptMetadataService metadataService)
 		{
 			_fileSystem = fileSystem;
 
 			foreach (var script in ContentProvider.GetAvailableContent<CSharpScript>())
-				ReloadScript(script);
+				ReloadScript(script, metadataService);
 			foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-				ReloadScript(script);
+				ReloadScript(script, metadataService);
 		}
 
-		private static void ReloadScript<T>(ContentRef<T> script) where T : ScriptResourceBase
+		private static void ReloadScript<T>(ContentRef<T> script, IScriptMetadataService metadataService) where T : ScriptResourceBase
 		{
-			var metafilePath = Path.GetFullPath(script.Res.GetMetafilePath());
+			var metafilePath = metadataService.GetMetafilePath(script.Path);
 
 			if (string.IsNullOrEmpty(metafilePath))
 				return;
 
 			if (string.IsNullOrEmpty(script.Res.SourcePath))
 				return;
+
 			if(!_fileSystem.File.Exists(script.Res.SourcePath))
 				return;
+
 			if (File.Exists(metafilePath) && File.GetLastWriteTime(script.Res.SourcePath) > File.GetLastWriteTime(metafilePath))
 			{
 				script.Res.Script = File.ReadAllText(script.Res.SourcePath);

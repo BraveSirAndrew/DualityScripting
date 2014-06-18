@@ -10,22 +10,30 @@ namespace ScriptingPlugin.Resources
 	[Serializable]
 	public abstract class ScriptResourceBase : Resource
 	{
-		public string Script { get; set; }
-		
+		[field: NonSerialized]
+		public event EventHandler Reloaded;
+
+		[NonSerialized]
+		private Assembly _assembly;
+		[NonSerialized]
+		private ScriptCompilerResult _scriptCompilerResult;
+		[NonSerialized]
+		protected IScriptCompilerService ScriptCompiler;
+		[NonSerialized]
+		protected IScriptMetadataService ScriptMetadataService;
+
+		public ScriptResourceBase()
+		{
+			ScriptMetadataService = ScriptingPluginCorePlugin.ScriptMetadataService;
+		}
+
 		[EditorHintFlags(MemberFlags.Invisible)]
 		public Assembly Assembly
 		{
 			get { return _assembly; }
 		}
 
-		[field: NonSerialized]
-		public event EventHandler Reloaded;
-
-		[NonSerialized]
-		private Assembly _assembly;
-		
-		[NonSerialized]
-		protected IScriptCompilerService ScriptCompiler;
+		public string Script { get; set; }
 
 		public void SaveScript(string scriptPath)
 		{
@@ -38,46 +46,42 @@ namespace ScriptingPlugin.Resources
 			File.WriteAllText(sourcePath, Script);
 		}
 
-		protected override void OnLoaded()
-		{
-			Compile();
-			base.OnLoaded();
-		}
-
-		private ScriptsResult Compile()
+		private void Compile()
 		{
 			const string scriptsDll = "Scripts\\Scripts.dll";
 			if (File.Exists(scriptsDll))
 			{
 				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
-				return ScriptsResult.AssemblyExists;
+				return;
 			}
 			try
 			{
 				if (!string.IsNullOrEmpty(SourcePath))
-					return ScriptCompiler.TryCompile(Name, SourcePath, Script, out _assembly);
+				{
+					_scriptCompilerResult = ScriptCompiler.TryCompile(Name, SourcePath, Script);
 
+					if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult == CompilerResult.AssemblyExists)
+						_assembly = _scriptCompilerResult.Assembly;
+
+					return;
+				}
 			}
 			catch (Exception e)
 			{
-				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);	
+				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);
 			}
-			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);	
-			
-			return ScriptsResult.GeneralError;
+
+			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
 		}
 
 		public DualityScript Instantiate()
 		{
 			if (Assembly == null)
 			{
-				var compiled = Compile();
+				Compile();
 
-				if (Assembly == null || compiled != ScriptsResult.AssemblyExists)
-				{
-					Log.Editor.WriteWarning("Couldn't compile script '{0}'", Name);
+				if (_scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
 					return null;
-				}
 			}
 
 			var script = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
@@ -95,24 +99,15 @@ namespace ScriptingPlugin.Resources
 		{
 			Compile();
 
-			var metafilePath = System.IO.Path.GetFullPath(GetMetafilePath());
-
-			if (File.Exists(metafilePath))
+			if (ScriptMetadataService == null)
 			{
-				var fileInfo = new FileInfo(metafilePath);
-				fileInfo.Attributes &= ~FileAttributes.Hidden;
+				Log.Editor.WriteError("The script metadata service hasn't been set up. Can't reload script '{0}'.", Name);
+				return;
 			}
 
-			File.WriteAllText(metafilePath, "");
-			File.SetLastWriteTime(metafilePath, DateTime.Now);
-			File.SetAttributes(metafilePath, FileAttributes.Hidden);
+			ScriptMetadataService.UpdateMetadata(Path);
 
 			OnReloaded();
-		}
-
-		public string GetMetafilePath()
-		{
-			return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path), System.IO.Path.GetFileNameWithoutExtension(Path) + ".meta");
 		}
 
 		protected virtual void OnReloaded()
@@ -121,6 +116,5 @@ namespace ScriptingPlugin.Resources
 			if (handler != null)
 				handler(this, EventArgs.Empty);
 		}
-
 	}
 }

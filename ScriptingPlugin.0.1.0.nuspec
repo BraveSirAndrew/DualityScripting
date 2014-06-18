@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>ScriptingPlugin</id>
-        <version>0.1.0</version>
+        <version>0.1.0-beta</version>
         <title>Duality Scripting Plugin</title>
         <authors>@BatCatGames</authors>
         <owners>@BatCatGames</owners>
@@ -12,9 +12,13 @@
         <language>en-IE</language>
         <tags>Duality</tags>
         <dependencies>
-            <group targetFramework=".NETFramework4.0">
+            <group targetFramework=".NETFramework4.5">
                 <dependency id="Mono.Cecil" version="0.9.5.4" />
                 <dependency id="FSharp.Compiler.Service" version="0.0.45" />
+                <dependency id="Microsoft.Bcl.Immutable" version="1.1.20-beta" />
+                <dependency id="Microsoft.Bcl.Metadata" version="1.0.11-alpha" />
+                <dependency id="Microsoft.CodeAnalysis.Common" version="0.7.4052301-beta" />
+                <dependency id="Microsoft.CodeAnalysis.CSharp" version="0.7.4052301-beta" />
             </group>
         </dependencies>
     </metadata>
