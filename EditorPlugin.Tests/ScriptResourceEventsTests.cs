@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Reflection;
 using Duality;
@@ -17,11 +18,12 @@ namespace EditorPlugin.Tests
 		private MockFileSystem _fileSystem;
 		private Mock<IScriptProjectEditor> _projectEditorMock;
 		private Mock<IScriptTemplate> _scriptTemplate;
+		private Mock<ISourceFilePathGenerator> _sourceFilePathGenerator;
 		private const string SolutionPath = @"c:\dir\solutionFile.sln";
 		private const string FsProjectPath = @"c:\dir\scripts\FSharp\FSharpScripts.fsproj";
 		private const string CsProjectPath = @"c:\dir\scripts\CSharp\CSharpScripts.csproj";
-		private const string OldPath = @"c:\dir\project\old";
-		private const string NewPath = @"c:\dir\project\new\resource.res";
+		private const string OldPath = @"Data\Path\oldResource.CSharpScript.res";
+		private const string NewPath = @"Data\Path\resource.CSharpScript.res";
 
 		[SetUp]
 		public void Setup()
@@ -33,14 +35,9 @@ namespace EditorPlugin.Tests
 			_projectEditorMock = new Mock<IScriptProjectEditor>();
 			_scriptTemplate = new Mock<IScriptTemplate>();
 
-			_scriptResourceEvents = new ScriptResourceEvents(_fileSystem,
-				new ProjectConstants()
-					{
-						FSharpScriptExtension = ".fs",
-						FSharpProjectPath = FsProjectPath,
-						CSharpScriptExtension = ".cs",
-						CSharpProjectPath = CsProjectPath,
-					},
+			_sourceFilePathGenerator = new Mock<ISourceFilePathGenerator>();
+			_scriptResourceEvents = new ScriptResourceEvents(_fileSystem, 
+				_sourceFilePathGenerator.Object,
 				_projectEditorMock.Object);
 			_scriptResourceEvents.AddDefaultScriptTemplate<CSharpScript>(_scriptTemplate.Object);
 		}
@@ -49,8 +46,8 @@ namespace EditorPlugin.Tests
 		public void When_renaming_scripts_Then_old_script_removed_and_new_script_added()
 		{
 			_scriptTemplate.SetupGet(m => m.ProjectPath).Returns(CsProjectPath);
-			_projectEditorMock.Setup(x => x.RemoveOldScriptFromProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-			_projectEditorMock.Setup(x => x.AddScriptToProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			_projectEditorMock.Setup(x => x.RemoveScriptFromProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			_projectEditorMock.Setup(x => x.AddScriptToProject(Path.Combine(ScriptResourceEvents.MediaFolder, "Path\\resource.cs"), "resource.cs", It.IsAny<string>()));
 
 			UpdateFileSystem(CsProjectPath, GetResourceContent(), _fileSystem);
 			var resourceRenamedEventArgs = CreateEventArgs(NewPath, OldPath);
@@ -61,10 +58,30 @@ namespace EditorPlugin.Tests
 		}
 
 		[Test]
+		public void When_renaming_a_script_that_has_never_been_opened_Then_ask_for_a_new_source_path()
+		{
+			var sourceFilePath = @"Source\Media\Test.cs";
+
+			_scriptTemplate.SetupGet(m => m.ProjectPath).Returns(CsProjectPath);
+			_sourceFilePathGenerator.Setup(m => m.GenerateSourceFilePath(It.IsAny<ContentRef<Resource>>(), It.IsAny<string>())).Returns(sourceFilePath);
+			_projectEditorMock.Setup(m => m.AddScriptToProject(Path.Combine(ScriptResourceEvents.MediaFolder, "Test.cs"), It.IsAny<string>(), It.IsAny<string>()));
+
+			var resourceRenamedEventArgs = CreateEventArgs(NewPath, OldPath);
+			resourceRenamedEventArgs.Content.Res.SourcePath = null;
+
+
+			UpdateFileSystem(CsProjectPath, GetResourceContent(), _fileSystem);
+			_scriptResourceEvents.OnResourceRenamed(null, resourceRenamedEventArgs);
+
+			_projectEditorMock.VerifyAll();
+		}
+
+		[Test]
 		public void When_csharp_script_created_Then_apply_template()
 		{
 			var path = @"Data\Scripts\resource.res";
-			
+
+			_sourceFilePathGenerator.Setup(m => m.GenerateSourceFilePath(It.IsAny<ContentRef<Resource>>(), It.IsAny<string>())).Returns(@"Source\Media\Scripts\resource.cs");
 			_scriptResourceEvents.OnResourceCreated(null, new ResourceEventArgs(CreateContentRef(GetFSScriptText(), path)));
 
 			_scriptTemplate.Verify(x => x.Apply(It.Is<ContentRef<ScriptResourceBase>>(s => s.Path == path)), Times.Once);
@@ -73,13 +90,36 @@ namespace EditorPlugin.Tests
 		[Test]
 		public void When_csharp_script_created_Then_add_script_to_project()
 		{
-			var path = @"Data\Scripts\resource.fsharp.res";
-			
-			_projectEditorMock.Setup(x => x.AddScriptToProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+			_sourceFilePathGenerator.Setup(m => m.GenerateSourceFilePath(It.IsAny<ContentRef<Resource>>(), It.IsAny<string>())).Returns(@"Source\Media\Scripts\resource.cs");
+			_projectEditorMock.Setup(x => x.AddScriptToProject(Path.Combine(ScriptResourceEvents.MediaFolder, @"Scripts\resource.cs"), "resource.cs", It.IsAny<string>()));
 
-			_scriptResourceEvents.OnResourceCreated(null, new ResourceEventArgs(CreateContentRef(GetFSScriptText(), path)));
+			_scriptResourceEvents.OnResourceCreated(null, new ResourceEventArgs(CreateContentRef(GetFSScriptText(), null)));
 
 			
+			_projectEditorMock.VerifyAll();
+		}
+
+		[Test]
+		public void When_script_deleted_Then_link_is_removed_from_project()
+		{
+			_projectEditorMock.Setup(m => m.RemoveScriptFromProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+
+			_scriptResourceEvents.OnResourceDeleting(null, new ResourceEventArgs(CreateContentRef(GetCSScriptText(), "")));
+
+			_projectEditorMock.VerifyAll();
+		}
+
+		[Test]
+		public void When_script_with_no_sourcePath_is_deleted_Then_use_generated_source_path_name()
+		{
+			var resourceEventArgs = new ResourceEventArgs(CreateContentRef(GetCSScriptText(), "Path\\test"));
+			resourceEventArgs.Content.Res.SourcePath = null;
+			
+			_sourceFilePathGenerator.Setup(m => m.GenerateSourceFilePath(It.IsAny<ContentRef<Resource>>(), It.IsAny<string>())).Returns(@"Path\test (2).cs");
+			_projectEditorMock.Setup(m => m.RemoveScriptFromProject(@"Path\test (2)", It.IsAny<string>(), It.IsAny<string>()));
+
+			_scriptResourceEvents.OnResourceDeleting(null, resourceEventArgs);
+
 			_projectEditorMock.VerifyAll();
 		}
 
@@ -106,10 +146,20 @@ namespace EditorPlugin.Tests
 
 		private static ContentRef<Resource> CreateContentRef(string scriptText, string path)
 		{
-			var cSharpScript = new CSharpScript()
+			var sourcePath = path;
+			
+			if(!string.IsNullOrEmpty(sourcePath))
+			{
+				sourcePath = path
+					.Replace(DualityApp.DataDirectory, "")
+					.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+				sourcePath = sourcePath.Remove(sourcePath.IndexOf('.') + 1) + "cs";
+			}
+			
+			var cSharpScript = new CSharpScript
 			{
 				Script = scriptText,
-				SourcePath = path,
+				SourcePath = Path.Combine(@"Source\Media", sourcePath ?? ""),
 			};
 			var fieldInfo = cSharpScript.GetType().GetField("path", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (fieldInfo != null)

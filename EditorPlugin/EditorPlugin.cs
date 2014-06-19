@@ -37,18 +37,13 @@ namespace ScriptingPlugin.Editor
 			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, "Scripts.csproj", Resources.Resources.ScriptsProjectTemplate);
 			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
 			
-			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(fileSystem, new ProjectConstants()
-			{
-				CSharpProjectPath = CSharpProjectPath,
-				CSharpScriptExtension = ScriptingPluginCorePlugin.CSharpScriptExtension,
-				FSharpProjectPath = FSharpProjectPath,
-				FSharpScriptExtension = ScriptingPluginCorePlugin.FSharpScriptExtension
-			});
+			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(fileSystem, new SourceFilePathGenerator());
 			_scriptResourceEvents.AddDefaultScriptTemplate<CSharpScript>(new CSharpScriptTemplate{ProjectPath = CSharpProjectPath});
 			_scriptResourceEvents.AddDefaultScriptTemplate<FSharpScript>(new FSharpScriptTemplate{ProjectPath = FSharpProjectPath});
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
+			FileEventManager.ResourceDeleting += _scriptResourceEvents.OnResourceDeleting;
 			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
 		}
 

@@ -8,8 +8,6 @@ namespace ScriptingPlugin.Editor
 {
 	public class ScriptProjectEditor : IScriptProjectEditor
 	{
-		private const string Scripts = "Scripts";
-
 		public void AddScriptToProject(string scriptPath, string scriptFileName, string projectPath)
 		{
 			try
@@ -19,17 +17,7 @@ namespace ScriptingPlugin.Editor
 					.Replace(Path.GetFileName(scriptPath), "")
 					.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-				var directories = directoryPart.Split(new []{Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries);
-
-				var currentDirectory = Path.GetDirectoryName(projectPath);
-				foreach (var directory in directories)
-				{
-					var combine = Path.Combine(currentDirectory, directory);
-					if (Directory.Exists(combine) == false)
-						Directory.CreateDirectory(combine);
-
-					currentDirectory = Path.Combine(currentDirectory, directory);
-				}
+				CreateAnyMissingDirectories(projectPath, directoryPart);
 
 				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
 				if (rootElement == null)
@@ -53,7 +41,7 @@ namespace ScriptingPlugin.Editor
 			}
 		}
 
-		public void RemoveOldScriptFromProject(string oldContentName, string extension, string projectPath)
+		public void RemoveScriptFromProject(string oldContentName, string extension, string projectPath)
 		{
 			var rootElement = ProjectRootElement.Open(projectPath);
 			if (rootElement == null)
@@ -70,7 +58,7 @@ namespace ScriptingPlugin.Editor
 				{
 					if (item.Include.Contains(scriptName))
 					{
-						rootElement.RemoveChild(itemGroup);
+						itemGroup.RemoveChild(item);
 					}
 				}
 			}
@@ -79,7 +67,7 @@ namespace ScriptingPlugin.Editor
 
 		private string GetScriptNameWithPath(string fileNameWithResourcePath)
 		{
-			return Path.Combine(@"..\..\..\Media", Scripts, fileNameWithResourcePath);
+			return Path.Combine(@"..\..\..\Media", fileNameWithResourcePath);
 		}
 
 		private string RemoveDataScriptPath(string fullScriptName, string extension)
@@ -87,9 +75,23 @@ namespace ScriptingPlugin.Editor
 			if (string.IsNullOrWhiteSpace(fullScriptName) || string.IsNullOrWhiteSpace(extension))
 				return null;
 
-			return fullScriptName.Replace(ScriptingPluginCorePlugin.DataScripts, string.Empty) + extension;
+			return fullScriptName.Replace(DualityApp.DataDirectory, string.Empty).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + extension;
+		}
+
+		private static void CreateAnyMissingDirectories(string projectPath, string directoryPart)
+		{
+			var directories = directoryPart.Split(new[] {Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar},
+				StringSplitOptions.RemoveEmptyEntries);
+
+			var currentDirectory = Path.GetDirectoryName(projectPath);
+			foreach (var directory in directories)
+			{
+				var combine = Path.Combine(currentDirectory, directory);
+				if (Directory.Exists(combine) == false)
+					Directory.CreateDirectory(combine);
+
+				currentDirectory = Path.Combine(currentDirectory, directory);
+			}
 		}
 	}
-
-
 }
