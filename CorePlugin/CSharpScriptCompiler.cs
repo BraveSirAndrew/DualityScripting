@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Duality;
 using Duality.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,25 +10,31 @@ namespace ScriptingPlugin
 {
 	public class CSharpScriptCompiler : IScriptCompiler
 	{
+		private const string AssembliesDirectory = "_assemblies";
+
 		private CSharpCompilation _compilation;
 
 		public CSharpScriptCompiler()
 		{
 			_compilation = CSharpCompilation.Create("ScriptingAssembly",
 				references: new[] { new MetadataFileReference(typeof(object).Assembly.Location) },
-				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+					debugInformationKind: DebugInformationKind.Full));
+
+			if (Directory.Exists(AssembliesDirectory) == false)
+				Directory.CreateDirectory(AssembliesDirectory);
 		}
 
 		public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
 		{
 			Guard.StringNotNullEmpty(script);
 
-			var tempFileName = Path.GetFileNameWithoutExtension(Path.GetTempFileName());
+			var tempFileName = Guid.NewGuid().ToString();
 			var assemblyName = tempFileName + ".dll";
-			var assemblyPath = Path.Combine(Path.GetTempPath(), assemblyName);
+			var assemblyPath = Path.Combine(AssembliesDirectory, assemblyName);
 
 			var pdbName = tempFileName + ".pdb";
-			var pdbPath = Path.Combine(Path.GetTempPath(), pdbName);
+			var pdbPath = Path.Combine(AssembliesDirectory, pdbName);
 
 			using (var assemblyStream = new FileStream(assemblyPath, FileMode.Create))
 			using (var pdbStream = new FileStream(pdbPath, FileMode.Create))

@@ -85,15 +85,21 @@ namespace ScriptingPlugin.Resources
 					return null;
 			}
 
-			var script = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript) && t.Name == Name);
+			var scriptType = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript));
 
-			if (script == null)
+			if (scriptType == null)
 			{
 				Log.Game.WriteError("Could not create an instance of script '{0}' because it does not contain a type derived from DualityScript.", Name);
 				return null;
 			}
 
-			return (DualityScript)Activator.CreateInstance(script);
+			if (scriptType.Name != Name)
+			{
+				Log.Game.WriteError("Could not create an instance of script '{0}' because the class name is '{1}' and should be '{0}'", Name, scriptType.Name);
+				return null;
+			}
+
+			return (DualityScript)Activator.CreateInstance(scriptType);
 		}
 
 		public void Reload()
