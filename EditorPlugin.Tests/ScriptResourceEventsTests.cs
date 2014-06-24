@@ -43,6 +43,14 @@ namespace EditorPlugin.Tests
 		}
 
 		[Test]
+		public void When_non_resource_is_renamed_Then_dont_throw()
+		{
+			var eventArgs = new ResourceRenamedEventArgs("", "");
+
+			Assert.DoesNotThrow(() => _scriptResourceEvents.OnResourceRenamed(this, eventArgs));
+		}
+
+		[Test]
 		public void When_renaming_scripts_Then_old_script_removed_and_new_script_added()
 		{
 			_scriptTemplate.SetupGet(m => m.ProjectPath).Returns(CsProjectPath);
@@ -77,6 +85,14 @@ namespace EditorPlugin.Tests
 		}
 
 		[Test]
+		public void When_a_non_resources_is_created_Then_dont_throw()
+		{
+			var eventArgs = new ResourceEventArgs(new ContentRef<Resource>());
+
+			Assert.DoesNotThrow(() => _scriptResourceEvents.OnResourceCreated(this, eventArgs));
+		}
+
+		[Test]
 		public void When_csharp_script_created_Then_apply_template()
 		{
 			var path = @"Data\Scripts\resource.res";
@@ -97,6 +113,14 @@ namespace EditorPlugin.Tests
 
 			
 			_projectEditorMock.VerifyAll();
+		}
+
+		[Test]
+		public void When_non_resource_is_deleted_Then_dont_throw()
+		{
+			var eventArgs = new ResourceEventArgs(new ContentRef<Resource>());
+
+			Assert.DoesNotThrow(() => _scriptResourceEvents.OnResourceDeleting(this, eventArgs));
 		}
 
 		[Test]

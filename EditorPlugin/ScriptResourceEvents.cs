@@ -31,6 +31,9 @@ namespace ScriptingPlugin.Editor
 		
 		public void OnResourceCreated(object sender, ResourceEventArgs resourceEventArgs)
 		{
+			if (resourceEventArgs.IsResource == false)
+				return;
+
 			var template = GetScriptTemplate(resourceEventArgs);
 			if (template == null)
 				return;
@@ -46,6 +49,9 @@ namespace ScriptingPlugin.Editor
 
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs renamedEventArgs)
 		{
+			if (renamedEventArgs.IsResource == false)
+				return;
+
 			var template = GetScriptTemplate(renamedEventArgs);
 			if (template == null)
 				return;
@@ -72,6 +78,9 @@ namespace ScriptingPlugin.Editor
 
 		public void OnResourceDeleting(object sender, ResourceEventArgs resourceEventArgs)
 		{
+			if (resourceEventArgs.IsResource == false)
+				return;
+
 			var template = GetScriptTemplate(resourceEventArgs);
 			if (template == null)
 				return;
