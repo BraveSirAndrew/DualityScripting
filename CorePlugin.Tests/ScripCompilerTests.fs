@@ -17,7 +17,14 @@ module ScriptCompilerTests =
                                 public void MyMethod(){var c= 1;}
                             }
                         }"
-                        
+    let errorCSharpScript = @"namespace Tests
+                        {
+                            public class MyClass { 
+                                public void MyMethod(){
+                                c;
+                                }
+                            }
+                        }"                        
     let createCSharpCompiler =
         let compiler = new CSharpScriptCompiler()
         let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll" ]
@@ -50,6 +57,15 @@ module ScriptCompilerTests =
         let compilerResults = scriptingCompiler.Compile(cShScript)
         Assert.IsFalse(compilerResults.Errors.Any())
         Assert.NotNull(compilerResults.CompiledAssembly)
+
+    [<Test>]
+    let ``Compiling returns false if there are  errors ``() = 
+        let scriptingCompiler = createCSharpCompiler
+        let compilerResults = scriptingCompiler.Compile(errorCSharpScript)
+
+        Assert.IsTrue(compilerResults.Errors.Any(), String.Join("\n ", compilerResults.Errors))
+        Assert.AreEqual(2,compilerResults.Errors.Count())
+        
 
 
 module FsharpScriptCompiler =        

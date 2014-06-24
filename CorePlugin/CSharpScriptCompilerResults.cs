@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 
@@ -24,8 +25,9 @@ namespace ScriptingPlugin
 				if (_results.Success)
 					return Enumerable.Empty<string>();
 
-				return from Diagnostic error in _results.Diagnostics 
-					   select string.Format("{0} {1} {2} ", error.Id, error.Location.GetLineSpan().StartLinePosition, error.GetMessage());
+				return (from diagnostic in _results.Diagnostics 
+						where diagnostic.Severity == DiagnosticSeverity.Error 
+						select string.Format("{0} {1} {2} ", diagnostic.Id, diagnostic.Location.GetLineSpan().StartLinePosition, diagnostic.GetMessage())).ToList();
 			}
 		}
 
