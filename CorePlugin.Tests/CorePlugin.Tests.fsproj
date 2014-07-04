@@ -79,8 +79,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScripCompilerTests.fs" />
     <None Include="packages.config" />
+    <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.optdata">
+      <Link>FSharp.Core.optdata</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.sigdata">
+      <Link>FSharp.Core.sigdata</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="ScripCompilerTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CorePlugin\CorePlugin.csproj">
