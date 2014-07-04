@@ -47,7 +47,8 @@
       <HintPath>..\packages\FsCheck.0.9.2.0\lib\net40-Client\FsCheck.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip">
@@ -65,6 +66,10 @@
     </Reference>
     <Reference Include="OpenTK.GLControl">
       <HintPath>..\packages\Duality.0.1.158\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="policy.2.3.FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
