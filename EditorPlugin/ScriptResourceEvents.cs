@@ -34,6 +34,9 @@ namespace ScriptingPlugin.Editor
 			if (resourceEventArgs.IsResource == false)
 				return;
 
+			if (IsResourceAScript(resourceEventArgs) == false)
+				return;
+
 			var template = GetScriptTemplate(resourceEventArgs);
 			if (template == null)
 				return;
@@ -50,6 +53,9 @@ namespace ScriptingPlugin.Editor
 		public void OnResourceRenamed(object sender, ResourceRenamedEventArgs renamedEventArgs)
 		{
 			if (renamedEventArgs.IsResource == false)
+				return;
+
+			if (IsResourceAScript(renamedEventArgs) == false)
 				return;
 
 			var template = GetScriptTemplate(renamedEventArgs);
@@ -81,6 +87,9 @@ namespace ScriptingPlugin.Editor
 			if (resourceEventArgs.IsResource == false)
 				return;
 
+			if (IsResourceAScript(resourceEventArgs) == false)
+				return;
+
 			var template = GetScriptTemplate(resourceEventArgs);
 			if (template == null)
 				return;
@@ -110,6 +119,11 @@ namespace ScriptingPlugin.Editor
 				return template;
 			}
 			return template;
+		}
+
+		private static bool IsResourceAScript(ResourceEventArgs resourceEventArgs)
+		{
+			return typeof(ScriptResourceBase).IsAssignableFrom(resourceEventArgs.ContentType);
 		}
 	}
 }

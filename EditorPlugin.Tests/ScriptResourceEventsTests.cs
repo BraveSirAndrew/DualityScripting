@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
+using System.Linq;
 using System.Reflection;
 using Duality;
 using Duality.Editor;
+using Duality.Resources;
 using Moq;
 using NUnit.Framework;
 using ScriptingPlugin.Editor;
@@ -145,6 +147,44 @@ namespace EditorPlugin.Tests
 			_scriptResourceEvents.OnResourceDeleting(null, resourceEventArgs);
 
 			_projectEditorMock.VerifyAll();
+		}
+
+		[Test]
+		public void When_a_non_script_resource_is_renamed_Then_dont_throw()
+		{
+			var resource = new Prefab();
+			resource.Save("test.prefab.res");
+			var eventArgs = new ResourceRenamedEventArgs("test2.prefab.res", "test.prefab.res");
+
+			Assert.DoesNotThrow(() => _scriptResourceEvents.OnResourceRenamed(this, eventArgs));
+		}
+
+		[Test]
+		public void When_a_non_script_resource_is_created_Then_dont_run()
+		{
+			var logCountBeforeRunning = Log.LogData.Data.Count();
+			
+			var resource = new Prefab();
+			resource.Save("test.prefab.res");
+			var eventArgs = new ResourceEventArgs("test.prefab.res");
+
+			_scriptResourceEvents.OnResourceCreated(this, eventArgs);
+
+			Assert.AreEqual(logCountBeforeRunning, Log.LogData.Data.Count());
+		}
+
+		[Test]
+		public void When_a_non_script_resource_is_deleted_Then_dont_run()
+		{
+			var logCountBeforeRunning = Log.LogData.Data.Count();
+
+			var resource = new Prefab();
+			resource.Save("test.prefab.res");
+			var eventArgs = new ResourceEventArgs("test.prefab.res");
+
+			_scriptResourceEvents.OnResourceDeleting(this, eventArgs);
+
+			Assert.AreEqual(logCountBeforeRunning, Log.LogData.Data.Count());
 		}
 
 		private ResourceRenamedEventArgs CreateEventArgs(string newPath, string oldPath)
