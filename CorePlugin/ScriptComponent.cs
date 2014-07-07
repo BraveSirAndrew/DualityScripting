@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Duality;
 using Duality.Helpers;
 using ScriptingPlugin.Resources;
@@ -11,6 +12,8 @@ namespace ScriptingPlugin
 	{
 		[NonSerialized]
 		private DualityScript _scriptInstance;
+		[NonSerialized]
+		private Dictionary<string, MethodInfo> _methodCache = new Dictionary<string, MethodInfo>();
 
 		private Dictionary<string, object> _scriptPropertyValues = new Dictionary<string, object>();
 
@@ -99,6 +102,31 @@ namespace ScriptingPlugin
 				return;
 
 			SafeExecute(_scriptInstance.HandleMessage, "HandleMessage", sender, msg);
+		}
+
+		public void CallMethod(string methodName)
+		{
+			if (_scriptInstance == null)
+				return;
+
+			var methodInfo = _methodCache.ContainsKey(methodName) ? _methodCache[methodName] : _scriptInstance.GetType().GetMethod(methodName);
+			if (methodInfo == null)
+			{
+				Log.Game.WriteWarning("{0}: Couldn't find method '{1}'", GetType(), methodName);
+				return;
+			}
+
+			if (_methodCache.ContainsKey(methodName) == false)
+				_methodCache.Add(methodName, methodInfo);
+
+			try
+			{
+				methodInfo.Invoke(_scriptInstance, null);
+			}
+			catch (Exception e)
+			{
+				Log.Game.WriteError("An error occurred while executing script method '{0}' on '{1}':{2}", methodName, Script.Name, e.Message);
+			}
 		}
 
 		public void SetScriptPropertyValue(string propertyName, object value)
