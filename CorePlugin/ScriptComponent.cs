@@ -139,7 +139,7 @@ namespace ScriptingPlugin
 
 		public object GetScriptPropertyValue(string propertyName)
 		{
-			return _scriptPropertyValues.ContainsKey(propertyName) ? _scriptPropertyValues[propertyName] : new object();
+			return _scriptPropertyValues.ContainsKey(propertyName) ? _scriptPropertyValues[propertyName] : null;
 		}
 
 		public void ClearScriptPropertyValues()

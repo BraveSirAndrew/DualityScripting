@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="ScriptCompilerServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptComponentTests.cs" />
     <Compile Include="ScriptResourceBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
