@@ -40,13 +40,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Duality, Version=1.0.5292.17926, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Duality, Version=1.0.5302.26819, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.158\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.160\lib\net40\Duality.dll</HintPath>
     </Reference>
     <Reference Include="FarseerDuality, Version=3.3.5203.39568, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.158\lib\net40\FarseerDuality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.160\lib\net40\FarseerDuality.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Compiler.Service, Version=0.0.58.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.158\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.160\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.7.4052301-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
@@ -76,11 +76,11 @@
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.158\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.160\lib\net40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.158\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.160\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable">
