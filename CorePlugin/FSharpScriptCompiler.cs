@@ -19,6 +19,9 @@ namespace ScriptingPlugin
 			try
 			{
 				_sourceCodeServices = new SimpleSourceCodeServices();
+
+				if (Directory.Exists(FileConstants.AssembliesDirectory) == false)
+					Directory.CreateDirectory(FileConstants.AssembliesDirectory);
 			}
 			catch (Exception exception)
 			{
@@ -30,7 +33,10 @@ namespace ScriptingPlugin
 		{
 			Guard.StringNotNullEmpty(script);
 			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();
-			var outputAssemblyPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Path.GetTempFileName() + ".dll");
+			
+			var assemblyName = "FS-"+Guid.NewGuid() + ".dll";
+			var outputAssemblyPath = Path.Combine(Environment.CurrentDirectory,FileConstants.AssembliesDirectory, assemblyName);
+			
 			var referencesAndScript = new List<string>();
 
 			foreach (var reference in _references)

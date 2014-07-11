@@ -9,8 +9,6 @@ namespace ScriptingPlugin
 {
 	public class CSharpScriptCompiler : IScriptCompiler
 	{
-		private const string AssembliesDirectory = "_assemblies";
-
 		private CSharpCompilation _compilation;
 
 		public CSharpScriptCompiler()
@@ -20,8 +18,8 @@ namespace ScriptingPlugin
 				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
 					debugInformationKind: DebugInformationKind.Full));
 
-			if (Directory.Exists(AssembliesDirectory) == false)
-				Directory.CreateDirectory(AssembliesDirectory);
+			if (Directory.Exists(FileConstants.AssembliesDirectory) == false)
+				Directory.CreateDirectory(FileConstants.AssembliesDirectory);
 		}
 
 		public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
@@ -30,10 +28,10 @@ namespace ScriptingPlugin
 
 			var tempFileName = Guid.NewGuid().ToString();
 			var assemblyName = tempFileName + ".dll";
-			var assemblyPath = Path.Combine(AssembliesDirectory, assemblyName);
+			var assemblyPath = Path.Combine(FileConstants.AssembliesDirectory, assemblyName);
 
 			var pdbName = tempFileName + ".pdb";
-			var pdbPath = Path.Combine(AssembliesDirectory, pdbName);
+			var pdbPath = Path.Combine(FileConstants.AssembliesDirectory, pdbName);
 
 			using (var assemblyStream = new FileStream(assemblyPath, FileMode.Create))
 			using (var pdbStream = new FileStream(pdbPath, FileMode.Create))
