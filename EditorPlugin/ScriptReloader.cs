@@ -1,5 +1,6 @@
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using Duality;
 using Duality.Editor;
 using ScriptingPlugin.Resources;
@@ -14,13 +15,22 @@ namespace ScriptingPlugin.Editor
 		{
 			_fileSystem = fileSystem;
 
-			foreach (var script in ContentProvider.GetAvailableContent<CSharpScript>())
-				ReloadScript(script, metadataService);
-			foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
-				ReloadScript(script, metadataService);
+			var resources = Resource.GetResourceFiles();
+
+			var csharpScripts = resources.Where(r => r.EndsWith(CSharpScript.FileExt));
+			foreach (var csharpScript in csharpScripts)
+			{
+				ReloadScriptIfOutOfDate(ContentProvider.RequestContent<CSharpScript>(csharpScript), metadataService);
+			}
+
+			var fsharpScripts = resources.Where(r => r.EndsWith(FSharpScript.FileExt));
+			foreach (var fsharpScript in fsharpScripts)
+			{
+				ReloadScriptIfOutOfDate(ContentProvider.RequestContent<FSharpScript>(fsharpScript), metadataService);
+			}
 		}
 
-		private static void ReloadScript<T>(ContentRef<T> script, IScriptMetadataService metadataService) where T : ScriptResourceBase
+		private static void ReloadScriptIfOutOfDate<T>(ContentRef<T> script, IScriptMetadataService metadataService) where T : ScriptResourceBase
 		{
 			var metafilePath = metadataService.GetMetafilePath(script.Path);
 

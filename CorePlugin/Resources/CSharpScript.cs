@@ -9,7 +9,7 @@ namespace ScriptingPlugin.Resources
 	[EditorHintImage("Resources", "csharp")]
 	public class CSharpScript : ScriptResourceBase
 	{
-		public new static string FileExt = FileConstants.CSharpExtension + Resource.FileExt;
+		public new static string FileExt = ".CSharpScript" + Resource.FileExt;
 
 		protected override void OnLoaded()
 		{

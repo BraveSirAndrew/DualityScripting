@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO.Abstractions;
+using System.Linq;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -58,8 +59,10 @@ namespace ScriptingPlugin.Editor
 
 				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
 
-				foreach (var script in ContentProvider.GetAvailableContent<FSharpScript>())
+				var fsharpScripts = Resource.GetResourceFiles().Where(r => r.EndsWith(FSharpScript.FileExt));
+				foreach (var scriptPath in fsharpScripts)
 				{
+					var script = ContentProvider.RequestContent<FSharpScript>(scriptPath);
 					script.Res.Reload();
 				}
 
