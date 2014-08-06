@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Duality.Helpers;
@@ -15,7 +16,7 @@ namespace ScriptingPlugin
 		{
 			_compilation = CSharpCompilation.Create("ScriptingAssembly",
 				references: new[] { new MetadataFileReference(typeof(object).Assembly.Location) },
-				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, 
+				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
 					debugInformationKind: DebugInformationKind.Full));
 
 			if (Directory.Exists(FileConstants.AssembliesDirectory) == false)
@@ -45,6 +46,44 @@ namespace ScriptingPlugin
 					.AddSyntaxTrees(syntaxTree)
 					.WithAssemblyName(assemblyName)
 					.Emit(assemblyStream, pdbStream: pdbStream, pdbFileName: pdbName);
+				return new CSharpScriptCompilerResults(results, assemblyPath);
+			}
+		}
+
+		public struct CompilationUnit
+		{
+			public string Source { get; set; }
+			public string SourceFilePath { get; set; }
+		}
+
+		public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> scripts)
+		{
+			var tempFileName = Guid.NewGuid().ToString();
+			var assemblyName = tempFileName + ".dll";
+			var assemblyPath = Path.Combine(FileConstants.AssembliesDirectory, assemblyName);
+
+			var pdbName = tempFileName + ".pdb";
+			var pdbPath = Path.Combine(FileConstants.AssembliesDirectory, pdbName);
+
+
+			using (var assemblyStream = new FileStream(assemblyPath, FileMode.Create))
+			using (var pdbStream = new FileStream(pdbPath, FileMode.Create))
+			{
+				var syntaxTrees = new List<SyntaxTree>();
+				foreach (var compilationUnit in scripts)
+				{
+					Guard.StringNotNullEmpty(compilationUnit.Source);
+					var sourcePath = string.IsNullOrEmpty(compilationUnit.SourceFilePath) ? "" : Path.GetFullPath(compilationUnit.SourceFilePath);
+
+					var syntaxTree = CSharpSyntaxTree.ParseText(compilationUnit.Source);
+					syntaxTree = CSharpSyntaxTree.Create((CSharpSyntaxNode)syntaxTree.GetRoot(), sourcePath);
+					syntaxTrees.Add(syntaxTree);
+					
+				}
+				var results = _compilation
+						.AddSyntaxTrees(syntaxTrees)
+						.WithAssemblyName(assemblyName)
+						.Emit(assemblyStream, pdbStream: pdbStream, pdbFileName: pdbName);
 				return new CSharpScriptCompilerResults(results, assemblyPath);
 			}
 		}
