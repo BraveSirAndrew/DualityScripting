@@ -49,12 +49,16 @@ namespace ScriptingPlugin.Resources
 
 		private void Compile()
 		{
-			const string scriptsDll = "Scripts\\Scripts.dll";
-			if (File.Exists(scriptsDll))
+#if !DEBUG
+			var scriptsDll = new[] { "Scripts\\Scripts.dll", "Scripts\\FSharpScripts.dll" };
+			foreach (string script in scriptsDll)
 			{
-				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(scriptsDll));
+				if (!File.Exists(script)) 
+					continue;
+				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(script));
 				return;
 			}
+#endif
 			try
 			{
 				if (!string.IsNullOrEmpty(SourcePath))
@@ -85,7 +89,7 @@ namespace ScriptingPlugin.Resources
 					return null;
 			}
 
-			var scriptType = Assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript));
+			var scriptType = _assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript));
 
 			if (scriptType == null)
 			{

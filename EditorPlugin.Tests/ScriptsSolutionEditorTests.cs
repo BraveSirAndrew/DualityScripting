@@ -26,7 +26,7 @@ namespace EditorPlugin.Tests
 
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
-				solutionEditor.AddScripstProjectsToSolution();
+				solutionEditor.AddScriptsProjectsToSolution();
 
 
 				Assert.AreEqual("EndProject" + _projectReferenceString, new MockFile(fileSystem).ReadAllText(_solutionPath));
@@ -42,7 +42,7 @@ namespace EditorPlugin.Tests
 
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
-				solutionEditor.AddScripstProjectsToSolution();
+				solutionEditor.AddScriptsProjectsToSolution();
 
 
 				Assert.AreEqual(_projectReferenceString, new MockFile(fileSystem).ReadAllText(_solutionPath));
@@ -58,7 +58,7 @@ namespace EditorPlugin.Tests
 
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
-				solutionEditor.AddScripstProjectsToSolution();
+				solutionEditor.AddScriptsProjectsToSolution();
 
 
 				Assert.IsTrue(_projectReferenceString.Equals(new MockFile(fileSystem).ReadAllText(_solutionPath), StringComparison.OrdinalIgnoreCase));
@@ -73,7 +73,7 @@ namespace EditorPlugin.Tests
 				});
 
 				var solutionEditor = new ScriptsSolutionEditor(fileSystem, _sourceCodeDirectory);
-				Assert.DoesNotThrow(solutionEditor.AddScripstProjectsToSolution);
+				Assert.DoesNotThrow(solutionEditor.AddScriptsProjectsToSolution);
 			}
 		}
 	}

@@ -26,7 +26,7 @@ namespace ScriptingPlugin.Editor
 			const string scripts = "Scripts";
 			var projectPath = Path.Combine(EditorHelper.SourceCodeDirectory, scripts, projectLanguagePath,  projectName);
 			ExtractScriptProjectToCodeDirectory(projectPath, projectTemplate);
-			AddScripstProjectsToSolution();
+			AddScriptsProjectsToSolution();
 			return projectPath;
 		}
 		
@@ -54,7 +54,7 @@ namespace ScriptingPlugin.Editor
 			return _fileSystem.Directory.GetFiles(_sourceCodeDirectory, "*.sln").FirstOrDefault();
 		}
 
-		public void AddScripstProjectsToSolution()
+		public void AddScriptsProjectsToSolution()
 		{
 			
 			if (SolutionExists() == false)
