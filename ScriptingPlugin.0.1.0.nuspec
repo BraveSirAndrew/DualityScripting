@@ -24,7 +24,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="CorePlugin\bin\Release\ScriptingPlugin.core.dll" target="lib\net40\ScriptingPlugin.core.dll" />
-        <file src="EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40\ScriptingPlugin.editor.dll" />
+        <file src="CorePlugin\bin\Release\ScriptingPlugin.core.dll" target="lib\net40\ScriptingPlugin.core.dll" />        
     </files>
 </package>
