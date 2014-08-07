@@ -22,8 +22,13 @@
                 <dependency id="Microsoft.CodeAnalysis.CSharp" version="0.7.4052301-beta" />
             </group>
         </dependencies>
+        <references>
+            <reference file="ScriptingPlugin.core.dll"/>
+        </references>
     </metadata>
+
     <files>
         <file src="CorePlugin\bin\Release\ScriptingPlugin.core.dll" target="lib\net40\ScriptingPlugin.core.dll" />        
+        <file src="EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40\ScriptingPlugin.editor.dll" />        
     </files>
 </package>
