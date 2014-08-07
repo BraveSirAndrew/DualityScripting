@@ -44,13 +44,12 @@ namespace ScriptingPlugin
 				if(!string.IsNullOrWhiteSpace(reference))
 					referencesAndScript.Add(string.Format("--reference:{0}", reference));
 			}
-
-			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
-
+			
 			var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
 			File.WriteAllText(tempScriptPath, script);
-
 			referencesAndScript.Add(tempScriptPath);
+
+			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
 			var completeOptions = options.Concat(referencesAndScript).ToArray();
 			var errorsAndExitCode = _sourceCodeServices.Compile(completeOptions);
 			Assembly assembly = null;

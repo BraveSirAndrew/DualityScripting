@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Duality.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -26,44 +27,23 @@ namespace ScriptingPlugin
 		public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
 		{
 			Guard.StringNotNullEmpty(script);
-
-			var tempFileName = Guid.NewGuid().ToString();
-			var assemblyName = tempFileName + ".dll";
-			var assemblyPath = Path.Combine(FileConstants.AssembliesDirectory, assemblyName);
-
-			var pdbName = tempFileName + ".pdb";
-			var pdbPath = Path.Combine(FileConstants.AssembliesDirectory, pdbName);
-
-			using (var assemblyStream = new FileStream(assemblyPath, FileMode.Create))
-			using (var pdbStream = new FileStream(pdbPath, FileMode.Create))
-			{
-				var sourcePath = string.IsNullOrEmpty(sourceFilePath) ? "" : Path.GetFullPath(sourceFilePath);
-
-				var syntaxTree = CSharpSyntaxTree.ParseText(script);
-				syntaxTree = CSharpSyntaxTree.Create((CSharpSyntaxNode)syntaxTree.GetRoot(), sourcePath);
-
-				var results = _compilation
-					.AddSyntaxTrees(syntaxTree)
-					.WithAssemblyName(assemblyName)
-					.Emit(assemblyStream, pdbStream: pdbStream, pdbFileName: pdbName);
-				return new CSharpScriptCompilerResults(results, assemblyPath);
-			}
+			return Compile(new[] {new CompilationUnit(script, sourceFilePath),});
 		}
 
-		public struct CompilationUnit
+		public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> scripts, string resultingAssemblyDirectory=null)
 		{
-			public string Source { get; set; }
-			public string SourceFilePath { get; set; }
-		}
-
-		public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> scripts)
-		{
+			
+			var assemblyDirectory = string.IsNullOrWhiteSpace(resultingAssemblyDirectory)
+				? FileConstants.AssembliesDirectory
+				: resultingAssemblyDirectory;
+			if (!Directory.Exists(assemblyDirectory))
+				Directory.CreateDirectory(assemblyDirectory);
 			var tempFileName = Guid.NewGuid().ToString();
 			var assemblyName = tempFileName + ".dll";
-			var assemblyPath = Path.Combine(FileConstants.AssembliesDirectory, assemblyName);
+			var assemblyPath = Path.Combine(assemblyDirectory, assemblyName);
 
 			var pdbName = tempFileName + ".pdb";
-			var pdbPath = Path.Combine(FileConstants.AssembliesDirectory, pdbName);
+			var pdbPath = Path.Combine(assemblyDirectory, pdbName);
 
 
 			using (var assemblyStream = new FileStream(assemblyPath, FileMode.Create))

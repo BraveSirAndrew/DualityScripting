@@ -5,7 +5,7 @@ open FsCheck
 open ScriptingPlugin
 open System
 open System.Linq
-    
+open System.Reflection    
 
 module ScriptCompilerTests =
 
@@ -39,7 +39,17 @@ module ScriptCompilerTests =
     [<Test>]
     let ``Compiling doesnt throw when SourcePath is null``() = 
         let scriptingCompiler = createCSharpCompiler
-        Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile(cShScript, null) |> ignore)
+        let newthing= new CompilationUnit(cShScript, null)
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile([newthing]) |> ignore)
+
+    [<Test>]
+    let ``Compiling with destination assembly``() = 
+        
+        let loc =  "Scripts"
+        
+        let scriptingCompiler = createCSharpCompiler
+        let newthing= new CompilationUnit(cShScript, null)
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile([newthing], loc) |> ignore)
 
     [<Test>]
     let ``Compiling doesnt throw when SourcePath is not a valid path``() = 

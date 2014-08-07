@@ -50,6 +50,7 @@ namespace ScriptingPlugin.Resources
 		private void Compile()
 		{
 #if !DEBUG
+			//Not sure if this is the best place to be doing this
 			var scriptsDll = new[] { "Scripts\\Scripts.dll", "Scripts\\FSharpScripts.dll" };
 			foreach (string script in scriptsDll)
 			{
