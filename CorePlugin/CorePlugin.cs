@@ -3,7 +3,6 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
 using Duality;
-using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin
 {

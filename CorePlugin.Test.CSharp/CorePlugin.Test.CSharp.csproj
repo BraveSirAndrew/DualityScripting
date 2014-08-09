@@ -72,6 +72,9 @@
     <Compile Include="ScriptResourceBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\DllForTesting.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

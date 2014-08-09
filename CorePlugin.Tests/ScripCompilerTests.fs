@@ -108,7 +108,6 @@ open System
         let scriptingCompiler = createFSharpCompiler        
         let compiled = scriptingCompiler.Compile(fsharpScript)    
 
-       // Assert.Ignore  "Find solution for sigdata and optdata"
         Assert.IsFalse(compiled.Errors.Any(), join compiled.Errors )
         Assert.NotNull(compiled.CompiledAssembly)
         Assert.IsFalse(String.IsNullOrWhiteSpace compiled.PathToAssembly)
@@ -116,3 +115,39 @@ open System
     [<Test>]
     let ``Compiling throws when script is empty string ``() =                 
         Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("") |> ignore )|> ignore
+
+    [<Test>]
+    let ``Compiling with destination assembly``() =         
+        let loc =  "Scripts"        
+        let scriptingCompiler = createFSharpCompiler
+        let newthing= new CompilationUnit(fsharpScript, null)
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile([newthing], loc) |> ignore)
+
+    [<Test>]
+    let ``Compiling multiple scripts``() =         
+        let loc =  "Scripts"        
+        let f1 = @"module Bla
+
+    let longBeaked = ""Delphinus capensis""
+    let shortBeaked = ""Delphinus delphis""
+    let dolphins = [longBeaked; shortBeaked]
+    printfn ""Known Dolphins: %A"" dolphins"
+        let f2 = @"module Whales.Fictional
+/// The three kinds of whales we cover in this release
+type WhaleKind =
+| Blue
+| Killer
+| GreatWhale
+/// The main whale
+let moby = ""Moby Dick Pacific"", GreatWhale
+/// The backup whale
+let bluey = ""Blue, Southern Ocean"", Blue
+/// This whale is for experimental use only
+let orca = ""Orca, Pacific"", Killer
+/// The collected whales
+let whales = [|moby; bluey; orca|]"
+
+        let scriptingCompiler = createFSharpCompiler
+        let newthing= [new CompilationUnit(fsharpScript, null); new CompilationUnit(f1);new CompilationUnit(f2)]
+        Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile(newthing, loc) |> ignore)
+

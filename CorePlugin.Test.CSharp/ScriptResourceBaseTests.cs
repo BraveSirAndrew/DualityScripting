@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.IO;
+using Moq;
 using NUnit.Framework;
 using ScriptingPlugin;
 using ScriptingPlugin.Resources;
@@ -43,6 +44,15 @@ namespace CorePlugin.Test.CSharp
 
 				_metadataService.Verify(m => m.UpdateMetadata("testpath"), Times.Once);
 			}
+#if !DEBUG
+			[Test]
+			public void LoadsFromAssemblyIfScriptAvailable()
+			{
+				_script.Reload();
+
+				_metadataService.Verify(m => m.UpdateMetadata(It.IsAny<string>()));
+			}
+#endif
 		}
 
 		public class TheAssemblyProperty

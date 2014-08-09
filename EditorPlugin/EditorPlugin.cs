@@ -45,7 +45,7 @@ namespace ScriptingPlugin.Editor
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
 			FileEventManager.ResourceDeleting += _scriptResourceEvents.OnResourceDeleting;
-			DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
+		//	DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
 		}
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
@@ -53,10 +53,7 @@ namespace ScriptingPlugin.Editor
 			if (Debugger.IsAttached && _debuggerAttachedLastFrame == false)
 			{
 				Log.Editor.Write("Reloading scripts with debug information...");
-				Log.Editor.PushIndent();
-
-				var sw = Stopwatch.StartNew();
-
+				
 				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
 
 				var fsharpScripts = Resource.GetResourceFiles().Where(r => r.EndsWith(FSharpScript.FileExt));
@@ -67,10 +64,6 @@ namespace ScriptingPlugin.Editor
 				}
 
 				_debuggerAttachedLastFrame = true;
-				
-				sw.Stop();
-				Log.Editor.PopIndent();
-				Log.Editor.Write("Reloading scripts took {0} ms", sw.ElapsedMilliseconds);
 			}
 			else if (Debugger.IsAttached == false && _debuggerAttachedLastFrame)
 			{

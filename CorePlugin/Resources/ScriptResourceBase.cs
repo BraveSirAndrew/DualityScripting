@@ -51,13 +51,19 @@ namespace ScriptingPlugin.Resources
 		{
 #if !DEBUG
 			//Not sure if this is the best place to be doing this
-			var scriptsDll = new[] { "Scripts\\Scripts.dll", "Scripts\\FSharpScripts.dll" };
-			foreach (string script in scriptsDll)
+			
+			var scriptsDirectory = new DirectoryInfo("Scripts");
+			if(scriptsDirectory.Exists)
 			{
-				if (!File.Exists(script)) 
-					continue;
-				_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(script));
-				return;
+				var scriptsDll = scriptsDirectory.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList();
+			
+				foreach (var script in scriptsDll)
+				{
+					if (!script.Exists) 
+						continue;
+					_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(script.FullName));
+					return;
+				}
 			}
 #endif
 			try
