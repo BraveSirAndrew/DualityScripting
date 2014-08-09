@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Duality.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -26,12 +27,12 @@ namespace ScriptingPlugin
 		public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
 		{
 			Guard.StringNotNullEmpty(script);
-			return Compile(new[] {new CompilationUnit(script, sourceFilePath),});
+			return Compile(new[] { new CompilationUnit(script, sourceFilePath), });
 		}
 
-		public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> scripts, string resultingAssemblyDirectory=null)
+		public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> scripts, string resultingAssemblyDirectory = null)
 		{
-			
+
 			var assemblyDirectory = string.IsNullOrWhiteSpace(resultingAssemblyDirectory)
 				? FileConstants.AssembliesDirectory
 				: resultingAssemblyDirectory;
@@ -59,7 +60,7 @@ namespace ScriptingPlugin
 					var syntaxTree = CSharpSyntaxTree.ParseText(compilationUnit.Source);
 					syntaxTree = CSharpSyntaxTree.Create((CSharpSyntaxNode)syntaxTree.GetRoot(), sourcePath);
 					syntaxTrees.Add(syntaxTree);
-					
+
 				}
 				var results = _compilation
 						.AddSyntaxTrees(syntaxTrees)
@@ -74,11 +75,24 @@ namespace ScriptingPlugin
 			if (string.IsNullOrEmpty(referenceAssembly) || !referenceAssembly.Contains("dll"))
 				return;
 
-			string filePath;
+			string filePath = null;
 			if (File.Exists(referenceAssembly))
 				filePath = Path.GetFullPath(referenceAssembly);
 			else
-				filePath = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == Path.GetFileNameWithoutExtension(referenceAssembly)).Location;
+			{
+				var referencedAssemblyInAppDomain =
+					AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == Path.GetFileNameWithoutExtension(referenceAssembly));
+				//TODO : This is actually kind of tricky
+				if (referencedAssemblyInAppDomain != null)
+				{
+					filePath = referencedAssemblyInAppDomain.Location;
+				}
+				else
+				{
+					throw new ArgumentException(
+						string.Format("Thre was a problem trying to find {0} either in the current folder or in the AppDomain, the solution is to try to load the missing assembly into the appdomain somehow",referenceAssembly));
+				}
+			}
 
 			_compilation = _compilation.AddReferences(new MetadataFileReference(filePath));
 		}
