@@ -6,5 +6,7 @@ namespace ScriptingPlugin
 	{
 		IScriptCompilerResults Compile(string script, string sourceFilePath = null);
 		IScriptCompilerResults Compile(IEnumerable<CompilationUnit> scripts, string resultingAssemblyDirectory = null);
+		void AddReference(string referenceAssembly);
+
 	}
 }
