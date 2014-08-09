@@ -76,7 +76,9 @@ module ScriptCompilerTests =
         Assert.IsTrue(compilerResults.Errors.Any(), String.Join("\n ", compilerResults.Errors))
         Assert.AreEqual(2,compilerResults.Errors.Count())
         
-
+    [<Test>]
+    let ``Compiling throws when script is empty string ``() =                 
+        Assert.Throws<System.ArgumentException>(fun () -> createCSharpCompiler.Compile("") |> ignore )|> ignore
 
 module FsharpScriptCompiler =        
             

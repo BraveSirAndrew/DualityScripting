@@ -51,7 +51,9 @@ namespace ScriptingPlugin
 				var syntaxTrees = new List<SyntaxTree>();
 				foreach (var compilationUnit in scripts)
 				{
-					Guard.StringNotNullEmpty(compilationUnit.Source);
+					if (string.IsNullOrWhiteSpace(compilationUnit.Source))
+						throw new ArgumentException("scriptsource");
+
 					var sourcePath = string.IsNullOrEmpty(compilationUnit.SourceFilePath) ? "" : Path.GetFullPath(compilationUnit.SourceFilePath);
 
 					var syntaxTree = CSharpSyntaxTree.ParseText(compilationUnit.Source);

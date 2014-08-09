@@ -52,7 +52,8 @@ namespace ScriptingPlugin
 			var deleteTempFiles = new List<string>();
 			foreach (var compilationUnit in compilationUnits)
 			{
-				Guard.StringNotNullEmpty(compilationUnit.Source);
+				if(string.IsNullOrWhiteSpace(compilationUnit.Source))
+					throw new ArgumentException("scriptsource");
 
 				var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
 				File.WriteAllText(tempScriptPath, compilationUnit.Source);

@@ -29,14 +29,6 @@ namespace CorePlugin.Test.CSharp
 			}
 
 			[Test]
-			public void RecompilesTheScript()
-			{
-				_script.Reload();
-
-				_compilerService.Verify(m => m.TryCompile(It.IsAny<string>(), "test", It.IsAny<string>()));
-			}
-
-			[Test]
 			public void UpdatesTheMetadata()
 			{
 				_script.Save("testpath");
@@ -44,6 +36,17 @@ namespace CorePlugin.Test.CSharp
 
 				_metadataService.Verify(m => m.UpdateMetadata("testpath"), Times.Once);
 			}
+#if DEBUG
+
+			[Test]
+			public void RecompilesTheScript()
+			{
+				_script.Reload();
+
+				_compilerService.Verify(m => m.TryCompile(It.IsAny<string>(), "test", It.IsAny<string>()));
+			}
+#endif
+
 #if !DEBUG
 			[Test]
 			public void LoadsFromAssemblyIfScriptAvailable()
