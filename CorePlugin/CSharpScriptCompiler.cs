@@ -82,7 +82,7 @@ namespace ScriptingPlugin
 			{
 				var referencedAssemblyInAppDomain =
 					AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == Path.GetFileNameWithoutExtension(referenceAssembly));
-				//TODO : This is actually kind of tricky
+				
 				if (referencedAssemblyInAppDomain != null)
 				{
 					filePath = referencedAssemblyInAppDomain.Location;
