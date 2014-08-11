@@ -49,23 +49,6 @@ namespace ScriptingPlugin.Resources
 
 		private void Compile()
 		{
-#if !DEBUG
-			//Not sure if this is the best place to be doing this
-			
-			var scriptsDirectory = new DirectoryInfo("Scripts");
-			if(scriptsDirectory.Exists)
-			{
-				var scriptsDll = scriptsDirectory.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList();
-			
-				foreach (var script in scriptsDll)
-				{
-					if (!script.Exists) 
-						continue;
-					_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(script.FullName));
-					return;
-				}
-			}
-#endif
 			try
 			{
 				if (!string.IsNullOrEmpty(SourcePath))
@@ -88,15 +71,20 @@ namespace ScriptingPlugin.Resources
 
 		public DualityScript Instantiate()
 		{
-			if (Assembly == null)
+			if (_assembly == null)
 			{
-				Compile();
+				LoadAssemblyFromBuiltSriptsFromThePast();
+				if (_assembly == null)
+					Compile();
 
-				if (_scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
+				if ( _scriptCompilerResult != null&& _scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
 					return null;
 			}
-
-			var scriptType = _assembly.GetTypes().FirstOrDefault(t => t.BaseType != null && t.BaseType == typeof(DualityScript));
+			
+			var scriptType = _assembly.GetTypes().FirstOrDefault(t => 
+											t.BaseType != null && 
+											t.BaseType == typeof(DualityScript) &&
+											String.Equals(t.Name, Name, StringComparison.CurrentCultureIgnoreCase));
 
 			if (scriptType == null)
 			{
@@ -111,6 +99,23 @@ namespace ScriptingPlugin.Resources
 			}
 
 			return (DualityScript)Activator.CreateInstance(scriptType);
+		}
+
+		private void LoadAssemblyFromBuiltSriptsFromThePast()
+		{
+			var scriptsDirectory = new DirectoryInfo("Scripts");
+			if (scriptsDirectory.Exists)
+			{
+				var scriptsDll = scriptsDirectory.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList();
+
+				foreach (var script in scriptsDll)
+				{
+					if (!script.Exists)
+						continue;
+					_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(script.FullName));
+				}
+			}
+		
 		}
 
 		public void Reload()
