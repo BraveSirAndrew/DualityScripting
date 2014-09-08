@@ -40,7 +40,8 @@ namespace ScriptingPlugin
 				foreach (var assembly in assemblies)
 				{
 					cSharpScriptCompiler.AddReference(assembly);
-					fSharpScriptCompiler.AddReference(assembly);
+					if (!assembly.EndsWith("System.Runtime.dll",StringComparison.CurrentCultureIgnoreCase))
+						fSharpScriptCompiler.AddReference(assembly);
 				}
 			}
 
