@@ -13,6 +13,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 	public class ScriptComponentPropertyEditor : ComponentPropertyEditor
 	{
 		private readonly List<PropertyEditor> _propertyEditors = new List<PropertyEditor>();
+		private bool _isInvokingDirectChild;
  
 		protected override bool IsAutoCreateMember(MemberInfo info)
 		{
@@ -44,6 +45,44 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 
 			var scriptComponents = GetValue().Cast<ScriptComponent>();
 			UpdateScriptPropertyEditors(scriptComponents);
+		}
+
+		protected override void OnValueChanged(object sender, PropertyEditorValueEventArgs args)
+		{
+			if (_isInvokingDirectChild) return;
+
+			// Find the direct descendant editor on the path to the changed one
+			var directChild = args.Editor;
+			while (directChild != null && !HasPropertyEditor(directChild))
+				directChild = directChild.ParentEditor;
+			
+			if (directChild == args.Editor) 
+				return;
+
+			if (directChild != null && directChild != args.Editor && directChild.EditedMember != null)
+			{
+				try
+				{
+					_isInvokingDirectChild = true;
+					if (directChild.EditedMember is PropertyInfo || directChild.EditedMember is FieldInfo)
+						NotifyScriptComponentsChanged();
+				}
+				finally
+				{
+					_isInvokingDirectChild = false;
+				}
+			}
+
+			UpdatePrefabModifiedState(directChild);
+		}
+
+		private void NotifyScriptComponentsChanged()
+		{
+			var scriptComponents = GetValue().Cast<ScriptComponent>();
+
+			foreach (var scriptComponent in scriptComponents)
+				DualityEditorApp.NotifyObjPropChanged(scriptComponent, new ObjectSelection(scriptComponent),
+					typeof (ScriptComponent).GetProperty("ScriptPropertyValues"));
 		}
 
 		private void OnScriptChanged(object sender, PropertyEditorValueEventArgs propertyEditorValueEventArgs)
@@ -80,6 +119,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 					var propertyEditor = ParentGrid.CreateEditor(propertyInfo.PropertyType, this);
 					propertyEditor.BeginUpdate();
 					propertyEditor.PropertyName = propertyInfo.Name;
+					propertyEditor.EditedMember = propertyInfo;
 					propertyEditor.Getter = () => GetValue().Cast<ScriptComponent>().Select(o => o.GetScriptPropertyValue(propertyInfo.Name));
 					propertyEditor.Setter = values => ScriptPropertyValuesSetter(info.Name, values);
 					_propertyEditors.Add(propertyEditor);
