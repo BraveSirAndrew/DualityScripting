@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
+﻿using Duality;
+using NUnit.Framework;
 using ScriptingPlugin;
+using ScriptingPlugin.Resources;
 
 namespace CorePlugin.Test.CSharp
 {
@@ -27,5 +29,16 @@ namespace CorePlugin.Test.CSharp
 				Assert.AreSame(value, component.GetScriptPropertyValue("test"));
 			}
 		}
+
+	    [TestFixture]
+	    public class ReloadingTheScript
+	    {
+	        [Test]
+	        public void DoesntThrow()
+	        {
+                var scriptComponent = new ScriptComponent();
+	            Assert.DoesNotThrow(() => scriptComponent.OnScriptReloaded(null, null));
+	        }
+	    }
 	}
 }

@@ -161,12 +161,19 @@ namespace ScriptingPlugin
 			_scriptInstance.GameObj = GameObj;
 		}
 
-		private void OnScriptReloaded(object sender, EventArgs eventArgs)
+	    internal void OnScriptReloaded(object sender, EventArgs eventArgs)
 		{
-			InstantiateScript();
-			if (_scriptInstance == null)
-				return;
-			SetScriptPropertyValues();
+	        try
+	        {
+	            InstantiateScript();
+	            if (_scriptInstance == null)
+	                return;
+	            SetScriptPropertyValues();
+	        }
+	        catch (Exception exception)
+	        {
+	            Log.Editor.WriteWarning("Problem trying to reload the script.Error {0} {1} StackTrace:{2}",exception.Message, Environment.NewLine, exception.StackTrace);
+	        }
 		}
 
 		private void SafeExecute(Action action, string methodName)
