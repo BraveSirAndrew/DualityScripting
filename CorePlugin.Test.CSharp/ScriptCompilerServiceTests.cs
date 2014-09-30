@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿
+using Moq;
 using NUnit.Framework;
 using ScriptingPlugin;
 
@@ -12,7 +13,7 @@ namespace CorePlugin.Test.CSharp
 		{
 			var compiler = new Mock<IScriptCompiler>();
 			var compilerResult = new Mock<IScriptCompilerResults>();
-
+		    
 			compilerResult.Setup(m => m.Errors).Returns(new[] {"{", "}"});
 			compiler.Setup(m => m.Compile(It.IsAny<string>(), It.IsAny<string>())).Returns(compilerResult.Object);
 
