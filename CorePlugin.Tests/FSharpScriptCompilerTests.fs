@@ -26,7 +26,7 @@ open System
     let join (errors: Collections.Generic.IEnumerable<string>) =     
         String.Join(" ", errors)
 
-    [<Test>]
+    [<Ignore "Need to find out how to actually use generators">]
     let ``Compiler add reference f#``() = 
         let scriptongCompiler = new FSharpScriptCompiler()
         Check.VerboseThrowOnFailure scriptongCompiler.AddReference
