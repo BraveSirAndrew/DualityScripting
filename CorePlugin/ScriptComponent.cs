@@ -8,7 +8,7 @@ using ScriptingPlugin.Resources;
 namespace ScriptingPlugin
 {
 	[Serializable]
-	public class ScriptComponent : Component, ICmpInitializable, ICmpUpdatable, ICmpCollisionListener, ICmpHandlesMessages 
+	public class ScriptComponent : Component, ICmpInitializable, ICmpUpdatable, ICmpCollisionListener, ICmpHandlesMessages, ICmpEditorUpdatable
 	{
 		[NonSerialized]
 		private DualityScript _scriptInstance;
@@ -56,12 +56,37 @@ namespace ScriptingPlugin
 			SafeExecute(_scriptInstance.Shutdown, "Shutdown");
 		}
 
-		public void OnUpdate()
+		void ICmpUpdatable.OnUpdate()
 		{
 			if (_scriptInstance == null)
 				return;
 
 			SafeExecute(_scriptInstance.Update, "Update");
+		}
+
+		void ICmpEditorUpdatable.OnUpdate()
+		{
+			if (_scriptInstance == null)
+				return;
+
+			SafeExecute(_scriptInstance.EditorUpdate, "EditorUpdate");
+
+			var keys = new List<string>(_scriptPropertyValues.Keys);
+			foreach (var key in keys)
+			{
+				var property = _scriptInstance.GetType().GetProperty(key);
+
+				if (property == null)
+					continue;
+
+				var currentPropertyValue = property.GetValue(_scriptInstance);
+				var existingValue = _scriptPropertyValues[key];
+
+				if (property.PropertyType.IsValueType ?
+					!currentPropertyValue.Equals(existingValue) :
+					currentPropertyValue != existingValue)
+					_scriptPropertyValues[key] = currentPropertyValue;
+			}
 		}
 
 		public void OnCollisionBegin(Component sender, CollisionEventArgs args)
@@ -135,6 +160,9 @@ namespace ScriptingPlugin
 				_scriptPropertyValues[propertyName] = value;
 			else
 				_scriptPropertyValues.Add(propertyName, value);
+
+			if(_scriptInstance != null)
+				SetScriptPropertyValues();
 		}
 
 		public object GetScriptPropertyValue(string propertyName)
@@ -151,7 +179,7 @@ namespace ScriptingPlugin
 		{
 			if (Script.Res == null)
 			{
-				Log.Editor.WriteWarning("Attempting to instanciate Script but resource is null {0}", Script);
+				Log.Editor.WriteWarning("Attempting to instantiate Script but resource is null {0}", Script);
 				return;
 			}
 			_scriptInstance = Script.Res.Instantiate();
