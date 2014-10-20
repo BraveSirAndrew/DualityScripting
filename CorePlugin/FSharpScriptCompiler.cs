@@ -89,49 +89,15 @@ namespace ScriptingPlugin
 		{
 			Guard.StringNotNullEmpty(script);
 			return Compile(new []{new CompilationUnit(script, sourceFilePath)});
-//			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();
-//			
-//			var assemblyName = "FS-"+Guid.NewGuid() + ".dll";
-//			var outputAssemblyPath = Path.Combine(Environment.CurrentDirectory,FileConstants.AssembliesDirectory, assemblyName);
-//			
-//			var referencesAndScript = new List<string>();
-//
-//			foreach (var reference in _references)
-//			{
-//				if(!string.IsNullOrWhiteSpace(reference))
-//					referencesAndScript.Add(string.Format("--reference:{0}", reference));
-//			}
-//			
-//			var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
-//			File.WriteAllText(tempScriptPath, script);
-//			referencesAndScript.Add(tempScriptPath);
-//
-//			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
-//			var completeOptions = options.Concat(referencesAndScript).ToArray();
-//			var errorsAndExitCode = _sourceCodeServices.Compile(completeOptions);
-//			Assembly assembly = null;
-//			try
-//			{
-//				assembly = Assembly.LoadFile(outputAssemblyPath);
-//			}
-//			catch (Exception e)
-//			{
-//				Log.Editor.WriteWarning("{0}: Couldn't load assembly file. {1} ", GetType().Name, e.Message);
-//			}
-//			finally
-//			{
-//				if (File.Exists(tempScriptPath))
-//					File.Delete(tempScriptPath);
-//			}
-//			var errors = errorsAndExitCode.Item1.Select(x => string.Format("{0} {1} {2} ", x.Severity, x.StartLineAlternate, x.Message));
-//			return new FSharpScriptCompilerResults(errors, assembly, outputAssemblyPath);
+
 		}
 
 		public void AddReference(string referenceAssembly)
 		{
 			if(string.IsNullOrWhiteSpace(referenceAssembly))
 				return;
-			
+            if (referenceAssembly.EndsWith("System.Runtime.dll",StringComparison.CurrentCultureIgnoreCase))
+                return;
 			_references.Add(referenceAssembly.Trim());
 		}
 	}
