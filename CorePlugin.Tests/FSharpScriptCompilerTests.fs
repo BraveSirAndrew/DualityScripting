@@ -52,6 +52,14 @@ open System
         Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile([newthing], loc) |> ignore)
 
     [<Test>]
+    let ``Doesn't add reference to system runtime``() =         
+        let scriptingCompiler = createFSharpCompiler
+        let ref = "System.Runtime.dll"
+        scriptingCompiler.AddReference ref
+        Assert.False (scriptingCompiler.References |> Seq.exists (fun x-> x = ref) )
+
+
+    [<Test>]
     let ``Compiling multiple scripts``() =         
         let loc =  "Scripts"        
         let f1 = @"module Bla

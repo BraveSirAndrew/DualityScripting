@@ -29,7 +29,12 @@ namespace ScriptingPlugin
 			}
 		}
 
-		public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> compilationUnits, string resultingAssemblyDirectory = null)
+	    public List<string> References
+	    {
+	        get { return _references; }
+	    }
+
+	    public IScriptCompilerResults Compile(IEnumerable<CompilationUnit> compilationUnits, string resultingAssemblyDirectory = null)
 		{
 			_sourceCodeServices = _sourceCodeServices ?? new SimpleSourceCodeServices();
 			var assemblyName = "FS-" + Guid.NewGuid() + ".dll";
@@ -42,7 +47,7 @@ namespace ScriptingPlugin
 
 			var referencesAndScript = new List<string>();
 
-			foreach (var reference in _references)
+			foreach (var reference in References)
 			{
 				if (!string.IsNullOrWhiteSpace(reference))
 					referencesAndScript.Add(string.Format("--reference:{0}", reference));
@@ -89,7 +94,6 @@ namespace ScriptingPlugin
 		{
 			Guard.StringNotNullEmpty(script);
 			return Compile(new []{new CompilationUnit(script, sourceFilePath)});
-
 		}
 
 		public void AddReference(string referenceAssembly)
@@ -98,7 +102,7 @@ namespace ScriptingPlugin
 				return;
             if (referenceAssembly.EndsWith("System.Runtime.dll",StringComparison.CurrentCultureIgnoreCase))
                 return;
-			_references.Add(referenceAssembly.Trim());
+			References.Add(referenceAssembly.Trim());
 		}
 	}
 }
