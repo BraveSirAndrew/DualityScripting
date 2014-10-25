@@ -15,6 +15,11 @@ namespace ScriptingPlugin
 			
 		}
 
+		public virtual void EditorUpdate()
+		{
+			
+		}
+
 		public virtual void CollisionBegin(CollisionEventArgs args)
 		{
 			

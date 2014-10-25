@@ -14,6 +14,8 @@ namespace ScriptingPlugin
         private readonly HashSet<string> _references = new HashSet<string>();
         private SimpleSourceCodeServices _sourceCodeServices;
 
+        public HashSet<string> References { get { return _references; } }
+
         public FSharpScriptCompiler()
         {
             try

@@ -185,8 +185,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)..\..\..\..\..\Plugins"
-copy "$(TargetPath)" "$(TargetDir)..\..\..\..\..\Plugins"
+    <PostBuildEvent>
 </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
