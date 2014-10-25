@@ -100,7 +100,7 @@ open System
     let join (errors: Collections.Generic.IEnumerable<string>) =     
         String.Join(" ", errors)
 
-    [<Test>]
+    [<Ignore>]
     let ``Compiler add reference f#``() = 
         let scriptongCompiler = new FSharpScriptCompiler()
         Check.VerboseThrowOnFailure scriptongCompiler.AddReference
