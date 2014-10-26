@@ -65,7 +65,7 @@ namespace ScriptingPlugin
 
             }
             var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
-            completeOptions = options.Concat(referencesAndScript).ToArray();
+            completeOptions = options.Concat(referencesAndScript).ToArray(); 
             var errorsAndExitCode = _sourceCodeServices.Compile(completeOptions);
 
             Assembly assembly = null;
@@ -113,7 +113,7 @@ namespace ScriptingPlugin
             if (string.IsNullOrWhiteSpace(fileName))
                 return false;
 
-            return references.Any(x => x.ToLower().Contains(fileName.ToLower()));
+            return references.Any(x => x == fileName.ToLower());
         }
     }
 }
