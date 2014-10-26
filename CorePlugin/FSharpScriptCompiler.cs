@@ -40,7 +40,7 @@ namespace ScriptingPlugin
                 : resultingAssemblyDirectory;
             if (!Directory.Exists(assemblyDirectory))
                 Directory.CreateDirectory(assemblyDirectory);
-            var outputAssemblyPath = Path.Combine(Environment.CurrentDirectory, FileConstants.AssembliesDirectory, assemblyName);
+            var outputAssemblyPath =  Path.Combine(assemblyDirectory, assemblyName);
 
             var referencesAndScript = new List<string>();
 
