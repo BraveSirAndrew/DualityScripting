@@ -75,8 +75,11 @@ public class TestScript : DualityScript
 			[Test]
 			public void CallsTheScriptsEditorUpdateMethod()
 			{
-				if (Directory.Exists("Scripts"))
-					Directory.Delete("Scripts", true);
+			    if (Directory.Exists("Scripts"))
+			    {
+			        Directory.Delete("Scripts", true);
+			        Directory.CreateDirectory("Scripts");
+			    }
 
 				var resource = new TestScriptResource { Script = TestScriptWithOneProperty, SourcePath = "TestScript.cs" };
 				resource.Save("TestScript.cs");

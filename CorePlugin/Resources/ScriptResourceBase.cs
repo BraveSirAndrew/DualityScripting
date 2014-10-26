@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,137 +8,162 @@ using Duality.Editor;
 
 namespace ScriptingPlugin.Resources
 {
-	[Serializable]
-	[ExplicitResourceReference(new Type[0])]
-	public abstract class ScriptResourceBase : Resource
-	{
-		[field: NonSerialized]
-		public event EventHandler Reloaded;
+    [Serializable]
+    [ExplicitResourceReference(new Type[0])]
+    public abstract class ScriptResourceBase : Resource
+    {
+        [field: NonSerialized]
+        public event EventHandler Reloaded;
 
-		[NonSerialized]
-		private Assembly _assembly;
-		[NonSerialized]
-		private ScriptCompilerResult _scriptCompilerResult;
-		[NonSerialized]
-		protected IScriptCompilerService ScriptCompiler;
-		[NonSerialized]
-		protected IScriptMetadataService ScriptMetadataService;
+        [NonSerialized]
+        private Assembly _assembly;
+        [NonSerialized]
+        private ScriptCompilerResult _scriptCompilerResult;
+        [NonSerialized]
+        protected IScriptCompilerService ScriptCompiler;
+        [NonSerialized]
+        protected IScriptMetadataService ScriptMetadataService;
 
-		public ScriptResourceBase()
-		{
-			ScriptMetadataService = ScriptingPluginCorePlugin.ScriptMetadataService;
-		}
+        public ScriptResourceBase()
+        {
+            ScriptMetadataService = ScriptingPluginCorePlugin.ScriptMetadataService;
+        }
 
-		[EditorHintFlags(MemberFlags.Invisible)]
-		public Assembly Assembly
-		{
-			get { return _assembly; }
-		}
+        [EditorHintFlags(MemberFlags.Invisible)]
+        public Assembly Assembly
+        {
+            get { return _assembly; }
+        }
 
-		public string Script { get; set; }
+        public string Script { get; set; }
 
-		public void SaveScript(string scriptPath)
-		{
-			if (scriptPath == null)
-				scriptPath = sourcePath;
+        public void SaveScript(string scriptPath)
+        {
+            if (scriptPath == null)
+                scriptPath = sourcePath;
 
-			if (!IsDefaultContent && sourcePath == null)
-				sourcePath = scriptPath;
+            if (!IsDefaultContent && sourcePath == null)
+                sourcePath = scriptPath;
 
-			File.WriteAllText(sourcePath, Script);
-		}
+            File.WriteAllText(sourcePath, Script);
+        }
 
-		private void Compile()
-		{
-			try
-			{
-				if (!string.IsNullOrEmpty(SourcePath))
-				{
-					_scriptCompilerResult = ScriptCompiler.TryCompile(Name, SourcePath, Script);
+        private void Compile()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(SourcePath))
+                {
+                    _scriptCompilerResult = ScriptCompiler.TryCompile(Name, SourcePath, Script);
 
-					if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult == CompilerResult.AssemblyExists)
-						_assembly = _scriptCompilerResult.Assembly;
+                    if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult == CompilerResult.AssemblyExists)
+                        _assembly = _scriptCompilerResult.Assembly;
 
-					return;
-				}
-			}
-			catch (Exception e)
-			{
-				Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);
-			}
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Editor.WriteError("Error trying to compile script {0}.Message {1} \n {2}", Name, e.Message, e.StackTrace);
+            }
 
-			Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
-		}
+            Log.Editor.WriteWarning("The script resource '{0}' has no SourcePath and can't be compiled.", Name);
+        }
 
-		public DualityScript Instantiate()
-		{
-			if (_assembly == null)
-			{
-				LoadAssemblyFromBuiltSriptsFromThePast();
-				if (_assembly == null)
-					Compile();
+        public DualityScript Instantiate()
+        {
+            Type scriptType = null;
 
-				if ( _scriptCompilerResult != null&& _scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
-					return null;
-			}
-			
-			var scriptType = _assembly.GetTypes().FirstOrDefault(t => 
-											t.BaseType != null && 
-											t.BaseType == typeof(DualityScript) &&
-											String.Equals(t.Name, Name, StringComparison.CurrentCultureIgnoreCase));
+            var assemblies = PrebuildScripts.LoadAssemblies();
+            if (assemblies.Any())
+                foreach (Type type in assemblies.Select(assembly => FindTypeInAssembly(assembly, Name))
+                                               .Where(type => type != null))
+                {
+                    scriptType = type;
+                    break;
+                }
+            
+            if (scriptType == null)
+            {
+                Compile();
+                scriptType = FindTypeInAssembly(_assembly, Name);
+                if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
+                    return null;
+            }
 
-			if (scriptType == null)
-			{
-				Log.Game.WriteError("Could not create an instance of script '{0}' because it does not contain a type derived from DualityScript.", Name);
-				return null;
-			}
+            if (scriptType == null)
+            {
+                Log.Game.WriteError("Could not create an instance of script '{0}' because it does not contain a type derived from DualityScript.", Name);
+                return null;
+            }
 
-			if (scriptType.Name != Name)
-			{
-				Log.Game.WriteError("Could not create an instance of script '{0}' because the class name is '{1}' and should be '{0}'", Name, scriptType.Name);
-				return null;
-			}
+            if (scriptType.Name != Name)
+            {
+                Log.Game.WriteError("Could not create an instance of script '{0}'.Possibly because the class name is '{1}' and should be '{0}'", Name, scriptType.Name);
+                return null;
+            }
 
-			return (DualityScript)Activator.CreateInstance(scriptType);
-		}
+            return (DualityScript)Activator.CreateInstance(scriptType);
+        }
 
-		private void LoadAssemblyFromBuiltSriptsFromThePast()
-		{
-			var scriptsDirectory = new DirectoryInfo("Scripts");
-			if (scriptsDirectory.Exists)
-			{
-				var scriptsDll = scriptsDirectory.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList();
+        private Type FindTypeInAssembly(Assembly assembly, string typeName)
+        {
+            Type type = null;
+            if (assembly == null)
+                return null;
+            type = assembly.GetTypes().FirstOrDefault(t =>
+                t.BaseType != null &&
+                t.BaseType == typeof(DualityScript) &&
+                String.Equals(t.Name, typeName, StringComparison.CurrentCultureIgnoreCase));
+            return type;
+        }
 
-				foreach (var script in scriptsDll)
-				{
-					if (!script.Exists)
-						continue;
-					_assembly = Assembly.LoadFile(System.IO.Path.GetFullPath(script.FullName));
-				}
-			}
-		
-		}
 
-		public void Reload()
-		{
-			Compile();
+        public void Reload()
+        {
+            Compile();
 
-			if (ScriptMetadataService == null)
-			{
-				Log.Editor.WriteError("The script metadata service hasn't been set up. Can't reload script '{0}'.", Name);
-				return;
-			}
+            if (ScriptMetadataService == null)
+            {
+                Log.Editor.WriteError("The script metadata service hasn't been set up. Can't reload script '{0}'.", Name);
+                return;
+            }
 
-			ScriptMetadataService.UpdateMetadata(Path);
+            ScriptMetadataService.UpdateMetadata(Path);
 
-			OnReloaded();
-		}
+            OnReloaded();
+        }
 
-		protected virtual void OnReloaded()
-		{
-			var handler = Reloaded;
-			if (handler != null)
-				handler(this, EventArgs.Empty);
-		}
-	}
+        protected virtual void OnReloaded()
+        {
+            var handler = Reloaded;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+    }
+
+    internal class PrebuildScripts
+    {
+        private static List<Assembly> _resultingAssemblies;
+
+        public static Assembly[] LoadAssemblies()
+        {
+            var scriptsDirectory = new DirectoryInfo("Scripts");
+            _resultingAssemblies = new List<Assembly>();
+            if (scriptsDirectory.Exists || _resultingAssemblies.Count == 0)
+            {
+                var scriptsDll = scriptsDirectory.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList();
+                foreach (var script in scriptsDll)
+                {
+                    if (!script.Exists)
+                        continue;
+                    var assembly = Assembly.LoadFile(Path.GetFullPath(script.FullName));
+                    _resultingAssemblies.Add(assembly);
+                    Log.Editor.Write("Loading script assembly {0} from Scripts directory", assembly.FullName);
+                }
+            }
+            return _resultingAssemblies.ToArray();
+        }
+
+    }
 }

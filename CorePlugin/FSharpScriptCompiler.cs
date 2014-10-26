@@ -48,8 +48,9 @@ namespace ScriptingPlugin
             {
                 if (!string.IsNullOrWhiteSpace(reference))
                     referencesAndScript.Add(string.Format("--reference:{0}", reference));
-            }
 
+            }
+            
             string[] completeOptions = null;
             var deleteTempFiles = new List<string>();
             foreach (var compilationUnit in compilationUnits)
@@ -74,7 +75,7 @@ namespace ScriptingPlugin
             }
             catch (Exception e)
             {
-                Log.Editor.WriteWarning("{0}: Couldn't load assembly file. {1} ", GetType().Name, e.Message);
+                Log.Editor.WriteWarning("{0}: Couldn't create an assembly file from {2}. {1} ", GetType().Name, e.Message, string.Join(Environment.NewLine, compilationUnits.Select(x=> x.SourceFilePath)));
             }
             finally
             {
