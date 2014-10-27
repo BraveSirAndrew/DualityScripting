@@ -105,6 +105,7 @@
     <Compile Include="IScriptCompilerResults.cs" />
     <Compile Include="IScriptCompilerService.cs" />
     <Compile Include="NullPdbEditor.cs" />
+    <Compile Include="PathProvider.cs" />
     <Compile Include="PdbEditor.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\CSharpScript.cs" />
@@ -124,7 +125,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
