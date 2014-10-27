@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PathProviderTests.cs" />
     <Compile Include="ScriptCompilerServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptComponentTests.cs" />
