@@ -5,6 +5,7 @@ using System.Linq;
 using Duality.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.FSharp.Compiler.AbstractIL.Internal;
 
 namespace ScriptingPlugin
 {
@@ -65,7 +66,14 @@ namespace ScriptingPlugin
 						.AddSyntaxTrees(syntaxTrees)
 						.WithAssemblyName(assemblyName)
 						.Emit(assemblyStream, pdbStream: pdbStream, pdbFileName: pdbName);
-				return new CSharpScriptCompilerResults(results, assemblyPath);
+
+				var errors = Enumerable.Empty<string>();
+				if (!results.Success)
+					errors = (from diagnostic in results.Diagnostics
+						where diagnostic.Severity == DiagnosticSeverity.Error
+						select string.Format("{0} {1} {2} ", diagnostic.Id, diagnostic.Location.GetLineSpan().StartLinePosition, diagnostic.GetMessage())).ToList();
+
+				return new CSharpScriptCompilerResults(results.Success, errors, assemblyPath);
 			}
 		}
 

@@ -76,16 +76,19 @@ namespace ScriptingPlugin.Resources
 
             var assemblies = PrebuildScripts.LoadAssemblies();
             if (assemblies.Any())
-                foreach (Type type in assemblies.Select(assembly => FindTypeInAssembly(assembly, Name))
-                                               .Where(type => type != null))
-                {
-                    scriptType = type;
-                    break;
-                }
+            {
+	            foreach (Type type in assemblies.Select(assembly => FindTypeInAssembly(assembly, Name)).Where(type => type != null))
+	            {
+		            scriptType = type;
+		            break;
+	            }
+            }
             
             if (scriptType == null)
             {
-                Compile();
+				if(_assembly == null)
+					Compile();
+
                 scriptType = FindTypeInAssembly(_assembly, Name);
                 if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult != CompilerResult.AssemblyExists)
                     return null;
@@ -117,8 +120,7 @@ namespace ScriptingPlugin.Resources
                 String.Equals(t.Name, typeName, StringComparison.CurrentCultureIgnoreCase));
             return type;
         }
-
-
+		
         public void Reload()
         {
             Compile();
@@ -164,6 +166,5 @@ namespace ScriptingPlugin.Resources
             }
             return _resultingAssemblies.ToArray();
         }
-
     }
 }
