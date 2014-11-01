@@ -66,7 +66,7 @@ namespace ScriptingPlugin
 		{
 			try
 			{
-				return Assembly.LoadFrom(Path.Combine(DualityApp.PluginDirectory, filename));
+				return Assembly.Load(File.ReadAllBytes(Path.Combine(DualityApp.PluginDirectory, filename)));
 			}
 			catch(Exception e)
 			{

@@ -8,7 +8,7 @@
         <owners>@BatCatGames</owners>
         <projectUrl>https://github.com/BraveSirAndrew/DualityScripting</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>A plugin for Duality that uses the CodeDom support in .Net to enable easy scripting.</description>
+        <description>A plugin for Duality that adds support for scripting in C# and F#, all recompiled on the fly without even a full editor restart.</description>
         <language>en-IE</language>
         <tags>Duality</tags>
         <dependencies>
@@ -17,9 +17,9 @@
                 <dependency id="FSharp.Compiler.Service" version="0.0.58" />
                 <dependency id="FSharp.Core.3" version="0.0.2"/>
                 <dependency id="Microsoft.Bcl.Immutable" version="1.1.20-beta" />
-                <dependency id="Microsoft.Bcl.Metadata" version="1.0.11-alpha" />
-                <dependency id="Microsoft.CodeAnalysis.Common" version="0.7.4052301-beta" />
-                <dependency id="Microsoft.CodeAnalysis.CSharp" version="0.7.4052301-beta" />
+                <dependency id="Microsoft.Bcl.Metadata" version="1.0.12-alpha" />
+                <dependency id="Microsoft.CodeAnalysis.Common" version="0.7.4091001-beta" />
+                <dependency id="Microsoft.CodeAnalysis.CSharp" version="0.7.4091001-beta" />
             </group>
         </dependencies>
         <references>

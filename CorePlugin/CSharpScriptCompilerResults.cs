@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace ScriptingPlugin
@@ -25,7 +26,7 @@ namespace ScriptingPlugin
 		{
 			get
 			{
-				return _success ? Assembly.LoadFrom(_assemblyPath) : null;
+				return _success ? Assembly.Load(File.ReadAllBytes(_assemblyPath)) : null;
 			}
 		}
 
