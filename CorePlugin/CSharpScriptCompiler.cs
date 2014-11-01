@@ -64,7 +64,7 @@ namespace ScriptingPlugin
 				var results = _compilation
 						.AddSyntaxTrees(syntaxTrees)
 						.WithAssemblyName(assemblyName)
-						.Emit(assemblyStream, pdbStream: pdbStream, pdbFilePath: pdbName);
+						.Emit(assemblyStream, pdbStream: pdbStream, pdbFilePath: Path.Combine(assemblyDirectory, pdbName));
 
 				var errors = Enumerable.Empty<string>();
 				if (!results.Success)
