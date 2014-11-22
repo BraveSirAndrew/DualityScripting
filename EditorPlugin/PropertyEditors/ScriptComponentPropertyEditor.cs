@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AdamsLair.WinForms.PropertyEditing;
@@ -9,7 +10,7 @@ using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor.PropertyEditors
 {
-	[PropertyEditorAssignment(typeof(ScriptComponent), PropertyEditorAssignmentAttribute.PrioritySpecialized)]
+	[PropertyEditorAssignment(typeof(ScriptComponentPropertyEditor), "MatchToProperty")]
 	public class ScriptComponentPropertyEditor : ComponentPropertyEditor
 	{
 		private readonly List<PropertyEditor> _propertyEditors = new List<PropertyEditor>();
@@ -158,6 +159,14 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 				scriptComponent.SetScriptPropertyValue(name, values.FirstOrDefault());
 				DualityEditorApp.NotifyObjPropChanged(scriptComponent, new ObjectSelection(scriptComponent), typeof(ScriptComponent).GetProperty("ScriptPropertyValues"));
 			}
+		}
+
+		public static int MatchToProperty(Type propertyType, ProviderContext context)
+		{
+			if (typeof(ScriptComponent).IsAssignableFrom(propertyType) && context.ParentEditor is GameObjectOverviewPropertyEditor)
+				return PropertyEditorAssignmentAttribute.PrioritySpecialized;
+
+			return PropertyEditorAssignmentAttribute.PriorityNone;
 		}
 	}
 }
