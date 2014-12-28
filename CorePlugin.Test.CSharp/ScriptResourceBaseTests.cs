@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using ScriptingPlugin;
@@ -56,6 +57,36 @@ namespace CorePlugin.Test.CSharp
 				_metadataService.Verify(m => m.UpdateMetadata(It.IsAny<string>()));
 			}
 #endif
+		}
+
+		[TestFixture]
+		public class TheInstantiateMethod
+		{
+			[Test]
+			public void OnlyCompilesTheScriptOnTheFirstCall()
+			{
+				var scriptCompiler = new Mock<IScriptCompiler>();
+				scriptCompiler.Setup(m => m.Compile(It.IsAny<string>(), It.IsAny<string>())).Returns(new CSharpScriptCompilerResults(true, Enumerable.Empty<string>(), GetType().Assembly.Location));
+
+				if (Directory.Exists("Scripts"))
+				{
+					Directory.Delete("Scripts", true);
+					Directory.CreateDirectory("Scripts");
+				}
+
+				var script = new TestScriptType
+				{
+					ScriptCompilerServiceProxy = new ScriptCompilerService(scriptCompiler.Object, null),
+					ScriptMetadataServiceProxy = new Mock<IScriptMetadataService>().Object,
+					SourcePath = "test",
+					Script = "namespace Tests { public class MyClass { }}"
+				};
+
+				script.Instantiate();
+				script.Instantiate();
+
+				scriptCompiler.Verify(m => m.Compile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+			}
 		}
 
 		public class TheAssemblyProperty

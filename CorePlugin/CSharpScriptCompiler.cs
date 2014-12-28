@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Duality.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,11 +15,10 @@ namespace ScriptingPlugin
 
 		public CSharpScriptCompiler()
 		{
-			_compilation = CSharpCompilation.Create("ScriptingAssembly",
-				references: new[] { new MetadataFileReference(typeof(object).Assembly.Location) },
-				options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
-					debugInformationKind: DebugInformationKind.Full));
-
+			_compilation = CSharpCompilation.Create("ScriptingAssembly")
+				.AddReferences(new MetadataReference[]{ new MetadataImageReference(File.ReadAllBytes(typeof(object).Assembly.Location))})
+				.WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+			
 			if (Directory.Exists(FileConstants.AssembliesDirectory) == false)
 				Directory.CreateDirectory(FileConstants.AssembliesDirectory);
 		}
@@ -57,15 +57,22 @@ namespace ScriptingPlugin
 					var sourcePath = string.IsNullOrEmpty(compilationUnit.SourceFilePath) ? "" : Path.GetFullPath(compilationUnit.SourceFilePath);
 
 					var syntaxTree = CSharpSyntaxTree.ParseText(compilationUnit.Source);
-					syntaxTree = CSharpSyntaxTree.Create((CSharpSyntaxNode)syntaxTree.GetRoot(), sourcePath);
+					syntaxTree = CSharpSyntaxTree.Create((CSharpSyntaxNode)syntaxTree.GetRoot(), path: sourcePath, encoding: Encoding.UTF8);
 					syntaxTrees.Add(syntaxTree);
-
 				}
+
 				var results = _compilation
 						.AddSyntaxTrees(syntaxTrees)
 						.WithAssemblyName(assemblyName)
-						.Emit(assemblyStream, pdbStream: pdbStream, pdbFileName: pdbName);
-				return new CSharpScriptCompilerResults(results, assemblyPath);
+						.Emit(assemblyStream, pdbStream: pdbStream, pdbFilePath: Path.Combine(assemblyDirectory, pdbName));
+
+				var errors = Enumerable.Empty<string>();
+				if (!results.Success)
+					errors = (from diagnostic in results.Diagnostics
+						where diagnostic.Severity == DiagnosticSeverity.Error
+						select string.Format("{0} {1} {2} ", diagnostic.Id, diagnostic.Location.GetLineSpan().StartLinePosition, diagnostic.GetMessage())).ToList();
+
+				return new CSharpScriptCompilerResults(results.Success, errors, assemblyPath);
 			}
 		}
 
@@ -93,7 +100,7 @@ namespace ScriptingPlugin
 				}
 			}
 
-			_compilation = _compilation.AddReferences(new MetadataFileReference(filePath));
+			_compilation = _compilation.AddReferences(new MetadataImageReference(File.ReadAllBytes(filePath)));
 		}
 	}
 }
