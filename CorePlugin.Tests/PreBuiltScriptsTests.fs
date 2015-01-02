@@ -22,13 +22,14 @@ open System
 
     type FSharpScript() =
         inherit DualityScript()"
-        if Directory.Exists "Scripts" then Directory.Delete ("Scripts", true)
-        if not (Directory.Exists "Scripts") then 
-            Directory.CreateDirectory "Scripts" |> ignore
+        
+        if Directory.Exists "Scripts" then             
+            Directory.Delete ("Scripts", true)
+        Directory.CreateDirectory "Scripts" |> ignore
         let compiler = createFSharpCompiler        
-        let results = compiler.Compile(fsharpScript)
+        let results = compiler.Compile(fsharpScript)        
         File.Copy(results.PathToAssembly, Path.Combine("Scripts", Path.GetFileName(results.PathToAssembly)))
-
+(*
     [<Test>]
     let ``When scripts dir doesn't exist then return empty`` ()=
         if Directory.Exists "Scripts" then Directory.Delete ("Scripts", true)
@@ -47,6 +48,7 @@ open System
         createDirWithAssemblies()
         let pre = PrebuildScripts.LoadAssemblies() 
         Assert.IsNotEmpty pre
+*)
 
     [<Test>]
     let ``When there is assemblies no need to load twice ``() =        
@@ -66,4 +68,5 @@ open System
 
         Assert.Greater (first, ult, "ult {0} first {1}", ult, first)
         Assert.AreEqual (fst.Length, scn.Length)
+        
         
