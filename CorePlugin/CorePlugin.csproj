@@ -117,6 +117,7 @@
     <Compile Include="NullPdbEditor.cs" />
     <Compile Include="PathProvider.cs" />
     <Compile Include="PdbEditor.cs" />
+    <Compile Include="PrebuildScripts.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="Resources\CSharpScript.cs" />
     <Compile Include="IScriptMetadataService.cs" />

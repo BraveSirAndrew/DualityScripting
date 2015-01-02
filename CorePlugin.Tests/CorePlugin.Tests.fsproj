@@ -65,6 +65,7 @@
     <Compile Include="FSharpScriptCompilerTests.fs" />
     <Compile Include="FsCheckAddin.fs" />
     <Content Include="app.config" />
+    <Compile Include="PreBuiltScriptsTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Duality">
