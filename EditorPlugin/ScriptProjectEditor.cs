@@ -13,7 +13,7 @@ namespace ScriptingPlugin.Editor
 			try
 			{
 				var directoryPart = scriptPath
-					.Replace(ScriptResourceEvents.MediaFolder, "")
+					.Replace(ProjectConstants.MediaFolder, "")
 					.Replace(Path.GetFileName(scriptPath), "")
 					.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
@@ -62,6 +62,22 @@ namespace ScriptingPlugin.Editor
 					}
 				}
 			}
+			rootElement.Save();
+		}
+
+		public void RemoveAllScriptReferences(string projectPath)
+		{
+			var rootElement = ProjectRootElement.Open(projectPath);
+			if (rootElement == null)
+				return;
+
+			var scriptGroup = rootElement.ItemGroups.FirstOrDefault(g => g.Items.Any(i => i.ItemType == "Compile"));
+			if (scriptGroup != null)
+			{
+				scriptGroup.RemoveAllChildren();
+				rootElement.RemoveChild(scriptGroup);
+			}
+
 			rootElement.Save();
 		}
 

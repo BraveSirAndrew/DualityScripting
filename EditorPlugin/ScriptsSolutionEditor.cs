@@ -30,7 +30,7 @@ namespace ScriptingPlugin.Editor
 			return projectPath;
 		}
 		
-		public void ExtractScriptProjectToCodeDirectory(string projectPath, byte[] projectTemplate)
+		private void ExtractScriptProjectToCodeDirectory(string projectPath, byte[] projectTemplate)
 		{
 			if (_fileSystem.File.Exists(projectPath))
 				return;

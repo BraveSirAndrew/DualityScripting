@@ -148,6 +148,7 @@
     <Compile Include="ScriptResourceEvents.cs" />
     <Compile Include="ScriptsSolutionEditor.cs" />
     <Compile Include="SourceFilePathGenerator.cs" />
+    <Compile Include="SynchroniseScriptProjectEditorAction.cs" />
     <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.optdata">
       <Link>FSharp.Core.optdata</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

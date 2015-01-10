@@ -10,8 +10,6 @@ namespace ScriptingPlugin.Editor
 {
 	public class ScriptResourceEvents
 	{
-		public const string MediaFolder = @"..\..\..\Media";
-
 		private readonly IFileSystem _fileSystem;
 		private readonly ISourceFilePathGenerator _sourceFilePathGenerator;
 		private readonly IScriptProjectEditor _projectEditor;
@@ -44,7 +42,7 @@ namespace ScriptingPlugin.Editor
 			template.Apply(resourceEventArgs.Content.As<ScriptResourceBase>());
 
 			var sourceFilePath = _sourceFilePathGenerator.GenerateSourceFilePath(resourceEventArgs.Content, template.FileExtension);
-			sourceFilePath = sourceFilePath.Replace("Source\\Media", MediaFolder);
+			sourceFilePath = sourceFilePath.Replace("Source\\Media", ProjectConstants.MediaFolder);
 			var scriptFileName = GetFileName(sourceFilePath);
 			
 			_projectEditor.AddScriptToProject(sourceFilePath, scriptFileName, template.ProjectPath);
@@ -78,7 +76,7 @@ namespace ScriptingPlugin.Editor
 			if (string.IsNullOrEmpty(sourceFilePath))
 				sourceFilePath = _sourceFilePathGenerator.GenerateSourceFilePath(renamedEventArgs.Content, template.FileExtension);
 
-			sourceFilePath = sourceFilePath.Replace("Source\\Media", MediaFolder);
+			sourceFilePath = sourceFilePath.Replace("Source\\Media", ProjectConstants.MediaFolder);
 			_projectEditor.AddScriptToProject(sourceFilePath, Path.GetFileName(sourceFilePath), template.ProjectPath);
 		}
 

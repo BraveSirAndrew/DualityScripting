@@ -57,7 +57,7 @@ namespace EditorPlugin.Tests
 		{
 			_scriptTemplate.SetupGet(m => m.ProjectPath).Returns(CsProjectPath);
 			_projectEditorMock.Setup(x => x.RemoveScriptFromProject(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-			_projectEditorMock.Setup(x => x.AddScriptToProject(Path.Combine(ScriptResourceEvents.MediaFolder, "Path\\resource.cs"), "resource.cs", It.IsAny<string>()));
+			_projectEditorMock.Setup(x => x.AddScriptToProject(Path.Combine(ProjectConstants.MediaFolder, "Path\\resource.cs"), "resource.cs", It.IsAny<string>()));
 
 			UpdateFileSystem(CsProjectPath, GetResourceContent(), _fileSystem);
 			var resourceRenamedEventArgs = CreateEventArgs(NewPath, OldPath);
@@ -74,7 +74,7 @@ namespace EditorPlugin.Tests
 
 			_scriptTemplate.SetupGet(m => m.ProjectPath).Returns(CsProjectPath);
 			_sourceFilePathGenerator.Setup(m => m.GenerateSourceFilePath(It.IsAny<ContentRef<Resource>>(), It.IsAny<string>())).Returns(sourceFilePath);
-			_projectEditorMock.Setup(m => m.AddScriptToProject(Path.Combine(ScriptResourceEvents.MediaFolder, "Test.cs"), It.IsAny<string>(), It.IsAny<string>()));
+			_projectEditorMock.Setup(m => m.AddScriptToProject(Path.Combine(ProjectConstants.MediaFolder, "Test.cs"), It.IsAny<string>(), It.IsAny<string>()));
 
 			var resourceRenamedEventArgs = CreateEventArgs(NewPath, OldPath);
 			resourceRenamedEventArgs.Content.Res.SourcePath = null;
@@ -109,7 +109,7 @@ namespace EditorPlugin.Tests
 		public void When_csharp_script_created_Then_add_script_to_project()
 		{
 			_sourceFilePathGenerator.Setup(m => m.GenerateSourceFilePath(It.IsAny<ContentRef<Resource>>(), It.IsAny<string>())).Returns(@"Source\Media\Scripts\resource.cs");
-			_projectEditorMock.Setup(x => x.AddScriptToProject(Path.Combine(ScriptResourceEvents.MediaFolder, @"Scripts\resource.cs"), "resource.cs", It.IsAny<string>()));
+			_projectEditorMock.Setup(x => x.AddScriptToProject(Path.Combine(ProjectConstants.MediaFolder, @"Scripts\resource.cs"), "resource.cs", It.IsAny<string>()));
 
 			_scriptResourceEvents.OnResourceCreated(null, new ResourceEventArgs(CreateContentRef(GetFSScriptText(), null)));
 
