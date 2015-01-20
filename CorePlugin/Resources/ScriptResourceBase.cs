@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -141,30 +140,6 @@ namespace ScriptingPlugin.Resources
             var handler = Reloaded;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-        }
-    }
-
-    internal class PrebuildScripts
-    {
-        private static List<Assembly> _resultingAssemblies;
-
-        public static Assembly[] LoadAssemblies()
-        {
-            var scriptsDirectory = new DirectoryInfo("Scripts");
-            _resultingAssemblies = new List<Assembly>();
-            if (scriptsDirectory.Exists || _resultingAssemblies.Count == 0)
-            {
-                var scriptsDll = scriptsDirectory.GetFiles("*.dll", SearchOption.TopDirectoryOnly).ToList();
-                foreach (var script in scriptsDll)
-                {
-                    if (!script.Exists)
-                        continue;
-                    var assembly = Assembly.LoadFile(Path.GetFullPath(script.FullName));
-                    _resultingAssemblies.Add(assembly);
-                    Log.Editor.Write("Loading script assembly {0} from Scripts directory", assembly.FullName);
-                }
-            }
-            return _resultingAssemblies.ToArray();
         }
     }
 }

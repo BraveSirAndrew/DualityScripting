@@ -70,7 +70,7 @@ namespace ScriptingPlugin
 				if (!results.Success)
 					errors = (from diagnostic in results.Diagnostics
 						where diagnostic.Severity == DiagnosticSeverity.Error
-						select string.Format("{0} {1} {2} ", diagnostic.Id, diagnostic.Location.GetLineSpan().StartLinePosition, diagnostic.GetMessage())).ToList();
+							  select string.Format("{0} {3} {1} {2} ", diagnostic.Id, diagnostic.Location.GetLineSpan().StartLinePosition, diagnostic.GetMessage(), diagnostic.Location)).ToList();
 
 				return new CSharpScriptCompilerResults(results.Success, errors, assemblyPath);
 			}

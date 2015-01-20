@@ -13,9 +13,11 @@ namespace ScriptingPlugin.Editor
 	{
 		private bool _debuggerAttachedLastFrame;
 		
-		private ScriptsSolutionEditor _scriptsSolutionEditor;
-		internal static string CSharpProjectPath;
-		internal static string FSharpProjectPath;
+		private static ScriptsSolutionEditor _scriptsSolutionEditor;
+		private static string _cSharpProjectPath;
+		private static string _fSharpProjectPath;
+		
+		private ISourceFilePathGenerator _sourceFilePathGenerator;
 		private ScriptResourceEvents _scriptResourceEvents;
 		private IScriptMetadataService _scriptMetadataService;
 		
@@ -26,7 +28,17 @@ namespace ScriptingPlugin.Editor
 		{
 			get { return "ScriptingEditorPlugin"; }
 		}
-		
+
+		public static string CSharpProjectPath
+		{
+			get { return _cSharpProjectPath; }
+		}
+
+		public static string FSharpProjectPath
+		{
+			get { return _fSharpProjectPath; }
+		}
+
 		protected override void InitPlugin(MainForm main)
 		{
 			base.InitPlugin(main);
@@ -35,17 +47,22 @@ namespace ScriptingPlugin.Editor
 			_scriptMetadataService = new ScriptMetadataService(fileSystem);
 
 			ScriptReloader.ReloadOutOfDateScripts(fileSystem, _scriptMetadataService);
-			CSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, "Scripts.csproj", Resources.Resources.ScriptsProjectTemplate);
-			FSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
-			
-			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(fileSystem, new SourceFilePathGenerator());
-			_scriptResourceEvents.AddDefaultScriptTemplate<CSharpScript>(new CSharpScriptTemplate{ProjectPath = CSharpProjectPath});
-			_scriptResourceEvents.AddDefaultScriptTemplate<FSharpScript>(new FSharpScriptTemplate{ProjectPath = FSharpProjectPath});
+			AddScriptProjectsToSolution();
+
+			_sourceFilePathGenerator = new SourceFilePathGenerator();
+			_scriptResourceEvents = _scriptResourceEvents ?? new ScriptResourceEvents(fileSystem, _sourceFilePathGenerator);
+			_scriptResourceEvents.AddDefaultScriptTemplate<CSharpScript>(new CSharpScriptTemplate{ProjectPath = _cSharpProjectPath});
+			_scriptResourceEvents.AddDefaultScriptTemplate<FSharpScript>(new FSharpScriptTemplate{ProjectPath = _fSharpProjectPath});
 
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
 			FileEventManager.ResourceDeleting += _scriptResourceEvents.OnResourceDeleting;
-		//	DualityEditorApp.EditorIdling += DualityEditorAppOnIdling;
+		}
+
+		public static void AddScriptProjectsToSolution()
+		{
+			_cSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartCsharp, "Scripts.csproj", Resources.Resources.ScriptsProjectTemplate);
+			_fSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
 		}
 
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
