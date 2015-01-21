@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Duality;
 using Duality.Helpers;
+using Flow;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin
@@ -134,15 +135,11 @@ namespace ScriptingPlugin
 			if (_scriptInstance == null)
 				return;
 
-			var methodInfo = _methodCache.ContainsKey(methodName) ? _methodCache[methodName] : _scriptInstance.GetType().GetMethod(methodName);
+			var methodInfo = FindScriptMethod(methodName);
 			if (methodInfo == null)
-			{
-				Log.Game.WriteWarning("{0}: Couldn't find method '{1}'", GetType(), methodName);
 				return;
-			}
 
-			if (_methodCache.ContainsKey(methodName) == false)
-				_methodCache.Add(methodName, methodInfo);
+			CacheMethodInfo(methodName, methodInfo);
 
 			try
 			{
@@ -152,6 +149,19 @@ namespace ScriptingPlugin
 			{
 				Log.Game.WriteError("An error occurred while executing script method '{0}' on '{1}':{2}", methodName, Script.Name, e.Message);
 			}
+		}
+
+		public ICoroutine<T> StartCoroutine<T>(string coroutineName, IFactory factory)
+		{
+			if (_scriptInstance == null)
+				return null;
+
+			var methodInfo = FindScriptMethod(coroutineName);
+			if (methodInfo == null)
+				return null;
+
+			CacheMethodInfo(coroutineName, methodInfo);
+			return CoroutineHelper.CreateCoroutine<T>(coroutineName, methodInfo, factory, _scriptInstance);
 		}
 
 		public void SetScriptPropertyValue(string propertyName, object value)
@@ -189,7 +199,7 @@ namespace ScriptingPlugin
 			_scriptInstance.GameObj = GameObj;
 		}
 
-	    internal void OnScriptReloaded(object sender, EventArgs eventArgs)
+		internal void OnScriptReloaded(object sender, EventArgs eventArgs)
 		{
 	        try
 	        {
@@ -216,7 +226,7 @@ namespace ScriptingPlugin
 			}
 		}
 
-		private void SafeExecute<T>(Action<T> action, string methodName, T args)
+		private void SafeExecute<T>(System.Action<T> action, string methodName, T args)
 		{
 			try
 			{
@@ -228,7 +238,7 @@ namespace ScriptingPlugin
 			}
 		}
 
-		private void SafeExecute<T1, T2>(Action<T1, T2> action, string methodName, T1 argOne, T2 argTwo)
+		private void SafeExecute<T1, T2>(System.Action<T1, T2> action, string methodName, T1 argOne, T2 argTwo)
 		{
 			try
 			{
@@ -265,6 +275,26 @@ namespace ScriptingPlugin
 			{
 				_scriptPropertyValues.Remove(key);
 			}
+		}
+
+		private MethodInfo FindScriptMethod(string methodName)
+		{
+			var methodInfo = _methodCache.ContainsKey(methodName)
+				? _methodCache[methodName]
+				: _scriptInstance.GetType().GetMethod(methodName);
+
+			if (methodInfo == null)
+			{
+				Log.Game.WriteWarning("{0}: Couldn't find method '{1}'. Make sure the spelling is correct and that the method is public", GetType(), methodName);
+				return methodInfo;
+			}
+			return methodInfo;
+		}
+
+		private void CacheMethodInfo(string methodName, MethodInfo methodInfo)
+		{
+			if (_methodCache.ContainsKey(methodName) == false)
+				_methodCache.Add(methodName, methodInfo);
 		}
 	}
 }

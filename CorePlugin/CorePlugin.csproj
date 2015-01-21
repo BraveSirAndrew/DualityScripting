@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Duality.0.1.192\lib\net40\FarseerDuality.dll</HintPath>
     </Reference>
+    <Reference Include="Flow">
+      <HintPath>..\packages\Flow.0.1.16\lib\net20\Flow.dll</HintPath>
+    </Reference>
     <Reference Include="FSharp.Compiler.Service">
       <HintPath>..\packages\FSharp.Compiler.Service.0.0.60\lib\net45\FSharp.Compiler.Service.dll</HintPath>
     </Reference>
@@ -107,6 +110,7 @@
     <Compile Include="CompilationUnit.cs" />
     <Compile Include="CompilerResult.cs" />
     <Compile Include="CorePlugin.cs" />
+    <Compile Include="CoroutineHelper.cs" />
     <Compile Include="DualityScript.cs" />
     <Compile Include="FileConstants.cs" />
     <Compile Include="FSharpScriptCompiler.cs" />
