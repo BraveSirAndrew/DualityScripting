@@ -124,6 +124,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 					propertyEditor.Getter = () => GetValue().Cast<ScriptComponent>().Select(o => o.GetScriptPropertyValue(propertyInfo.Name));
 					propertyEditor.Setter = values => ScriptPropertyValuesSetter(info.Name, values);
 					_propertyEditors.Add(propertyEditor);
+					ParentGrid.ConfigureEditor(propertyEditor);
 					AddPropertyEditor(propertyEditor);
 					propertyEditor.EndUpdate();
 				}
