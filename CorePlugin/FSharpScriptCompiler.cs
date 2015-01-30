@@ -64,7 +64,7 @@ namespace ScriptingPlugin
                 deleteTempFiles.Add(tempScriptPath);
 
             }
-            var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
+			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "--debug+", "--optimize-", "--noframework" };
             completeOptions = options.Concat(referencesAndScript).ToArray(); 
             var errorsAndExitCode = _sourceCodeServices.Compile(completeOptions);
 
