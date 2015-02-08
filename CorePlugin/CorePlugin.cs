@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Abstractions;
-using System.Reflection;
 using Duality;
 
 namespace ScriptingPlugin
@@ -52,27 +51,14 @@ namespace ScriptingPlugin
 		{
 			ReflectionHelper.ExcludeFromTypeSearches(new[]
 			{
-				LoadPluginAssembly("FSharp.Compiler.Service.dll"),
-				LoadPluginAssembly("Microsoft.CodeAnalysis.CSharp.dll"),
-				LoadPluginAssembly("Microsoft.CodeAnalysis.dll"),
-				LoadPluginAssembly("System.Reflection.Metadata.dll"),
-				LoadPluginAssembly("System.Collections.Immutable.dll"),
-				LoadPluginAssembly("Mono.Cecil.dll"),
-				LoadPluginAssembly("Mono.Cecil.Pdb.dll")
+				"FSharp.Compiler.Service",
+				"Microsoft.CodeAnalysis.CSharp",
+				"Microsoft.CodeAnalysis",
+				"System.Reflection.Metadata",
+				"System.Collections.Immutable",
+				"Mono.Cecil",
+				"Mono.Cecil.Pdb"
 			});
-		}
-
-		private static Assembly LoadPluginAssembly(string filename)
-		{
-			try
-			{
-				return Assembly.Load(File.ReadAllBytes(Path.Combine(DualityApp.PluginDirectory, filename)));
-			}
-			catch(Exception e)
-			{
-				Log.Game.WriteWarning("Error while loading assembly {0}. {1}", filename, e.Message);
-				return null;
-			}
 		}
 	}
 }
