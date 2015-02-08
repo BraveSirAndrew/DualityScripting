@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Threading.Tasks;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
@@ -57,6 +58,8 @@ namespace ScriptingPlugin.Editor
 			FileEventManager.ResourceCreated += _scriptResourceEvents.OnResourceCreated;
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
 			FileEventManager.ResourceDeleting += _scriptResourceEvents.OnResourceDeleting;
+
+			PrecompileCSharpScripts();
 		}
 
 		public static void AddScriptProjectsToSolution()
@@ -65,6 +68,28 @@ namespace ScriptingPlugin.Editor
 			_fSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
 		}
 
+		private static void PrecompileCSharpScripts()
+		{
+			Task.Factory.StartNew(() =>
+			{
+				Log.Editor.Write("Precompiling CSharp scripts...");
+				var sw = Stopwatch.StartNew();
+
+				var resources = Resource.GetResourceFiles();
+				var scripts = resources.Where(r => r.EndsWith(CSharpScript.FileExt));
+				Parallel.ForEach(scripts,
+					new ParallelOptions { MaxDegreeOfParallelism = 3 },
+					scriptRes =>
+					{
+						var script = ContentProvider.RequestContent<CSharpScript>(scriptRes);
+						script.Res.Instantiate();
+					});
+
+				sw.Stop();
+				Log.Editor.Write("Precompiled CSharp scripts in " + sw.Elapsed.TotalSeconds + " seconds.");
+			});
+		}
+		
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{
 			if (Debugger.IsAttached && _debuggerAttachedLastFrame == false)
