@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Duality;
+using Duality.Editor;
 using Duality.Helpers;
 using Flow;
 using ScriptingPlugin.Resources;
@@ -9,6 +10,7 @@ using ScriptingPlugin.Resources;
 namespace ScriptingPlugin
 {
 	[Serializable]
+	[EditorHintImage("ScriptingPlugin.Editor.Resources", "script")]
 	public class ScriptComponent : Component, ICmpInitializable, ICmpUpdatable, ICmpCollisionListener, ICmpHandlesMessages, ICmpEditorUpdatable
 	{
 		[NonSerialized]

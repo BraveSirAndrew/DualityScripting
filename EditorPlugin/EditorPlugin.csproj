@@ -183,6 +183,7 @@
     </Content>
     <Content Include="Resources\csharp.png" />
     <Content Include="Resources\fsharp.png" />
+    <Content Include="Resources\script.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
