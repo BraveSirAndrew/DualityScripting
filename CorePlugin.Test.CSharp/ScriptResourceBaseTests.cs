@@ -3,6 +3,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using ScriptingPlugin;
+using ScriptingPlugin.CSharp;
 using ScriptingPlugin.Resources;
 
 namespace CorePlugin.Test.CSharp

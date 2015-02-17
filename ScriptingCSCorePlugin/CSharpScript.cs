@@ -1,8 +1,9 @@
 ﻿using System;
 using Duality;
 using Duality.Editor;
+using ScriptingPlugin.Resources;
 
-namespace ScriptingPlugin.Resources
+namespace ScriptingPlugin.CSharp
 {
 	[Serializable]
 	[EditorHintCategory("Scripting")]
@@ -13,7 +14,7 @@ namespace ScriptingPlugin.Resources
 
 		protected override void OnLoaded()
 		{
-			ScriptCompiler = ScriptingPluginCorePlugin.CSharpScriptCompiler;
+			ScriptCompiler = ScriptingCsCorePlugin.CSharpScriptCompiler;
 			base.OnLoaded();
 		}
 	}

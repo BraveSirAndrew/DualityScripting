@@ -124,16 +124,13 @@
     <Compile Include="PdbEditor.cs" />
     <Compile Include="PrebuildScripts.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
-    <Compile Include="Resources\CSharpScript.cs" />
     <Compile Include="IScriptMetadataService.cs" />
     <Compile Include="ScriptMetadataService.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />
-    <Compile Include="CSharpScriptCompilerResults.cs" />
     <Compile Include="ScriptCompilerResult.cs" />
     <Compile Include="ScriptCompilerService.cs" />
     <Compile Include="ScriptComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CSharpScriptCompiler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

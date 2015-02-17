@@ -5,6 +5,7 @@ module ``C# ScriptCompiler Tests`` =
     open NUnit.Framework
     open FsCheck
     open ScriptingPlugin
+    open ScriptingPlugin.CSharp
     open System
     open System.Linq
 

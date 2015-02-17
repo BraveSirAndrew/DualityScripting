@@ -8,6 +8,7 @@ using Duality.Editor;
 using Duality.Resources;
 using Moq;
 using NUnit.Framework;
+using ScriptingPlugin.CSharp;
 using ScriptingPlugin.Editor;
 using ScriptingPlugin.Resources;
 
