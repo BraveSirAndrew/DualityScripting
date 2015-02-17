@@ -58,32 +58,6 @@
       <HintPath>..\packages\Duality.0.1.202\lib\net40\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=0.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=0.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Desktop">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
     <Reference Include="OpenTK">
       <HintPath>..\packages\Duality.0.1.202\lib\net40\OpenTK.dll</HintPath>
       <Private>True</Private>
@@ -93,17 +67,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Abstractions">
       <HintPath>..\packages\System.IO.Abstractions.1.4.0.86\lib\net35\System.IO.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Metadata.1.0.12-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +87,6 @@
     <Compile Include="IScriptCompilerService.cs" />
     <Compile Include="NullPdbEditor.cs" />
     <Compile Include="PathProvider.cs" />
-    <Compile Include="PdbEditor.cs" />
     <Compile Include="PrebuildScripts.cs" />
     <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="IScriptMetadataService.cs" />
