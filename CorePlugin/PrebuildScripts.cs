@@ -23,7 +23,7 @@ namespace ScriptingPlugin
 				{
 					if (!scriptAssembly.Exists)
 						continue;
-					var assembly = Assembly.LoadFile(Path.GetFullPath(scriptAssembly.FullName));
+					var assembly = Assembly.LoadFrom(Path.GetFullPath(scriptAssembly.FullName));
 					_resultingAssemblies.Add(assembly);
 					Log.Editor.Write("Loading script assembly {0} from Scripts directory", assembly.FullName);
 				}
