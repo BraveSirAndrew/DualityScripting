@@ -224,7 +224,7 @@ namespace ScriptingPlugin
 			}
 			catch (Exception e)
 			{
-				Log.Game.WriteError("An error occurred while executing script {0} on '{1}':{2}", methodName, Script.Name, e.Message);
+				LogException(methodName, e);
 			}
 		}
 
@@ -236,7 +236,7 @@ namespace ScriptingPlugin
 			}
 			catch (Exception e)
 			{
-				Log.Game.WriteError("An error occurred while executing script {0} on '{1}':{2}", methodName, Script.Name, e.Message);
+				LogException(methodName, e);
 			}
 		}
 
@@ -248,8 +248,13 @@ namespace ScriptingPlugin
 			}
 			catch (Exception e)
 			{
-				Log.Game.WriteError("An error occurred while executing script {0} on '{1}':{2}", methodName, Script.Name, e.Message);
+				LogException(methodName, e);
 			}
+		}
+
+		private void LogException(string methodName, Exception e)
+		{
+			Log.Game.WriteError("An error occurred while executing script {0} on '{1}':{2}\nCallStack:\n{3}", methodName, Script.Name, e.Message, e.StackTrace);
 		}
 
 		private void SetScriptPropertyValues()
