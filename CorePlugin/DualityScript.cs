@@ -60,6 +60,11 @@ namespace ScriptingPlugin
 			
 		}
 
+		public virtual void Saving()
+		{
+			
+		}
+
 		public virtual void Shutdown()
 		{
 			
