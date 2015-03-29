@@ -7,6 +7,7 @@ using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
 using ScriptingPlugin.CSharp;
+using ScriptingPlugin.FSharp;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor

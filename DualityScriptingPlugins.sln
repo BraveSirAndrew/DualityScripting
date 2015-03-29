@@ -21,9 +21,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin.Tests", "Edito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin.Test.CSharp", "CorePlugin.Test.CSharp\CorePlugin.Test.CSharp.csproj", "{BCA20AAB-0855-41B2-931C-762266C19749}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ScriptingFSWrapper", "ScriptingFSCorePlugin\ScriptingFSWrapper.fsproj", "{FAAE8F95-5E70-4D63-8ABD-EC193F190A88}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingCSCorePlugin", "ScriptingCSCorePlugin\ScriptingCSCorePlugin.csproj", "{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingFSCorePlugin", "ScriptingFSCorePlugin\ScriptingFSCorePlugin.csproj", "{9D402F09-EC11-4F14-95CE-8E1393D12EC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFilles", "SolutionFilles", "{88574E22-7018-4B51-9895-676956B3B822}"
+	ProjectSection(SolutionItems) = preProject
+		ScriptingPlugin.0.1.0.nuspec = ScriptingPlugin.0.1.0.nuspec
+		ScriptingPlugin.CSharp.0.1.0.nuspec = ScriptingPlugin.CSharp.0.1.0.nuspec
+		ScriptingPlugin.Editor.0.1.0.nuspec = ScriptingPlugin.Editor.0.1.0.nuspec
+		ScriptingPlugin.FSharp.0.1.0.nuspec = ScriptingPlugin.FSharp.0.1.0.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,14 +59,14 @@ Global
 		{BCA20AAB-0855-41B2-931C-762266C19749}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCA20AAB-0855-41B2-931C-762266C19749}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCA20AAB-0855-41B2-931C-762266C19749}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAAE8F95-5E70-4D63-8ABD-EC193F190A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAAE8F95-5E70-4D63-8ABD-EC193F190A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAAE8F95-5E70-4D63-8ABD-EC193F190A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAAE8F95-5E70-4D63-8ABD-EC193F190A88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

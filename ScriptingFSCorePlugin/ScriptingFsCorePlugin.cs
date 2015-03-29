@@ -2,21 +2,21 @@
 using System.IO;
 using Duality;
 
-namespace ScriptingPlugin.CSharp
+namespace ScriptingPlugin.FSharp
 {
-	public class ScriptingCsCorePlugin : CorePlugin
+	public class ScriptingFsCorePlugin : CorePlugin
 	{
-		public static IScriptCompilerService CSharpScriptCompiler { get; set; }
+		public static IScriptCompilerService FSharpScriptCompiler { get; set; }
+
 		protected override void InitPlugin()
 		{
 			base.InitPlugin();
 
-			var cSharpScriptCompiler = new CSharpScriptCompiler();
-			CSharpScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler, new NullPdbEditor());
-
+			var fSharpScriptCompiler = new FSharpScriptCompiler();
+			FSharpScriptCompiler = new ScriptCompilerService(fSharpScriptCompiler, new PdbEditor());
 			foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 			{
-				cSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
+				fSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
 			}
 
 			if (File.Exists(ScriptingPluginCorePlugin.ReferenceAssembliesFile))
@@ -24,10 +24,13 @@ namespace ScriptingPlugin.CSharp
 				var assemblies = File.ReadAllText(ScriptingPluginCorePlugin.ReferenceAssembliesFile).Split('\n');
 
 				foreach (var assembly in assemblies)
-					cSharpScriptCompiler.AddReference(assembly);
+				{
+					if (!assembly.EndsWith("System.Runtime.dll", StringComparison.CurrentCultureIgnoreCase))
+						fSharpScriptCompiler.AddReference(assembly);
+				}
 			}
-
 			ScriptingPluginCorePlugin.ExcludeAssembliesFromTypeSearch();
 		}
+
 	}
 }

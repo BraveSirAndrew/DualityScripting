@@ -1,9 +1,9 @@
 ﻿using System;
 using Duality;
 using Duality.Editor;
-using ScriptingPlugin.Resources;
+using ScriptingPlugin.CSharp;
 
-namespace ScriptingPlugin.CSharp
+namespace ScriptingPlugin.Resources
 {
 	[Serializable]
 	[EditorHintCategory("Scripting")]

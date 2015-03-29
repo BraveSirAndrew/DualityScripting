@@ -1,5 +1,6 @@
 using Duality.Editor;
 using ScriptingPlugin.CSharp;
+using ScriptingPlugin.FSharp;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor

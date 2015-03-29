@@ -5,7 +5,9 @@ module ``F# ScriptCompiler tests``=
     open NUnit.Framework
     open FsCheck
     open ScriptingPlugin
+    open ScriptingPlugin.FSharp
     open System
+    open System.IO
     open System.Linq
 
     let createFSharpCompiler =
@@ -34,7 +36,7 @@ open System
     [<Test>]
     let ``Compiling has no errors and creates assembly ``() =        
         let scriptingCompiler = createFSharpCompiler        
-        let compiled = scriptingCompiler.Compile(fsharpScript)    
+        let compiled = scriptingCompiler.Compile(fsharpScript, Path.GetTempFileName())    
 
         Assert.IsFalse(compiled.Errors.Any(), join compiled.Errors )
         Assert.NotNull(compiled.CompiledAssembly)
@@ -42,7 +44,7 @@ open System
 
     [<Test>]
     let ``Compiling throws when script is empty string ``() =                 
-        Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("") |> ignore )|> ignore
+        Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("", Path.GetTempFileName()) |> ignore )|> ignore
 
     [<Test>]
     let ``Compiling with destination assembly``() =         

@@ -58,6 +58,18 @@
       <HintPath>..\packages\Duality.0.1.202\lib\net40\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK">
       <HintPath>..\packages\Duality.0.1.202\lib\net40\OpenTK.dll</HintPath>
       <Private>True</Private>
@@ -79,16 +91,14 @@
     <Compile Include="CoroutineHelper.cs" />
     <Compile Include="DualityScript.cs" />
     <Compile Include="FileConstants.cs" />
-    <Compile Include="FSharpScriptCompiler.cs" />
-    <Compile Include="FSharpScriptCompilerResults.cs" />
     <Compile Include="IPdbEditor.cs" />
     <Compile Include="IScriptCompiler.cs" />
     <Compile Include="IScriptCompilerResults.cs" />
     <Compile Include="IScriptCompilerService.cs" />
     <Compile Include="NullPdbEditor.cs" />
     <Compile Include="PathProvider.cs" />
+    <Compile Include="PdbEditor.cs" />
     <Compile Include="PrebuildScripts.cs" />
-    <Compile Include="Resources\FSharpScript.cs" />
     <Compile Include="IScriptMetadataService.cs" />
     <Compile Include="ScriptMetadataService.cs" />
     <Compile Include="Resources\ScriptResourceBase.cs" />
