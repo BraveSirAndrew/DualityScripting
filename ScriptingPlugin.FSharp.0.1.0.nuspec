@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <metadata>
+        <id>ScriptingPlugin-FSharp</id>
+        <version>0.1.0-beta</version>
+        <title>Duality Scripting Plugin - Use this package for F# support</title>
+        <authors>@BatCatGames</authors>
+        <owners>@BatCatGames</owners>
+        <projectUrl>https://github.com/BraveSirAndrew/DualityScripting</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A plugin for Duality that adds support for scripting in C# and F#, all recompiled on the fly without even a full editor restart.</description>
+        <language>en-IE</language>
+        <tags>Duality</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+				<dependency id="ScriptingPlugin" version="0.1.0-beta" />
+                <dependency id="FSharp.Compiler.Service" version="0.0.58" />
+                <dependency id="FSharp.Core.3" version="0.0.2"/>
+            </group>
+        </dependencies>
+        <references>
+            <reference file="ScriptingFSCorePlugin.core.dll"/>
+        </references>
+    </metadata>
+
+    <files>
+        <file src="ScriptingFSCorePlugin\bin\Release\ScriptingFSCorePlugin.core.dll" target="lib\net40\ScriptingFSCorePlugin.core.dll" />        
+    </files>
+</package>
