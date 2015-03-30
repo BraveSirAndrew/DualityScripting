@@ -55,10 +55,12 @@ namespace ScriptingPlugin.FSharp
             {
                 if (string.IsNullOrWhiteSpace(compilationUnit.Source))
                     throw new ArgumentException("scriptsource");
+				if (string.IsNullOrWhiteSpace(compilationUnit.SourceFilePath))
+                    throw new ArgumentException("scriptsourceFilePath");
 
                 var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
-                File.WriteAllText(tempScriptPath, compilationUnit.Source);
-                referencesAndScript.Add(tempScriptPath);
+                File.WriteAllText(compilationUnit.SourceFilePath, compilationUnit.Source);
+				referencesAndScript.Add(compilationUnit.SourceFilePath);
                 deleteTempFiles.Add(tempScriptPath);
 
             }
@@ -69,7 +71,7 @@ namespace ScriptingPlugin.FSharp
             Assembly assembly = null;
             try
             {
-                assembly = Assembly.LoadFrom(outputAssemblyPath);
+                assembly = Assembly.Load(File.ReadAllBytes(outputAssemblyPath));
             }
             catch (Exception e)
             {
