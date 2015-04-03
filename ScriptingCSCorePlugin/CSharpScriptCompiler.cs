@@ -15,8 +15,9 @@ namespace ScriptingPlugin.CSharp
 
 		public CSharpScriptCompiler()
 		{
+			var executableReference = AssemblyMetadata.CreateFromImage(File.ReadAllBytes(typeof(object).Assembly.Location)).GetReference();
 			_compilation = CSharpCompilation.Create("ScriptingAssembly")
-				.AddReferences(new MetadataReference[]{ new MetadataImageReference(File.ReadAllBytes(typeof(object).Assembly.Location))})
+				.AddReferences(new MetadataReference[]{ executableReference})
 				.WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 			
 			if (Directory.Exists(FileConstants.AssembliesDirectory) == false)
@@ -64,7 +65,7 @@ namespace ScriptingPlugin.CSharp
 				var results = _compilation
 						.AddSyntaxTrees(syntaxTrees)
 						.WithAssemblyName(assemblyName)
-						.Emit(assemblyStream, pdbStream: pdbStream, pdbFilePath: Path.Combine(assemblyDirectory, pdbName));
+						.Emit(assemblyStream, pdbStream);
 
 				var errors = Enumerable.Empty<string>();
 				if (!results.Success)
@@ -99,8 +100,8 @@ namespace ScriptingPlugin.CSharp
 						string.Format("Thre was a problem trying to find {0} either in the current folder or in the AppDomain, the solution is to try to load the missing assembly into the appdomain somehow",referenceAssembly));
 				}
 			}
-
-			_compilation = _compilation.AddReferences(new MetadataImageReference(File.ReadAllBytes(filePath)));
+			var executableReference = AssemblyMetadata.CreateFromImage(File.ReadAllBytes(filePath)).GetReference();
+			_compilation = _compilation.AddReferences(new MetadataReference[]{ executableReference});
 		}
 	}
 }

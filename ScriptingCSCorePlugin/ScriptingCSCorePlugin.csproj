@@ -47,18 +47,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Duality.0.1.210\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=0.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0-rc1\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-rc1\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-rc1\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Desktop">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.0.7.4091001-beta\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0-rc1\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.dll</HintPath>
@@ -68,14 +71,14 @@
       <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.1.33.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.33-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Reflection.Metadata, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Bcl.Metadata.1.0.12-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    <Reference Include="System.Reflection.Metadata, Version=1.0.18.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.0.18-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
