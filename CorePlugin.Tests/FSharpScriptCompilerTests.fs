@@ -15,7 +15,7 @@ module ``F# ScriptCompiler tests``=
         let ref = [ "System.dll"; "System.Core.dll"; "Duality.dll" ; "FarseerDuality.dll";"ScriptingPlugin.core.dll"; "OpenTK.dll";"System.Drawing.dll";"System.Xml.Linq.dll" ]
         List.iter(fun r -> compiler.AddReference(r)) ref
         compiler
-
+    let createTempFileName() = Path.GetTempFileName().Replace("tmp", "fs")
     let fsharpScript = @"module Dualityscript
 
 open ScriptingPlugin
@@ -33,10 +33,11 @@ open System
         let scriptongCompiler = new FSharpScriptCompiler()
         Check.VerboseThrowOnFailure scriptongCompiler.AddReference
 
+    
     [<Test>]
     let ``Compiling has no errors and creates assembly ``() =        
         let scriptingCompiler = createFSharpCompiler        
-        let compiled = scriptingCompiler.Compile(fsharpScript, Path.GetTempFileName())    
+        let compiled = scriptingCompiler.Compile(fsharpScript, createTempFileName())    
 
         Assert.IsFalse(compiled.Errors.Any(), join compiled.Errors )
         Assert.NotNull(compiled.CompiledAssembly)
@@ -44,13 +45,13 @@ open System
 
     [<Test>]
     let ``Compiling throws when script is empty string ``() =                 
-        Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("", Path.GetTempFileName()) |> ignore )|> ignore
+        Assert.Throws<System.ArgumentException>(fun () -> createFSharpCompiler.Compile("", createTempFileName()) |> ignore )|> ignore
 
     [<Test>]
     let ``Compiling with destination assembly``() =         
         let loc =  "Scripts"        
         let scriptingCompiler = createFSharpCompiler
-        let newthing= new CompilationUnit(fsharpScript, null)
+        let newthing= new CompilationUnit(fsharpScript, createTempFileName())
         Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile([newthing], loc) |> ignore)
 
     [<Test>]
@@ -86,5 +87,5 @@ let orca = ""Orca, Pacific"", Killer
 let whales = [|moby; bluey; orca|]"
 
         let scriptingCompiler = createFSharpCompiler
-        let newthing= [new CompilationUnit(fsharpScript, null); new CompilationUnit(f1);new CompilationUnit(f2)]
+        let newthing= [new CompilationUnit(fsharpScript, createTempFileName()); new CompilationUnit(f1, createTempFileName());new CompilationUnit(f2,createTempFileName())]
         Assert.DoesNotThrow( fun () -> scriptingCompiler.Compile(newthing, loc) |> ignore)

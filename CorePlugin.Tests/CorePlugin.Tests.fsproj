@@ -79,11 +79,11 @@
       <Private>True</Private>
     </ProjectReference>
     <Reference Include="Duality">
-      <HintPath>..\packages\Duality.0.1.191\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.210\lib\net40\Duality.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FarseerDuality">
-      <HintPath>..\packages\Duality.0.1.191\lib\net40\FarseerDuality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.210\lib\net40\FarseerDuality.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsCheck">
@@ -103,7 +103,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\packages\Duality.0.1.191\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.210\lib\net40\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
@@ -118,11 +118,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\packages\Duality.0.1.191\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK.GLControl">
-      <HintPath>..\packages\Duality.0.1.191\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.GLControl.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="policy.2.3.FSharp.Core">
