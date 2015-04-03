@@ -2,12 +2,12 @@ namespace ScriptingPlugin
 {
 	public struct CompilationUnit
 	{
-		public CompilationUnit(string source, string sourceFilePath=null) : this()
+		public CompilationUnit(string source, string sourceFilePath) : this()
 		{
 			Source = source;
 			SourceFilePath = sourceFilePath;
 		}
-		public string Source { get; set; }
-		public string SourceFilePath { get; set; }
+		public string Source { get; private set; }
+		public string SourceFilePath { get; private set; }
 	}
 }
