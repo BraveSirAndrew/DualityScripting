@@ -12,7 +12,7 @@ namespace ScriptingPlugin.CSharp
 			base.InitPlugin();
 
 			var cSharpScriptCompiler = new CSharpScriptCompiler();
-			CSharpScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler, new NullPdbEditor());
+			CSharpScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler);
 
 			foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 			{
