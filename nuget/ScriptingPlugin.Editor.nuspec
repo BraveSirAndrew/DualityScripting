@@ -22,6 +22,6 @@
     </metadata>
 
     <files>
-		<file src="EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40\ScriptingPlugin.editor.dll" />
+		<file src="..\EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40\ScriptingPlugin.editor.dll" />
 	</files>
 </package>

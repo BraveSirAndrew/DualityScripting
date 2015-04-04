@@ -24,6 +24,6 @@
     </metadata>
 
     <files>
-        <file src="ScriptingFSCorePlugin\bin\Release\ScriptingFSCorePlugin.core.dll" target="lib\net40\ScriptingFSCorePlugin.core.dll" />        
+        <file src="..\ScriptingFSCorePlugin\bin\Release\ScriptingFSCorePlugin.core.dll" target="lib\net40\ScriptingFSCorePlugin.core.dll" />        
     </files>
 </package>
