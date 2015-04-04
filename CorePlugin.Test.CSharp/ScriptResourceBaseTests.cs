@@ -77,7 +77,7 @@ namespace CorePlugin.Test.CSharp
 
 				var script = new TestScriptType
 				{
-					ScriptCompilerServiceProxy = new ScriptCompilerService(scriptCompiler.Object, null),
+					ScriptCompilerServiceProxy = new ScriptCompilerService(scriptCompiler.Object),
 					ScriptMetadataServiceProxy = new Mock<IScriptMetadataService>().Object,
 					SourcePath = "test",
 					Script = "namespace Tests { public class MyClass { }}"
@@ -97,7 +97,7 @@ namespace CorePlugin.Test.CSharp
 			{
 				var script = new TestScriptType
 				{
-					ScriptCompilerServiceProxy = new ScriptCompilerService(new CSharpScriptCompiler(), null),
+					ScriptCompilerServiceProxy = new ScriptCompilerService(new CSharpScriptCompiler()),
 					ScriptMetadataServiceProxy = new Mock<IScriptMetadataService>().Object,
 					SourcePath = "test",
 					Script = "namespace Tests { public class MyClass { }}"
