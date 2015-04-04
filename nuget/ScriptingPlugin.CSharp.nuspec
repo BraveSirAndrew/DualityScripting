@@ -26,6 +26,6 @@
     </metadata>
 
     <files>
-        <file src="ScriptingCSCorePlugin\bin\Release\ScriptingCSCorePlugin.core.dll" target="lib\net40\ScriptingCSCorePlugin.core.dll" />        
+        <file src="..\ScriptingCSCorePlugin\bin\Release\ScriptingCSCorePlugin.core.dll" target="lib\net40\ScriptingCSCorePlugin.core.dll" />        
     </files>
 </package>
