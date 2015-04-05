@@ -8,7 +8,7 @@ RestorePackages()
 // Directories
 let buildDir  = @".\build\"
 let testDir   = @".\test\"
-let packagesDir = @".\nugets"
+let packagesDir = @".\deploy"
 
 // version info
 let version = "0.2.0-beta"  // or retrieve from CI server
