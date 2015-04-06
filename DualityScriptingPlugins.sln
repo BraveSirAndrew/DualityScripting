@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingFSCorePlugin", "Sc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFilles", "SolutionFilles", "{88574E22-7018-4B51-9895-676956B3B822}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		Build.bat = Build.bat
 		completeBuild.fsx = completeBuild.fsx
 		nuget\ScriptingPlugin.0.1.0.nuspec = nuget\ScriptingPlugin.0.1.0.nuspec
 		nuget\ScriptingPlugin.CSharp.0.1.0.nuspec = nuget\ScriptingPlugin.CSharp.0.1.0.nuspec

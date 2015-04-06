@@ -7,12 +7,11 @@ open Fake.AssemblyInfoFile
 // Directories
 let buildDir  = @".\build\"
 let testDir   = @".\test\"
-let packagesDir = @".\deploy"
-
+let packagesDir = @".\deploy\"
 // version info
 let version = "0.2.0-beta"  // or retrieve from CI server
 
-
+RestorePackages()
 // Targets
 Target "Clean" (fun _ ->
     CleanDirs [buildDir; testDir; packagesDir] 
@@ -44,14 +43,8 @@ Target "SetVersions" (fun _ ->
          Attribute.Version version
          Attribute.FileVersion version]
 )
-let nugetSource = "https://www.myget.org/F/6416d9912a7c4d46bc983870fb440d25/"
-Target "RestorePackages" (fun _ ->
-    "./**/packages.config"
-    |> RestorePackage (fun p ->
-    { p with
-        Sources = nugetSource :: p.Sources
-        Retries = 4 })
-)
+
+
 
 Target "Build" (fun _ ->          
     let buildMode = getBuildParamOrDefault "buildMode" "Release"
@@ -81,7 +74,6 @@ Target "NUnitTest" (fun _ ->
                    OutputFile = testDir + @"TestResults.xml"})
 )
 
-
 Target "CreateNuget" (fun _ ->      
     ["nuget/ScriptingPlugin.nuspec";
     "nuget/ScriptingPlugin.CSharp.nuspec";
@@ -100,8 +92,7 @@ Target "CreateNuget" (fun _ ->
 )
 
 // Dependencies
-"Clean"  
-  ==> "RestorePackages"
+"Clean"    
   ==> "SetVersions"
   ==> "Build"
   ==> "BuildTest"
