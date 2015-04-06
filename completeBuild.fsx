@@ -4,7 +4,6 @@
 open Fake
 open Fake.AssemblyInfoFile
 
-RestorePackages()
 // Directories
 let buildDir  = @".\build\"
 let testDir   = @".\test\"
@@ -16,7 +15,7 @@ let version = "0.2.0-beta"  // or retrieve from CI server
 
 // Targets
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; testDir]
+    CleanDirs [buildDir; testDir] 
 )
 
 Target "SetVersions" (fun _ ->
@@ -103,7 +102,8 @@ Target "CreateNuget" (fun _ ->
 // Dependencies
 "CreateNuget"
 
-"Clean"
+"Clean"  
+  ==> "RestorePackages"
   ==> "SetVersions"
   ==> "Build"
   ==> "BuildTest"
