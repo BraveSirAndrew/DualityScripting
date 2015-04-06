@@ -15,7 +15,7 @@ let version = "0.2.0-beta"  // or retrieve from CI server
 
 // Targets
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; testDir] 
+    CleanDirs [buildDir; testDir; packagesDir] 
 )
 
 Target "SetVersions" (fun _ ->
@@ -100,14 +100,13 @@ Target "CreateNuget" (fun _ ->
 )
 
 // Dependencies
-"CreateNuget"
-
 "Clean"  
   ==> "RestorePackages"
   ==> "SetVersions"
   ==> "Build"
   ==> "BuildTest"
   ==> "NUnitTest"  
+  ==> "CreateNuget"  
 
 // start build
 RunTargetOrDefault "CreateNuget"
