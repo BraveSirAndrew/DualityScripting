@@ -44,7 +44,11 @@ Target "SetVersions" (fun _ ->
          Attribute.FileVersion version]
 )
 
-
+Target "RestorePackages" (fun _ ->
+    !! "./**/packages.config"
+        |> Seq.iter (RestorePackage (fun p ->
+            { p with Sources = ["https://www.myget.org/F/6416d9912a7c4d46bc983870fb440d25/"]}))
+)
 
 Target "Build" (fun _ ->          
     let buildMode = getBuildParamOrDefault "buildMode" "Release"
@@ -94,6 +98,7 @@ Target "CreateNuget" (fun _ ->
 // Dependencies
 "Clean"    
   ==> "SetVersions"
+  ==> "RestorePackages"
   ==> "Build"
   ==> "BuildTest"
   ==> "NUnitTest"  
