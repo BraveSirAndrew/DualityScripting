@@ -3,6 +3,6 @@ init:
 build_script:
   - cmd: Build.bat
 test: off
-version: 0.1.{build}
+version: 0.2.{build}-beta
 artifacts:
   - path: deploy\*.nupkg
