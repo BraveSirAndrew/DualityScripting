@@ -45,6 +45,14 @@ Target "SetVersions" (fun _ ->
          Attribute.Version version
          Attribute.FileVersion version]
 )
+let nugetSource = "https://www.myget.org/F/6416d9912a7c4d46bc983870fb440d25/"
+Target "RestorePackages" (fun _ ->
+    "./**/packages.config"
+    |> RestorePackage (fun p ->
+    { p with
+        Sources = nugetSource :: p.Sources
+        Retries = 4 })
+)
 
 Target "Build" (fun _ ->          
     let buildMode = getBuildParamOrDefault "buildMode" "Release"
