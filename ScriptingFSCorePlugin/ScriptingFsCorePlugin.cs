@@ -13,7 +13,7 @@ namespace ScriptingPlugin.FSharp
 			base.InitPlugin();
 
 			var fSharpScriptCompiler = new FSharpScriptCompiler();
-			FSharpScriptCompiler = new ScriptCompilerService(fSharpScriptCompiler, new PdbEditor());
+			FSharpScriptCompiler = new ScriptCompilerService(fSharpScriptCompiler);
 			foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Plugins"), "*.core.dll"))
 			{
 				fSharpScriptCompiler.AddReference("Plugins//" + Path.GetFileName(file));
