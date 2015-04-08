@@ -86,10 +86,9 @@ Target "CreateNuget" (fun _ ->
     |> List.iter (fun spec ->
     NuGet (fun p -> 
         {p with 
-            Version = version
-            Project = "DualityScripting"
+            Version = version                        
             PublishUrl = getBuildParamOrDefault "nugetrepo" ""
-            AccessKey = getBuildParamOrDefault "nugetkey" ""
+            AccessKey = getBuildParamOrDefault "keyfornuget" ""
             Publish = hasBuildParam "nugetrepo"
             OutputPath = packagesDir
         }) spec)
