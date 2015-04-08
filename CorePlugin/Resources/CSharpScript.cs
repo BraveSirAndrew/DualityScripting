@@ -11,6 +11,16 @@ namespace ScriptingPlugin.Resources
 	{
 		public new static string FileExt = ".CSharpScript" + Resource.FileExt;
 
+		public CSharpScript()
+		{
+			
+		}
+
+		public CSharpScript(IScriptCompilerService compilerService)
+		{
+			ScriptCompiler = compilerService;
+		}
+
 		protected override void OnLoaded()
 		{
 			ScriptCompiler = ScriptingPluginCorePlugin.CSharpScriptCompiler;

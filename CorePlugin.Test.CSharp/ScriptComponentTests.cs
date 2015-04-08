@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using Duality;
 using Flow;
 using NUnit.Framework;
@@ -13,32 +12,6 @@ namespace CorePlugin.Test.CSharp
 	[TestFixture]
 	public class ScriptComponentTests
 	{
-		protected static TestScriptResource CreateScriptResource(string script)
-		{
-			if (Directory.Exists("Scripts"))
-			{
-				Directory.Delete("Scripts", true);
-				Directory.CreateDirectory("Scripts");
-			}
-
-			var resource = new TestScriptResource { Script = script, SourcePath = "TestScript.cs" };
-			resource.Save("TestScript.cs");
-			return resource;
-		}
-
-		public class TestScriptResource : CSharpScript
-		{
-			public TestScriptResource()
-			{
-				var cSharpScriptCompiler = new CSharpScriptCompiler();
-				cSharpScriptCompiler.AddReference("Duality.dll");
-				cSharpScriptCompiler.AddReference("ScriptingPlugin.core.dll");
-				cSharpScriptCompiler.AddReference("Flow.dll");
-
-				ScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler, null);
-			}
-		}
-
 		[TestFixture]
 		public class TheGetScriptPropertyValuesMethod
 		{
@@ -103,7 +76,7 @@ public class TestScript : DualityScript
 			[Test]
 			public void CallsTheScriptsEditorUpdateMethod()
 			{
-			    var resource = CreateScriptResource(TestScriptWithOneProperty);
+			    var resource = TestScriptFactory.CreateScriptResource(TestScriptWithOneProperty);
 
 				Component.Script = new ContentRef<ScriptResourceBase>(resource);
 				Component.SetScriptPropertyValue("EditorUpdateCalled", false);
@@ -142,7 +115,7 @@ public class TestScript : DualityScript
 			[Test]
 			public void ReturnsAValidCoroutineInstance()
 			{
-				var component = new ScriptComponent {Script = CreateScriptResource(TestScriptWithCoroutine)};
+				var component = new ScriptComponent {Script = TestScriptFactory.CreateScriptResource(TestScriptWithCoroutine)};
 
 				component.OnInit(Component.InitContext.Activate);
 				var factory = Create.NewFactory();

@@ -115,7 +115,7 @@ namespace ScriptingPlugin.Resources
                 return null;
             type = assembly.GetTypes().FirstOrDefault(t =>
                 t.BaseType != null &&
-                t.BaseType == typeof(DualityScript) &&
+                typeof(DualityScript).IsAssignableFrom(t) &&
                 String.Equals(t.Name, typeName, StringComparison.CurrentCultureIgnoreCase));
             return type;
         }
