@@ -56,7 +56,15 @@ namespace ScriptingPlugin
 			if (_scriptInstance == null)
 				return;
 
-			SafeExecute(_scriptInstance.Shutdown, "Shutdown");
+			switch (context)
+			{
+				case ShutdownContext.Deactivate:
+					SafeExecute(_scriptInstance.Shutdown, "Shutdown");
+					break;
+				case ShutdownContext.Saving:
+					SafeExecute(_scriptInstance.Saving, "Saving");
+					break;
+			}
 		}
 
 		void ICmpUpdatable.OnUpdate()

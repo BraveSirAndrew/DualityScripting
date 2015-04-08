@@ -134,5 +134,50 @@ public class TestScript : DualityScript
 				Assert.AreEqual(3, coroutine.Value);
 			}
 		}
+
+		[TestFixture]
+		public class TheOnShutdownMethod
+		{
+			public const string TestScriptWithShutdown = @"using ScriptingPlugin; 
+using System.Collections.Generic;
+using Flow;
+using System;
+
+public class TestScript : DualityScript
+	{
+		public bool ShutdownCalled { get; set; }
+		public bool SavingCalled { get; set; }
+
+		public override void Shutdown()
+		{
+			ShutdownCalled = true;
+		}
+
+		public override void Saving()
+		{
+			SavingCalled = true;
+		}
+	}";
+
+			[Test]
+			[Sequential]
+			public void CallsShutdownOrSavingDependingOnContext(
+				[Values(Component.ShutdownContext.Saving, Component.ShutdownContext.Deactivate)]Component.ShutdownContext context,
+				[Values(false, true)]bool expectedShutdownResult,
+				[Values(true, false)]bool expectedSavingResult)
+			{
+				var component = new ScriptComponent { Script = CreateScriptResource(TestScriptWithShutdown) };
+
+				component.OnInit(Component.InitContext.Activate);
+				component.SetScriptPropertyValue("ShutdownCalled", false);
+				component.SetScriptPropertyValue("SavingCalled", false);
+				component.OnShutdown(context);
+
+				((ICmpEditorUpdatable)component).OnUpdate();
+
+				Assert.AreEqual(expectedShutdownResult, (bool)component.ScriptPropertyValues["ShutdownCalled"]);
+				Assert.AreEqual(expectedSavingResult, (bool)component.ScriptPropertyValues["SavingCalled"]);
+			}
+		}
 	}
 }
