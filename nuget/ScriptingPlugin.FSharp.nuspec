@@ -13,7 +13,7 @@
         <tags>Duality</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
-				<dependency id="ScriptingPlugin" version="0.1.0-beta" />
+				<dependency id="ScriptingPlugin" version="0.2.142-beta" />
                 <dependency id="FSharp.Compiler.Service" version="0.0.86" />
                 <dependency id="FSharp.Core.3" version="0.0.2"/>
             </group>

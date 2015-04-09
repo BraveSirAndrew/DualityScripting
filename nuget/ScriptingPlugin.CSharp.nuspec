@@ -13,11 +13,12 @@
         <tags>Duality</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
-                <dependency id="ScriptingPlugin" version="0.1.0-beta" />
-                <dependency id="Microsoft.Bcl.Immutable" version="1.1.20-beta" />
-                <dependency id="Microsoft.Bcl.Metadata" version="1.0.12-alpha" />
-                <dependency id="Microsoft.CodeAnalysis.Common" version="0.7.4091001-beta" />
-                <dependency id="Microsoft.CodeAnalysis.CSharp" version="0.7.4091001-beta" />
+                <dependency id="ScriptingPlugin" version="0.2.142-beta" />
+				<dependency id="Microsoft.CodeAnalysis.Analyzers" version="1.0.0-rc1"  />
+				<dependency id="Microsoft.CodeAnalysis.Common" version="1.0.0-rc1"  />
+				<dependency id="Microsoft.CodeAnalysis.CSharp" version="1.0.0-rc1"  />
+				<dependency id="System.Collections.Immutable" version="1.1.33-beta" />
+				<dependency id="System.Reflection.Metadata" version="1.0.18-beta"  />
             </group>
         </dependencies>
         <references>

@@ -30,10 +30,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFilles", "SolutionF
 		appveyor.yml = appveyor.yml
 		Build.bat = Build.bat
 		completeBuild.fsx = completeBuild.fsx
-		nuget\ScriptingPlugin.0.1.0.nuspec = nuget\ScriptingPlugin.0.1.0.nuspec
-		nuget\ScriptingPlugin.CSharp.0.1.0.nuspec = nuget\ScriptingPlugin.CSharp.0.1.0.nuspec
-		nuget\ScriptingPlugin.Editor.0.1.0.nuspec = nuget\ScriptingPlugin.Editor.0.1.0.nuspec
-		nuget\ScriptingPlugin.FSharp.0.1.0.nuspec = nuget\ScriptingPlugin.FSharp.0.1.0.nuspec
+		nuget\ScriptingPlugin.CSharp.nuspec = nuget\ScriptingPlugin.CSharp.nuspec
+		nuget\ScriptingPlugin.Editor.nuspec = nuget\ScriptingPlugin.Editor.nuspec
+		nuget\ScriptingPlugin.FSharp.nuspec = nuget\ScriptingPlugin.FSharp.nuspec
+		nuget\ScriptingPlugin.nuspec = nuget\ScriptingPlugin.nuspec
 	EndProjectSection
 EndProject
 Global
