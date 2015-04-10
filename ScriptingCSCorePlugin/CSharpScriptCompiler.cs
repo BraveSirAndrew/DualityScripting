@@ -6,6 +6,7 @@ using System.Text;
 using Duality.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace ScriptingPlugin.CSharp
 {
@@ -65,7 +66,7 @@ namespace ScriptingPlugin.CSharp
 				var results = _compilation
 						.AddSyntaxTrees(syntaxTrees)
 						.WithAssemblyName(assemblyName)
-						.Emit(assemblyStream, pdbStream);
+						.Emit(assemblyStream, pdbStream, options: new EmitOptions(pdbFilePath: Path.Combine(assemblyDirectory, pdbName)));
 
 				var errors = Enumerable.Empty<string>();
 				if (!results.Success)
