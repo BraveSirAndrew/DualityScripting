@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Duality;
+﻿using Duality;
 using Flow;
 using NUnit.Framework;
 using ScriptingPlugin;
@@ -166,7 +163,7 @@ public class TestScript : DualityScript
 				[Values(false, true)]bool expectedShutdownResult,
 				[Values(true, false)]bool expectedSavingResult)
 			{
-				var component = new ScriptComponent { Script = CreateScriptResource(TestScriptWithShutdown) };
+				var component = new ScriptComponent { Script = TestScriptFactory.CreateScriptResource(TestScriptWithShutdown) };
 
 				component.OnInit(Component.InitContext.Activate);
 				component.SetScriptPropertyValue("ShutdownCalled", false);
