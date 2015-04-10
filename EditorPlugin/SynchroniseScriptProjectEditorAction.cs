@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
+using ScriptingPlugin.CSharp;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
@@ -60,12 +61,12 @@ namespace ScriptingPlugin.Editor
 				if (contentRef.Res is CSharpScript)
 				{
 					projectPath = ScriptingEditorPlugin.CSharpProjectPath;
-					extension = ".cs";
+					extension = FileConstants.CSharpExtension;
 				}
 				else
 				{
 					projectPath = ScriptingEditorPlugin.FSharpProjectPath;
-					extension = ".fs";
+					extension = FileConstants.FSharpExtension;
 				}
 
 				var sourceFilePath = contentRef.Res.SourcePath;

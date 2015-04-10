@@ -144,6 +144,10 @@
       <Project>{78dbc94d-ee9d-4ac0-95ed-91a0ae2f6652}</Project>
       <Name>EditorPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ScriptingCSCorePlugin\ScriptingCSCorePlugin.csproj">
+      <Project>{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}</Project>
+      <Name>ScriptingCSCorePlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <metadata>
+        <id>ScriptingPlugin</id>
+        <version>0.1.0-beta</version>
+        <title>Duality Scripting Plugin</title>
+        <authors>@BatCatGames</authors>
+        <owners>@BatCatGames</owners>
+        <projectUrl>https://github.com/BraveSirAndrew/DualityScripting</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A plugin for Duality that adds support for scripting in C# and F#, all recompiled on the fly without even a full editor restart.</description>
+        <language>en-IE</language>
+        <tags>Duality</tags>
+        <references>
+            <reference file="ScriptingPlugin.core.dll"/>
+        </references>
+    </metadata>
+    <files>
+        <file src="..\CorePlugin\bin\Release\ScriptingPlugin.core.dll" target="lib\net40\ScriptingPlugin.core.dll" />        
+    </files>
+</package>

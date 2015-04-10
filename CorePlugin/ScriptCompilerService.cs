@@ -9,10 +9,9 @@ namespace ScriptingPlugin
 		private readonly IScriptCompiler _scriptCompiler;
 		private IPdbEditor _pdbEditor;
 
-		public ScriptCompilerService(IScriptCompiler scriptCompiler, IPdbEditor pdbEditor)
+		public ScriptCompilerService(IScriptCompiler scriptCompiler)
 		{
 			_scriptCompiler = scriptCompiler;
-			_pdbEditor = pdbEditor;
 		}
 
 		public ScriptCompilerResult TryCompile(string scriptName, string scriptPath, string script)

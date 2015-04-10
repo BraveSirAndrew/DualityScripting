@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Duality;
 using Duality.Editor;
 using Duality.Editor.Forms;
+using ScriptingPlugin.CSharp;
+using ScriptingPlugin.FSharp;
 using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Editor
@@ -92,27 +94,27 @@ namespace ScriptingPlugin.Editor
 		
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{
-			if (Debugger.IsAttached && _debuggerAttachedLastFrame == false)
-			{
-				Log.Editor.Write("Reloading scripts with debug information...");
-				
-				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
-
-				var fsharpScripts = Resource.GetResourceFiles().Where(r => r.EndsWith(FSharpScript.FileExt));
-				foreach (var scriptPath in fsharpScripts)
-				{
-					var script = ContentProvider.RequestContent<FSharpScript>(scriptPath);
-					script.Res.Reload();
-				}
-
-				_debuggerAttachedLastFrame = true;
-			}
-			else if (Debugger.IsAttached == false && _debuggerAttachedLastFrame)
-			{
-				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
-
-				_debuggerAttachedLastFrame = false;
-			}
+//			if (Debugger.IsAttached && _debuggerAttachedLastFrame == false)
+//			{
+//				Log.Editor.Write("Reloading scripts with debug information...");
+//				
+//				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new PdbEditor());
+//
+//				var fsharpScripts = Resource.GetResourceFiles().Where(r => r.EndsWith(FSharpScript.FileExt));
+//				foreach (var scriptPath in fsharpScripts)
+//				{
+//					var script = ContentProvider.RequestContent<FSharpScript>(scriptPath);
+//					script.Res.Reload();
+//				}
+//
+//				_debuggerAttachedLastFrame = true;
+//			}
+//			else if (Debugger.IsAttached == false && _debuggerAttachedLastFrame)
+//			{
+//				ScriptingPluginCorePlugin.FSharpScriptCompiler.SetPdbEditor(new NullPdbEditor());
+//
+//				_debuggerAttachedLastFrame = false;
+//			}
 		}
 	}
 }

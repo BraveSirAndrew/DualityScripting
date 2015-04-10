@@ -164,6 +164,14 @@
       <Project>{afe883f3-72b4-4c7c-a1d1-44edc09c8f6e}</Project>
       <Name>CorePlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ScriptingCSCorePlugin\ScriptingCSCorePlugin.csproj">
+      <Project>{192b3a39-fcd1-4a18-ac61-4a2a01ef6dc0}</Project>
+      <Name>ScriptingCSCorePlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScriptingFSCorePlugin\ScriptingFSCorePlugin.csproj">
+      <Project>{9d402f09-ec11-4f14-95ce-8e1393d12ec9}</Project>
+      <Name>ScriptingFSCorePlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Resources.resx">

@@ -17,7 +17,7 @@ namespace CorePlugin.Test.CSharp
 			compilerResult.Setup(m => m.Errors).Returns(new[] {"{", "}"});
 			compiler.Setup(m => m.Compile(It.IsAny<string>(), It.IsAny<string>())).Returns(compilerResult.Object);
 
-			var service = new ScriptCompilerService(compiler.Object, new Mock<IPdbEditor>().Object);
+			var service = new ScriptCompilerService(compiler.Object);
 
 			Assert.DoesNotThrow(() => service.TryCompile("", "", ""));
 		}

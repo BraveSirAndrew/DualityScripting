@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using ScriptingPlugin;
+using ScriptingPlugin.CSharp;
 using ScriptingPlugin.Resources;
 
 namespace CorePlugin.Test.CSharp
@@ -28,7 +29,7 @@ namespace CorePlugin.Test.CSharp
 				cSharpScriptCompiler.AddReference("ScriptingPlugin.core.dll");
 				cSharpScriptCompiler.AddReference("Flow.dll");
 
-				ScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler, null);
+				ScriptCompiler = new ScriptCompilerService(cSharpScriptCompiler);
 			}
 		}
 	}

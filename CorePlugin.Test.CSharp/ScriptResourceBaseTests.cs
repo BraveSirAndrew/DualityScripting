@@ -3,6 +3,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using ScriptingPlugin;
+using ScriptingPlugin.CSharp;
 using ScriptingPlugin.Resources;
 
 namespace CorePlugin.Test.CSharp
@@ -76,7 +77,7 @@ namespace CorePlugin.Test.CSharp
 
 				var script = new TestScriptType
 				{
-					ScriptCompilerServiceProxy = new ScriptCompilerService(scriptCompiler.Object, null),
+					ScriptCompilerServiceProxy = new ScriptCompilerService(scriptCompiler.Object),
 					ScriptMetadataServiceProxy = new Mock<IScriptMetadataService>().Object,
 					SourcePath = "test",
 					Script = "namespace Tests { public class MyClass { }}"
@@ -136,7 +137,7 @@ public class TestScript : DualityScript
 			{
 				var script = new TestScriptType
 				{
-					ScriptCompilerServiceProxy = new ScriptCompilerService(new CSharpScriptCompiler(), null),
+					ScriptCompilerServiceProxy = new ScriptCompilerService(new CSharpScriptCompiler()),
 					ScriptMetadataServiceProxy = new Mock<IScriptMetadataService>().Object,
 					SourcePath = "test",
 					Script = "namespace Tests { public class MyClass { }}"

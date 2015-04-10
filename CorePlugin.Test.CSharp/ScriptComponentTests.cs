@@ -2,6 +2,7 @@
 using Flow;
 using NUnit.Framework;
 using ScriptingPlugin;
+using ScriptingPlugin.CSharp;
 using ScriptingPlugin.Resources;
 
 namespace CorePlugin.Test.CSharp

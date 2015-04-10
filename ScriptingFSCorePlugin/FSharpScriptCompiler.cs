@@ -7,7 +7,7 @@ using Duality;
 using Duality.Helpers;
 using Microsoft.FSharp.Compiler.SimpleSourceCodeServices;
 
-namespace ScriptingPlugin
+namespace ScriptingPlugin.FSharp
 {
     public class FSharpScriptCompiler : IScriptCompiler
     {
@@ -41,14 +41,12 @@ namespace ScriptingPlugin
             if (!Directory.Exists(assemblyDirectory))
                 Directory.CreateDirectory(assemblyDirectory);
             var outputAssemblyPath =  Path.Combine(assemblyDirectory, assemblyName);
-
             var referencesAndScript = new List<string>();
 
             foreach (var reference in _references)
             {
                 if (!string.IsNullOrWhiteSpace(reference))
                     referencesAndScript.Add(string.Format("--reference:{0}", reference));
-
             }
             
             string[] completeOptions = null;
@@ -57,21 +55,23 @@ namespace ScriptingPlugin
             {
                 if (string.IsNullOrWhiteSpace(compilationUnit.Source))
                     throw new ArgumentException("scriptsource");
+				if (string.IsNullOrWhiteSpace(compilationUnit.SourceFilePath))
+                    throw new ArgumentException("scriptsourceFilePath");
 
                 var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
-                File.WriteAllText(tempScriptPath, compilationUnit.Source);
-                referencesAndScript.Add(tempScriptPath);
+                File.WriteAllText(compilationUnit.SourceFilePath, compilationUnit.Source);
+				referencesAndScript.Add(compilationUnit.SourceFilePath);
                 deleteTempFiles.Add(tempScriptPath);
 
             }
-            var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "-g", "--noframework" };
+			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "--debug+", "--optimize-", "--noframework" };
             completeOptions = options.Concat(referencesAndScript).ToArray(); 
             var errorsAndExitCode = _sourceCodeServices.Compile(completeOptions);
 
             Assembly assembly = null;
             try
             {
-                assembly = Assembly.LoadFile(outputAssemblyPath);
+                assembly = Assembly.Load(File.ReadAllBytes(outputAssemblyPath));
             }
             catch (Exception e)
             {
@@ -90,7 +90,7 @@ namespace ScriptingPlugin
             return new FSharpScriptCompilerResults(errors, assembly, outputAssemblyPath);
         }
 
-        public IScriptCompilerResults Compile(string script, string sourceFilePath = null)
+        public IScriptCompilerResults Compile(string script, string sourceFilePath)
         {
             Guard.StringNotNullEmpty(script);
             return Compile(new[] { new CompilationUnit(script, sourceFilePath) });

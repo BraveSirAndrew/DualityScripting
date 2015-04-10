@@ -1,6 +1,8 @@
 ﻿using System;
 using Duality;
 using Duality.Editor;
+using ScriptingPlugin.FSharp;
+using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Resources
 {
@@ -13,7 +15,7 @@ namespace ScriptingPlugin.Resources
 
 		protected override void OnLoaded()
 		{
-			ScriptCompiler = ScriptingPluginCorePlugin.FSharpScriptCompiler;
+			ScriptCompiler = ScriptingFsCorePlugin.FSharpScriptCompiler;
 			base.OnLoaded();
 		}
 	}

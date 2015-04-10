@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F75B19F0-0A5A-4214-AE68-DA0F1D6E484F}"
 EndProject
@@ -20,6 +20,21 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorPlugin.Tests", "EditorPlugin.Tests\EditorPlugin.Tests.csproj", "{17D36FD0-A019-4DF9-AA6A-9EAA5F7158A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin.Test.CSharp", "CorePlugin.Test.CSharp\CorePlugin.Test.CSharp.csproj", "{BCA20AAB-0855-41B2-931C-762266C19749}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingCSCorePlugin", "ScriptingCSCorePlugin\ScriptingCSCorePlugin.csproj", "{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingFSCorePlugin", "ScriptingFSCorePlugin\ScriptingFSCorePlugin.csproj", "{9D402F09-EC11-4F14-95CE-8E1393D12EC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFilles", "SolutionFilles", "{88574E22-7018-4B51-9895-676956B3B822}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		Build.bat = Build.bat
+		completeBuild.fsx = completeBuild.fsx
+		nuget\ScriptingPlugin.CSharp.nuspec = nuget\ScriptingPlugin.CSharp.nuspec
+		nuget\ScriptingPlugin.Editor.nuspec = nuget\ScriptingPlugin.Editor.nuspec
+		nuget\ScriptingPlugin.FSharp.nuspec = nuget\ScriptingPlugin.FSharp.nuspec
+		nuget\ScriptingPlugin.nuspec = nuget\ScriptingPlugin.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +62,14 @@ Global
 		{BCA20AAB-0855-41B2-931C-762266C19749}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCA20AAB-0855-41B2-931C-762266C19749}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCA20AAB-0855-41B2-931C-762266C19749}.Release|Any CPU.Build.0 = Release|Any CPU
+		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{192B3A39-FCD1-4A18-AC61-4A2A01EF6DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D402F09-EC11-4F14-95CE-8E1393D12EC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

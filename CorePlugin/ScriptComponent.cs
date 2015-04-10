@@ -209,7 +209,7 @@ namespace ScriptingPlugin
 			_scriptInstance.GameObj = GameObj;
 		}
 
-		internal void OnScriptReloaded(object sender, EventArgs eventArgs)
+		public void OnScriptReloaded(object sender, EventArgs eventArgs)
 		{
 	        try
 	        {
