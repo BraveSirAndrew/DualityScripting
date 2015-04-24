@@ -3,7 +3,7 @@
     <metadata>
         <id>ScriptingPlugin-CSharp</id>
         <version>0.1.0-beta</version>
-        <title>Duality Scripting Plugin . Use this package for C# support</title>
+        <title>Duality Scripting Plugin C#. Use this package for C# support</title>
         <authors>@BatCatGames</authors>
         <owners>@BatCatGames</owners>
         <projectUrl>https://github.com/BraveSirAndrew/DualityScripting</projectUrl>

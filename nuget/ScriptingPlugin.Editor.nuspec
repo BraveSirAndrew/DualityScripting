@@ -3,7 +3,7 @@
     <metadata>
         <id>ScriptingPluginEditor</id>
         <version>0.1.0-beta</version>
-        <title>Duality Scripting Plugin. Use this package for editor support</title>
+        <title>Duality Scripting Plugin Editor. Use this package for editor support</title>
         <authors>@BatCatGames</authors>
         <owners>@BatCatGames</owners>
         <projectUrl>https://github.com/BraveSirAndrew/DualityScripting</projectUrl>
