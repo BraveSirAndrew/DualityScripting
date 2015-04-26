@@ -105,7 +105,9 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 				if (scriptInstance == null)
 					continue;
 
-				var properties = scriptInstance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+				var properties = scriptInstance
+					.GetType()
+					.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 				
 				if(properties.Any() == false)
 					continue;
@@ -122,7 +124,7 @@ namespace ScriptingPlugin.Editor.PropertyEditors
 					propertyEditor.PropertyName = propertyInfo.Name;
 					propertyEditor.EditedMember = propertyInfo;
 					propertyEditor.Getter = () => GetValue().Cast<ScriptComponent>().Select(o => o.GetScriptPropertyValue(propertyInfo.Name));
-					propertyEditor.Setter = values => ScriptPropertyValuesSetter(info.Name, values);
+					propertyEditor.Setter = info.CanWrite ? values => ScriptPropertyValuesSetter(info.Name, values) : (Action<IEnumerable<object>>) null;
 					_propertyEditors.Add(propertyEditor);
 					ParentGrid.ConfigureEditor(propertyEditor);
 					AddPropertyEditor(propertyEditor);
