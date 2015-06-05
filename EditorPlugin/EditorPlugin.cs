@@ -61,7 +61,8 @@ namespace ScriptingPlugin.Editor
 			FileEventManager.ResourceRenamed += _scriptResourceEvents.OnResourceRenamed;
 			FileEventManager.ResourceDeleting += _scriptResourceEvents.OnResourceDeleting;
 
-			PrecompileCSharpScripts();
+			PrecompileScripts<CSharpScript>(CSharpScript.FileExt);
+			PrecompileScripts<FSharpScript>(FSharpScript.FileExt);
 		}
 
 		public static void AddScriptProjectsToSolution()
@@ -70,28 +71,28 @@ namespace ScriptingPlugin.Editor
 			_fSharpProjectPath = _scriptsSolutionEditor.AddToSolution(PathPartFsharp, "FSharpScripts.fsproj", Resources.Resources.FSharpProjectTemplate);
 		}
 
-		private static void PrecompileCSharpScripts()
+		private static void PrecompileScripts<T>(string scriptFileExtension) where T : ScriptResourceBase
 		{
 			Task.Factory.StartNew(() =>
 			{
-				Log.Editor.Write("Precompiling CSharp scripts...");
+				Log.Editor.Write("Precompiling {0} scripts...", scriptFileExtension);
 				var sw = Stopwatch.StartNew();
 
 				var resources = Resource.GetResourceFiles();
-				var scripts = resources.Where(r => r.EndsWith(CSharpScript.FileExt));
+				var scripts = resources.Where(r => r.EndsWith(scriptFileExtension));
 				Parallel.ForEach(scripts,
 					new ParallelOptions { MaxDegreeOfParallelism = 3 },
 					scriptRes =>
 					{
-						var script = ContentProvider.RequestContent<CSharpScript>(scriptRes);
+						var script = ContentProvider.RequestContent<T>(scriptRes);
 						script.Res.Instantiate();
 					});
 
 				sw.Stop();
-				Log.Editor.Write("Precompiled CSharp scripts in " + sw.Elapsed.TotalSeconds + " seconds.");
+				Log.Editor.Write("Precompiled {0} scripts in {1} seconds.", scriptFileExtension, sw.Elapsed.TotalSeconds);
 			});
 		}
-		
+
 		private void DualityEditorAppOnIdling(object sender, EventArgs eventArgs)
 		{
 //			if (Debugger.IsAttached && _debuggerAttachedLastFrame == false)
