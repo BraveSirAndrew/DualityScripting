@@ -50,18 +50,17 @@ namespace ScriptingPlugin.FSharp
             }
             
             string[] completeOptions = null;
-            var deleteTempFiles = new List<string>();
-            foreach (var compilationUnit in compilationUnits)
+            
+	        var enumerable = compilationUnits as CompilationUnit[] ?? compilationUnits.ToArray();
+	        foreach (var compilationUnit in enumerable)
             {
                 if (string.IsNullOrWhiteSpace(compilationUnit.Source))
                     throw new ArgumentException("scriptsource");
 				if (string.IsNullOrWhiteSpace(compilationUnit.SourceFilePath))
                     throw new ArgumentException("scriptsourceFilePath");
 
-                var tempScriptPath = Path.GetTempFileName().Replace("tmp", "fs");
-                File.WriteAllText(compilationUnit.SourceFilePath, compilationUnit.Source);
 				referencesAndScript.Add(compilationUnit.SourceFilePath);
-                deleteTempFiles.Add(tempScriptPath);
+
 
             }
 			var options = new[] { "fsc.exe", "-o", outputAssemblyPath, "-a", "--debug+", "--optimize-", "--noframework" };
@@ -75,18 +74,11 @@ namespace ScriptingPlugin.FSharp
             }
             catch (Exception e)
             {
-                Log.Editor.WriteWarning("{0}: Couldn't create an assembly file from {2}. {1} ", GetType().Name, e.Message, string.Join(Environment.NewLine, compilationUnits.Select(x=> x.SourceFilePath)));
+                Log.Editor.WriteWarning("{0}: Couldn't create an assembly file from {2}. {1} ", GetType().Name, e.Message, string.Join(Environment.NewLine, enumerable.Select(x=> x.SourceFilePath)));
             }
-            finally
-            {
-                foreach (var tempScriptPath in deleteTempFiles)
-                {
-                    if (File.Exists(tempScriptPath))
-                        File.Delete(tempScriptPath);
-                }
-            }
-            var eerr = errorsAndExitCode.Item1.Where(x => x.Severity.IsError);
-            var errors = eerr.Select(x => string.Format("{0} {1} {2} ", x.StartLineAlternate, x.StartColumn, x.Message));
+            
+            var errorsWithoutWarnings = errorsAndExitCode.Item1.Where(x => x.Severity.IsError);
+            var errors = errorsWithoutWarnings.Select(x => string.Format("{0} {1} {2} ", x.StartLineAlternate, x.StartColumn, x.Message));
             return new FSharpScriptCompilerResults(errors, assembly, outputAssemblyPath);
         }
 
