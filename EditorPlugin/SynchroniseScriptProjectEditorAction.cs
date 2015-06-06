@@ -23,8 +23,9 @@ namespace ScriptingPlugin.Editor
 
 		public override void Perform(ScriptResourceBase resource)
 		{
-			var result = MessageBox.Show("This action will overwrite any unsaved changes to the scripts in your Source\\Media directory. Are you sure you want to continue?",
-				"Synchronise with Visual Studio", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+			var result = MessageBox.Show(
+		@"This action will overwrite any unsaved changes to the scripts in your Source\\Media directory. Are you sure you want to continue?",
+				@"Synchronise with Visual Studio", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 			if (result == DialogResult.No)
 				return;
 
@@ -86,7 +87,7 @@ namespace ScriptingPlugin.Editor
 				projectEditor.AddScriptToProject(sourceFilePath, scriptFileName, projectPath);
 
 				worker.Progress = filesProcessed++ / totalFiles;
-				
+
 				yield return null;
 			}
 		}

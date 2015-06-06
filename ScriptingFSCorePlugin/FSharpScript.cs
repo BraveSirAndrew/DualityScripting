@@ -2,7 +2,6 @@
 using Duality;
 using Duality.Editor;
 using ScriptingPlugin.FSharp;
-using ScriptingPlugin.Resources;
 
 namespace ScriptingPlugin.Resources
 {

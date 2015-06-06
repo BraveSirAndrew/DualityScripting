@@ -57,7 +57,6 @@ namespace ScriptingPlugin.Resources
 
                     if (_scriptCompilerResult != null && _scriptCompilerResult.CompilerResult == CompilerResult.AssemblyExists)
                         _assembly = _scriptCompilerResult.Assembly;
-
                     return;
                 }
             }

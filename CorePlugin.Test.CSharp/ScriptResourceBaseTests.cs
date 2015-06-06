@@ -67,7 +67,7 @@ namespace CorePlugin.Test.CSharp
 			public void OnlyCompilesTheScriptOnTheFirstCall()
 			{
 				var scriptCompiler = new Mock<IScriptCompiler>();
-				scriptCompiler.Setup(m => m.Compile(It.IsAny<string>(), It.IsAny<string>())).Returns(new CSharpScriptCompilerResults(true, Enumerable.Empty<string>(), GetType().Assembly.Location));
+				scriptCompiler.Setup(m => m.Compile(It.IsAny<string>(), It.IsAny<string>())).Returns(new ScriptCompilerResults(true, Enumerable.Empty<string>(), GetType().Assembly.Location));
 
 				if (Directory.Exists("Scripts"))
 				{

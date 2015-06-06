@@ -37,7 +37,9 @@ open System
     [<Test>]
     let ``Compiling has no errors and creates assembly ``() =        
         let scriptingCompiler = createFSharpCompiler        
-        let compiled = scriptingCompiler.Compile(fsharpScript, createTempFileName())    
+        let fn = createTempFileName()
+        File.WriteAllText(fn, fsharpScript)
+        let compiled = scriptingCompiler.Compile(fsharpScript, fn)    
 
         Assert.IsFalse(compiled.Errors.Any(), join compiled.Errors )
         Assert.NotNull(compiled.CompiledAssembly)

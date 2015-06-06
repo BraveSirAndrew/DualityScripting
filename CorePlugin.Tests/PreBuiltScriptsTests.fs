@@ -28,7 +28,9 @@ open System
             Directory.Delete ("Scripts", true)
         Directory.CreateDirectory "Scripts" |> ignore
         let compiler = createFSharpCompiler        
-        let results = compiler.Compile(fsharpScript, Path.GetTempFileName().Replace("tmp", "fs"))        
+        let fn = Path.GetTempFileName().Replace("tmp", "fs")
+        File.WriteAllText(fn, fsharpScript)
+        let results = compiler.Compile(fsharpScript, fn)        
         File.Copy(results.PathToAssembly, Path.Combine("Scripts", Path.GetFileName(results.PathToAssembly)))
 (*
     [<Test>]

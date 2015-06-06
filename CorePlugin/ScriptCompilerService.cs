@@ -19,7 +19,6 @@ namespace ScriptingPlugin
 			try
 			{
 				Log.Editor.Write("Compiling script '{0}'.", scriptName);
-
 				var compilerResult = _scriptCompiler.Compile(script, scriptPath);
 
 				if (compilerResult.Errors.Any() == false)
