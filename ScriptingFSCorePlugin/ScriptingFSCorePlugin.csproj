@@ -73,12 +73,13 @@
   <ItemGroup>
     <Compile Include="FSharpScript.cs" />
     <Compile Include="FSharpScriptCompiler.cs" />
-    <Compile Include="FSharpScriptCompilerResults.cs" />
     <Compile Include="ScriptingFsCorePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CorePlugin\CorePlugin.csproj">

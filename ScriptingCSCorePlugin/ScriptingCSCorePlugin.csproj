@@ -90,7 +90,6 @@
     <Compile Include="CSharpScript.cs" />
     <Compile Include="ScriptingCsCorePlugin.cs" />
     <Compile Include="CSharpScriptCompiler.cs" />
-    <Compile Include="CSharpScriptCompilerResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
