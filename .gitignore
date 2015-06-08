@@ -17,6 +17,8 @@ TestResults
 [Dd]ebug/
 [Rr]elease/
 x64/
+test/
+deploy/
 *_i.c
 *_p.c
 *.ilk
