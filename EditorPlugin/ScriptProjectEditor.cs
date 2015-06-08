@@ -10,13 +10,17 @@ namespace ScriptingPlugin.Editor
 	{
 		public void AddScriptToProject(string scriptPath, string scriptFileName, string projectPath)
 		{
-			try
-			{
-				var directoryPart = scriptPath
+			var directoryPart = scriptPath
 					.Replace(ProjectConstants.MediaFolder, "")
 					.Replace(Path.GetFileName(scriptPath), "")
 					.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+			AddScriptToProject(scriptPath, directoryPart, scriptFileName, projectPath);
+		}
 
+		public void AddScriptToProject(string scriptPath, string directoryPart, string scriptFileName, string projectPath)
+		{
+			try
+			{
 				CreateAnyMissingDirectories(projectPath, directoryPart);
 
 				var rootElement = ProjectRootElement.Open(Path.Combine(PathHelper.ExecutingAssemblyDir, projectPath));
