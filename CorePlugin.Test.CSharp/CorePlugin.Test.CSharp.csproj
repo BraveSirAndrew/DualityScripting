@@ -34,11 +34,11 @@
   <ItemGroup>
     <Reference Include="Duality, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.210\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.223\lib\net40\Duality.dll</HintPath>
     </Reference>
     <Reference Include="FarseerDuality, Version=3.3.5203.39568, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.210\lib\net40\FarseerDuality.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.223\lib\net40\FarseerDuality.dll</HintPath>
     </Reference>
     <Reference Include="Flow, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -46,7 +46,7 @@
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.210\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.223\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
@@ -56,11 +56,11 @@
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.223\lib\net40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\Duality.0.1.223\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

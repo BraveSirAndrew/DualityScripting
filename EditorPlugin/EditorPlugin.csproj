@@ -42,59 +42,59 @@
     </Reference>
     <Reference Include="Aga.Controls, Version=1.7.0.1, Culture=neutral, PublicKeyToken=fcc90fbf924463a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\Aga.Controls.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\Aga.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="CamView.editor, Version=1.0.5560.18714, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CamView.editor, Version=1.0.5673.29100, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\CamView.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\CamView.editor.dll</HintPath>
     </Reference>
     <Reference Include="Compatibility.core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\Compatibility.core.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\Compatibility.core.dll</HintPath>
     </Reference>
     <Reference Include="Duality, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\Duality.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\Duality.dll</HintPath>
     </Reference>
-    <Reference Include="DualityEditor, Version=1.0.5560.18706, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DualityEditor, Version=1.0.5673.29096, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\DualityEditor.exe</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\DualityEditor.exe</HintPath>
     </Reference>
-    <Reference Include="EditorBase.editor, Version=1.0.5560.18707, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="EditorBase.editor, Version=1.0.5673.29096, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\EditorBase.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\EditorBase.editor.dll</HintPath>
     </Reference>
     <Reference Include="FarseerDuality, Version=3.3.5203.39568, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\FarseerDuality.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\FarseerDuality.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="HelpAdvisor.editor, Version=1.0.5560.18708, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="HelpAdvisor.editor, Version=1.0.5673.29097, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\HelpAdvisor.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\HelpAdvisor.editor.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\Ionic.Zip.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="LogView.editor, Version=1.0.5560.18711, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LogView.editor, Version=1.0.5673.29098, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\LogView.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\LogView.editor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build" />
-    <Reference Include="ObjectInspector.editor, Version=1.0.5560.18712, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ObjectInspector.editor, Version=1.0.5673.29098, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\ObjectInspector.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\ObjectInspector.editor.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="policy.2.3.FSharp.Core">
       <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
@@ -103,13 +103,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AdamsLair.WinForms.0.1.13\lib\net40\PopupControl.dll</HintPath>
     </Reference>
-    <Reference Include="ProjectView.editor, Version=1.0.5560.18713, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ProjectView.editor, Version=1.0.5673.29099, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\ProjectView.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\ProjectView.editor.dll</HintPath>
     </Reference>
-    <Reference Include="SceneView.editor, Version=1.0.5560.18713, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SceneView.editor, Version=1.0.5673.29099, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\SceneView.editor.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\SceneView.editor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -123,7 +123,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DualityEditor.0.1.210\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>..\packages\DualityEditor.0.1.223\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
