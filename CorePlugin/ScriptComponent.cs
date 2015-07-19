@@ -40,7 +40,7 @@ namespace ScriptingPlugin
 
 				return;
 			}
-
+			Script.Res.Reloaded -= OnScriptReloaded;
 			Script.Res.Reloaded += OnScriptReloaded;
 			InstantiateScript();
 
@@ -53,6 +53,7 @@ namespace ScriptingPlugin
 
 		public void OnShutdown(ShutdownContext context)
 		{
+
 			if (_scriptInstance == null)
 				return;
 
@@ -60,6 +61,7 @@ namespace ScriptingPlugin
 			{
 				case ShutdownContext.Deactivate:
 					SafeExecute(_scriptInstance.Shutdown, "Shutdown");
+					Script.Res.Reloaded -= OnScriptReloaded;
 					break;
 				case ShutdownContext.Saving:
 					SafeExecute(_scriptInstance.Saving, "Saving");
