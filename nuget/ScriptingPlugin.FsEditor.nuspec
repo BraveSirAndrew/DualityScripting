@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
     <metadata>
-        <id>ScriptingPluginEditor</id>
+        <id>@project@</id>
         <version>0.1.0-beta</version>
         <title>Duality Scripting Plugin Editor. Use this package for editor support</title>
         <authors>@BatCatGames</authors>

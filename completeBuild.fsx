@@ -105,21 +105,22 @@ Target "NUnitTest" (fun _ ->
 )
 
 Target "CreateNuget" (fun _ ->      
-    ["nuget/ScriptingPlugin.nuspec";
-    "nuget/ScriptingPlugin.CSharp.nuspec";
-    "nuget/ScriptingPlugin.CsEditor.nuspec";
-    "nuget/ScriptingPlugin.FSharp.nuspec";
-    "nuget/ScriptingPlugin.FsEditor.nuspec" ]
+    [("nuget/ScriptingPlugin.nuspec","ScriptingPlugin");
+    ("nuget/ScriptingPlugin.CSharp.nuspec","ScriptingPlugin-CSharp");
+    ("nuget/ScriptingPlugin.CsEditor.nuspec","ScriptingPluginEditorCSharp");
+    ("nuget/ScriptingPlugin.FSharp.nuspec","ScriptingPlugin-FSharp");
+    ("nuget/ScriptingPlugin.FsEditor.nuspec", "ScriptingPluginEditorFSharp") ]
     |> List.iter (fun spec ->
     NuGet (fun p -> 
         {p with 
             Version = version     
-            Authors = info.Authors                   
+            Authors = info.Authors             
+            Project = snd spec      
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
             PublishUrl = getBuildParamOrDefault "nugetUrl" "" 
             OutputPath = packagesDir
-        }) spec)
+        }) (fst spec))
 )
 
 Target "AndroidPack" (fun _ ->      

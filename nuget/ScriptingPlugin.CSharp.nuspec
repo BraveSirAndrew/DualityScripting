@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
     <metadata>
-        <id>ScriptingPlugin-CSharp</id>
+        <id>@project@</id>
         <version>0.1.0-beta</version>
         <title>Duality Scripting Plugin C#. Use this package for C# support</title>
         <authors>@BatCatGames</authors>
