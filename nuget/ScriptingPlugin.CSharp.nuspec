@@ -11,21 +11,10 @@
         <description>A plugin for Duality that adds support for scripting in C# and F#, all recompiled on the fly without even a full editor restart.</description>
         <language>en-IE</language>
         <tags>Duality</tags>
-        <dependencies>
-            <group targetFramework=".NETFramework4.5">
-                <dependency id="ScriptingPlugin" version="0.2.142-beta" />
-				<dependency id="Microsoft.CodeAnalysis.Analyzers" version="1.0.0-rc1"  />
-				<dependency id="Microsoft.CodeAnalysis.Common" version="1.0.0-rc1"  />
-				<dependency id="Microsoft.CodeAnalysis.CSharp" version="1.0.0-rc1"  />
-				<dependency id="System.Collections.Immutable" version="1.1.33-beta" />
-				<dependency id="System.Reflection.Metadata" version="1.0.18-beta"  />
-            </group>
-        </dependencies>
         <references>
             <reference file="ScriptingCSCorePlugin.core.dll"/>
         </references>
     </metadata>
-
     <files>
         <file src="..\ScriptingCSCorePlugin\bin\Release\ScriptingCSCorePlugin.core.dll" target="lib\net40\ScriptingCSCorePlugin.core.dll" />        
     </files>

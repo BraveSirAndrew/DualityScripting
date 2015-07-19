@@ -68,14 +68,14 @@
     <Compile Include="PreBuiltScriptsTests.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScriptingCSCorePlugin\ScriptingCSCorePlugin.csproj">
-      <Name>ScriptingCSCorePlugin</Name>
-      <Project>{192b3a39-fcd1-4a18-ac61-4a2a01ef6dc0}</Project>
+    <ProjectReference Include="..\EditorCSPlugin\EditorCSPlugin.csproj">
+      <Name>EditorCSPlugin</Name>
+      <Project>{0ee7f21f-0b63-44f5-b6b5-2e3a2aa85ca8}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\ScriptingFSCorePlugin\ScriptingFSCorePlugin.csproj">
-      <Name>ScriptingFSCorePlugin</Name>
-      <Project>{9d402f09-ec11-4f14-95ce-8e1393d12ec9}</Project>
+    <ProjectReference Include="..\EditorFSPlugin\EditorFSPlugin.csproj">
+      <Name>EditorFSPlugin</Name>
+      <Project>{fe4eff7d-fd62-4b75-bf5b-bdf659a6f322}</Project>
       <Private>True</Private>
     </ProjectReference>
     <Reference Include="Duality">

@@ -14,14 +14,17 @@
 		<dependencies>
 			<group targetFramework=".NETFramework4.5">
 				<dependency id="ScriptingPlugin" version="0.2.142-beta" />
+                <dependency id="FSharp.Compiler.Service" version="0.0.86" />
+                <dependency id="FSharp.Core.3" version="0.0.2"/>
 			</group>
 		</dependencies>
         <references>
             <reference file="ScriptingPlugin.editor.dll"/>
+            <reference file="EditorFSPlugin.core.dll"/>
         </references>
     </metadata>
-
     <files>
-		<file src="..\EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40\ScriptingPlugin.editor.dll" />
+		<file src="..\EditorPlugin\bin\Release\ScriptingPlugin.editor.dll" target="lib\net40" />
+		<file src="..\EditorFSPlugin\bin\Release\EditorFSPlugin.core.dll" target="lib\net40" />
 	</files>
 </package>

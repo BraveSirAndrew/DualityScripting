@@ -11,15 +11,9 @@
         <description>A plugin for Duality that adds support for scripting in C# and F#, all recompiled on the fly without even a full editor restart.</description>
         <language>en-IE</language>
         <tags>Duality</tags>
-        <dependencies>
-            <group targetFramework=".NETFramework4.5">
-				<dependency id="ScriptingPlugin" version="0.2.142-beta" />
-                <dependency id="FSharp.Compiler.Service" version="0.0.86" />
-                <dependency id="FSharp.Core.3" version="0.0.2"/>
-            </group>
-        </dependencies>
         <references>
             <reference file="ScriptingFSCorePlugin.core.dll"/>
+			
         </references>
     </metadata>
 

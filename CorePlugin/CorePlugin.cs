@@ -11,6 +11,11 @@ namespace ScriptingPlugin
 		public const string ReferenceAssembliesFile = "ScriptReferences.txt";
 
 		public static IScriptMetadataService ScriptMetadataService { get; set; }
+<<<<<<< HEAD
+=======
+		public static IScriptCompilerService CSharpScriptCompiler { get; set; }
+		public static IScriptCompilerService FSharpScriptCompiler { get; set; }
+>>>>>>> 57ab38a... Separating ScriptCompiler from script
 
 		protected override void InitPlugin()
 		{

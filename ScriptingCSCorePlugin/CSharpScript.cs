@@ -14,7 +14,6 @@ namespace ScriptingPlugin.Resources
 
 		public CSharpScript()
 		{
-			
 		}
 
 		public CSharpScript(IScriptCompilerService compilerService)
@@ -24,7 +23,8 @@ namespace ScriptingPlugin.Resources
 
 		protected override void OnLoaded()
 		{
-			ScriptCompiler = ScriptingCsCorePlugin.CSharpScriptCompiler;
+#if DEBUG
+			ScriptCompiler = ScriptingPluginCorePlugin.CSharpScriptCompiler;
 			base.OnLoaded();
 		}
 	}
