@@ -9,7 +9,7 @@ let buildDir  = @".\build\"
 let testDir   = @".\test\"
 let packagesDir = @".\deploy\"
 // version info
-let version = if isLocalBuild then "0.3-local" else "0.3."+buildVersion
+let version = if isLocalBuild then "0.3-local" else "0.3."+buildVersion+"-beta"
 
 
 
