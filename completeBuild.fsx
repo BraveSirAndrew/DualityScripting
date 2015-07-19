@@ -115,9 +115,9 @@ Target "CreateNuget" (fun _ ->
         {p with 
             Version = version     
             Authors = info.Authors                   
-            PublishUrl = getBuildParamOrDefault "nugetrepo" ""
-            AccessKey = getBuildParamOrDefault "keyfornuget" ""
-            Publish = hasBuildParam "nugetrepo"
+            AccessKey = getBuildParamOrDefault "nugetkey" ""
+            Publish = hasBuildParam "nugetkey"
+            PublishUrl = getBuildParamOrDefault "nugetUrl" "" 
             OutputPath = packagesDir
         }) spec)
 )
