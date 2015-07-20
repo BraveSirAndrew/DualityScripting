@@ -15,9 +15,8 @@ namespace ScriptingPlugin.Resources
 		protected override void OnLoaded()
 		{
 			base.OnLoaded();
-#if DEBUG
 			ScriptCompiler = ScriptingPluginCorePlugin.FSharpScriptCompiler;
-#endif
+
 		}
 	}
 }
