@@ -68,9 +68,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DualityEditor.0.1.236\lib\net40\FarseerDuality.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
-    </Reference>
     <Reference Include="HelpAdvisor.editor, Version=1.0.5691.31738, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DualityEditor.0.1.236\lib\net40\HelpAdvisor.editor.dll</HintPath>
@@ -95,9 +92,6 @@
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DualityEditor.0.1.236\lib\net40\OpenTK.GLControl.dll</HintPath>
-    </Reference>
-    <Reference Include="policy.2.3.FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="PopupControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -149,14 +143,7 @@
     <Compile Include="ScriptsSolutionEditor.cs" />
     <Compile Include="SourceFilePathGenerator.cs" />
     <Compile Include="SynchroniseScriptProjectEditorAction.cs" />
-    <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.optdata">
-      <Link>FSharp.Core.optdata</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.sigdata">
-      <Link>FSharp.Core.sigdata</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -185,10 +172,6 @@
     <None Include="Resources\ScriptsProjectTemplate.zip" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll">
-      <Link>FSharp.Core.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\csharp.png" />
     <Content Include="Resources\fsharp.png" />
     <Content Include="Resources\script.png" />

@@ -53,19 +53,17 @@
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.optdata">
-      <Link>FSharp.Core.optdata</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.sigdata">
-      <Link>FSharp.Core.sigdata</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="CSharpScripCompilerTests.fs" />
     <Compile Include="FSharpScriptCompilerTests.fs" />
-    <Compile Include="FsCheckAddin.fs" />
     <Content Include="app.config" />
     <Compile Include="PreBuiltScriptsTests.fs" />
+    <Compile Include="FsCheckAddin.fs" />
+    <None Include="FSharp.Core.optdata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="FSharp.Core.sigdata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EditorCSPlugin\EditorCSPlugin.csproj">
@@ -87,19 +85,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FsCheck">
-      <HintPath>..\packages\FsCheck.1.0.1\lib\net45\FsCheck.dll</HintPath>
+      <HintPath>..\packages\FsCheck.2.5.0\lib\net45\FsCheck.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsCheck.NUnit">
-      <HintPath>..\packages\FsCheck.Nunit.1.0.1\lib\net45\FsCheck.NUnit.dll</HintPath>
+      <HintPath>..\packages\FsCheck.NUnit.2.5.0\lib\net45\FsCheck.NUnit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsCheck.NUnit.Addin">
-      <HintPath>..\packages\FsCheck.Nunit.1.0.1\lib\net45\FsCheck.NUnit.Addin.dll</HintPath>
+      <HintPath>..\packages\FsCheck.NUnit.2.5.0\lib\net45\FsCheck.NUnit.Addin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
+      <HintPath>..\packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip">
@@ -108,13 +106,13 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="nunit.core">
-      <HintPath>..\packages\NUnit.Runners.2.6.3\tools\lib\nunit.core.dll</HintPath>
+      <HintPath>..\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.core.interfaces">
-      <HintPath>..\packages\NUnit.Runners.2.6.3\tools\lib\nunit.core.interfaces.dll</HintPath>
+      <HintPath>..\packages\NUnit.Runners.2.6.4\tools\lib\nunit.core.interfaces.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK">
@@ -123,10 +121,6 @@
     </Reference>
     <Reference Include="OpenTK.GLControl">
       <HintPath>..\packages\Duality.0.1.210\lib\net40\OpenTK.GLControl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="policy.2.3.FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
